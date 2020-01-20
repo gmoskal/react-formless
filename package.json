@@ -1,0 +1,86 @@
+{
+  "name": "typed-react-forms",
+  "version": "1.0.0",
+  "description": "Strongly typed react forms",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "eslint src/*",
+    "lint:fix": "eslint src/* --fix",
+    "precommit": "lint-staged",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags"
+  },
+  "files": [
+    "lib/**/*"
+  ],
+  "keywords": [
+    "typed",
+    "typescript",
+    "forms"
+  ],
+  "author": "Grzegorz Moskal",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "24.9.0",
+    "@typescript-eslint/eslint-plugin": "2.17.0",
+    "@typescript-eslint/parser": "2.17.0",
+    "eslint": "6.8.0",
+    "eslint-config-prettier": "6.9.0",
+    "eslint-plugin-import": "2.20.0",
+    "eslint-plugin-prettier": "3.1.2",
+    "eslint-plugin-react": "7.18.0",
+    "eslint-plugin-react-app": "6.1.0",
+    "eslint-plugin-react-hooks": "2.3.0",
+    "husky": "4.0.10",
+    "jest": "24.9.0",
+    "lint-staged": "10.0.0",
+    "prettier": "1.19.1",
+    "core-js": "3.6.4",
+    "ts-jest": "24.3.0",
+    "typescript": "3.7.5"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "ts-jest"
+    },
+    "testMatch": [
+      "<rootDir>/(src|functions)/**/*.(spec|test).(ts|tsx)"
+    ],
+    "moduleDirectories": [
+      "node_modules"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "setupFiles": [
+      "core-js"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run lint && npm test"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "npx prettier --config .prettierrc.js --write",
+      "git add"
+    ]
+  },
+  "engines": {
+    "node": ">= 10.0 < 12.0"
+  }
+}

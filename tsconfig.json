@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "jsx": "react",
+    "declaration": true,
+    "outDir": "./lib",
+    "types": ["jest"],
+    "lib": ["dom", "es2015.promise", "es2015", "esnext"],
+    "strict": true,
+    "baseUrl": "./",
+    "paths": {
+      "*": ["src/@types/*", "*"]
+    }
+  },
+  "allowJS": false,
+  "include": ["**/*.d.ts", "**/*.tsx", "**/*.ts"],
+  "exclude": ["node_modules/**", "functions/node_modules/**", "scripts", "e2e", "lib"]
+}
