@@ -181,3 +181,18 @@ export const validArrayDef = <T>(vs: Array<Validator<T>>) => [(v: any, m?: strin
 export const validArrayStringDef = validArrayDef(validString)
 
 export const validMapDef = <T>(vs: Array<Validator<T>>) => [(v: any, m?: string) => validateMap(vs)(v || {}, m)]
+
+export const validators = { validNumber, validString, validEmail, validBoolean, validArrayString }
+export const guards = {
+    isString,
+    isObject,
+    isFunction,
+    isArray,
+    isValid,
+    isNumber,
+    isBoolean,
+    isEmpty,
+    isEmail,
+    isOk,
+    isErr
+}
