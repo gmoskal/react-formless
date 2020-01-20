@@ -1,0 +1,80 @@
+import { useFormHook, FormHookProps } from "./useFormHook"
+import { renderHook, act } from "@testing-library/react-hooks"
+import { factory } from "./utils/map"
+import { _noop } from "./utils"
+import { validateAZ, validNumber, validateNotEmpty, Ok } from "./utils/validators"
+
+describe("useFormHook()", () => {
+    const getFormHook = <T>(p: FormHookProps<T>) => renderHook(() => useFormHook(p))
+    type Skill = { name: string; level: number }
+    const stringFixture = factory<InputState<string>>({ active: false, visited: false, value: "" })
+    const numberFixture = factory<InputState<number>>({ active: false, visited: false, value: 0 })
+
+    const initialValue: Skill = { name: "", level: 0 }
+    const schema: FormSchema<Skill> = {
+        name: { name: "Skill Name", type: "text", validators: [validateNotEmpty, validateAZ] },
+        level: { name: "Level", type: "number", validators: validNumber, toValue: v => parseInt(v, 10) }
+    }
+    const schemaWithNoValidators: FormSchema<Skill> = {
+        name: { name: "Skill Name", type: "text", validators: [] },
+        level: { name: "Level", type: "number", validators: [], toValue: v => parseInt(v, 10) }
+    }
+    it("returns correct form state when initialized", () => {
+        const expected: FormState<Skill> = { name: stringFixture(), level: numberFixture() }
+
+        const { result } = getFormHook<Skill>({ schema, initialValue, onSubmit: _noop })
+        expect(result.current.formViewProps.state).toEqual(expected)
+    })
+
+    it("returns correct result when no errors", () => {
+        const { result } = getFormHook<Skill>({ schema: schemaWithNoValidators, initialValue, onSubmit: _noop })
+        expect(result.current.result).toEqual(Ok(initialValue))
+    })
+
+    it("returns initial values on submit without changes", () => {
+        const resultSpy = jest.fn()
+        const { result } = getFormHook({ schema: schemaWithNoValidators, initialValue, onSubmit: resultSpy })
+        result.current.onSubmitClick()
+        expect(resultSpy).toBeCalledWith(initialValue)
+    })
+
+    it("calls setState and returns ok validation", () => {
+        const onSubmit = jest.fn()
+        const { result } = getFormHook<Skill>({ schema, initialValue, onSubmit })
+        const delta: FormState<Skill> = { name: stringFixture({ value: "a" }), level: numberFixture() }
+        act(() => {
+            result.current.formViewProps.setState(delta)
+        })
+        expect(result.current.formViewProps.state.name.value).toEqual("a")
+        expect(onSubmit).toBeCalledTimes(0)
+    })
+
+    it("call setState and returns error when validation failed", () => {
+        const onSubmit = jest.fn()
+        const { result } = getFormHook<Skill>({ schema, initialValue, onSubmit })
+        const delta: FormState<Skill> = { name: stringFixture({ value: "1" }), level: numberFixture() }
+
+        result.current.formViewProps.setState(delta)
+        result.current.onSubmitClick()
+
+        expect(result.current.formViewProps.state.name.validationResult!.type).toEqual("Err")
+        expect(onSubmit).toBeCalledTimes(0)
+    })
+
+    it("calls onSubmitClick when validation passed", () => {
+        const onSubmit = jest.fn()
+        const { result } = getFormHook<Skill>({ schema, initialValue, onSubmit })
+        const delta: FormState<Skill> = { name: stringFixture({ value: "foo" }), level: numberFixture() }
+        result.current.formViewProps.setState(delta)
+        result.current.onSubmitClick()
+        expect(onSubmit).toBeCalledTimes(1)
+    })
+
+    it("returns new props when setState prop is called", () => {
+        const { result } = getFormHook<Skill>({ schema, initialValue, onSubmit: _noop })
+        const value = "foo"
+        const delta: FormState<Skill> = { name: stringFixture({ value }), level: numberFixture() }
+        result.current.formViewProps.setState(delta)
+        expect(result.current.formViewProps.state.name.value).toEqual(value)
+    })
+})
