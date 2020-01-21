@@ -4,7 +4,7 @@ import { validators, useFormHook, FormView } from ".."
 type Credentials = { email: string; password: string }
 
 const schema: FormSchema<Credentials> = {
-    email: { name: "Email", type: "text", validators: validators.validEmail },
+    email: { name: "Email", type: "text", validators: validators.Ok },
     password: { name: "Password", type: "password", validators: validators.validString }
 }
 

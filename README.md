@@ -7,7 +7,7 @@ This library employs advanced `typescript` types to automatically generate forms
 from quite complex data structures (defined by `type` and `schema`).
 You can now focus on data structures only.
 
-Checkout simple login fomr example
+Checkout simple login form example
 
 ```typescript jsx
 import * as React from "react"
