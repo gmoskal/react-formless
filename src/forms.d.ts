@@ -1,48 +1,24 @@
-// tslint:disable-next-line: no-reference
 /// <reference path="./global.d.ts" />
 
+type Tuples<T = string> = Array<[string, T]>
 type ArrayItem<T> = T extends Array<infer E> ? E : T
 
 type InputSchemaBase<T> = {
-    name?: string
     validators?: Validators<T, string>
     toValue?: F1<string, T | null>
     fromValue?: F1<T | null, string>
     sectionTitle?: string
-}
-type Tuples<T = string> = Array<[string, T]>
+} & Pick<React.InputHTMLAttributes<any>, "disabled" | "placeholder" | "name">
 
-type InputBoxSchema<T> = InputSchemaBase<T> & {
-    type: "text" | "email" | "number" | "textarea" | "password"
-    disabled?: boolean
-    placeholder?: string
-}
-type InputOptionSchema<T> = InputSchemaBase<T> & { type: "radio" | "dropdown" | "selectableChips"; values: Tuples<T> }
-
+type InputBoxSchema<T> = InputSchemaBase<T> & State<"text" | "email" | "number" | "textarea" | "password">
+type InputOptionSchema<T> = InputSchemaBase<T> & State<"radio" | "dropdown" | "selectableChips", { values: Tuples<T> }>
 type SimpleInputSchema<T> = InputBoxSchema<T> | InputOptionSchema<ArrayItem<T>>
 
-type CreatableInput<T> = InputSchemaBase<T> & {
-    mutate?: {
-        createValue: ArrayItem<T>
-        createLabel: string
-        removeLabel?: string
-    }
-}
-
-type CollectionInputSchema<T> = CreatableInput<T> & {
-    type: "collection"
-    fields: FormSchema<ArrayItem<T>>
-}
-
-type ListInputSchema<T> = CreatableInput<T> & {
-    type: "list"
-    field: SimpleInputSchema<T>
-}
-
-type ChipsInputSchema<T = string> = CreatableInput<T> & {
-    type: "chips"
-    field: SimpleInputSchema<T[]>
-}
+type Mutable<T> = { createValue: ArrayItem<T>; createLabel: string; removeLabel?: string }
+type CreatableInput<T> = InputSchemaBase<T> & { mutate?: Mutable<T> }
+type CollectionInputSchema<T> = CreatableInput<T> & State<"collection", { fields: FormSchema<ArrayItem<T>> }>
+type ListInputSchema<T> = CreatableInput<T> & State<"list", { field: SimpleInputSchema<T> }>
+type ChipsInputSchema<T = string> = CreatableInput<T> & State<"chips", { field: SimpleInputSchema<T[]> }>
 
 type InputSchema<T> = SimpleInputSchema<T> | CollectionInputSchema<T> | ListInputSchema<T> | ChipsInputSchema
 
@@ -54,6 +30,7 @@ type InputState<T> = {
     validationResult?: Result<T, string>
     value?: T
 }
+
 type FormState<T> = {
     [P in keyof T]: T[P] extends Array<infer E>
         ? Array<FormState<E>> | InputState<E[]> | InputState<E>[]
@@ -61,4 +38,5 @@ type FormState<T> = {
 }
 
 type InputResult<T> = T extends Array<infer E> ? Array<FormResult<E>> : Result<T, string>
+
 type FormResult<T> = { [P in keyof T]: InputResult<T[P]> }

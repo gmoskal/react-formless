@@ -11,20 +11,20 @@ Checkout simple login form example
 
 ```typescript jsx
 import * as React from "react"
-import { validators, useFormHook, FormView } from "typed-react-forms"
+import { useFormHook, FormView } from "typed-react-forms"
 
 type Credentials = { email: string; password: string }
 
 const schema: FormSchema<Credentials> = {
-    email: { name: "Email address", type: "text", validators: validators.validEmail },
-    password: { name: "Password", type: "password", validators: validators.validString }
+    email: { name: "Email", type: "text" },
+    password: { name: "Password", type: "password" }
 }
 
-export const LoginForm: React.FC = () => {
+export const LoginForm: React.FC<{ tryLogin: (data: Credentials) => void }> = p => {
     const { formViewProps, onSubmitClick } = useFormHook({
         schema,
         initialValue: { email: "", password: "" },
-        onSubmit: console.log
+        onSubmit: p.tryLogin
     })
 
     return (
@@ -34,4 +34,5 @@ export const LoginForm: React.FC = () => {
         </>
     )
 }
+
 ```

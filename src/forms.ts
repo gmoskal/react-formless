@@ -40,7 +40,6 @@ function inputStateToInputResult<T>(
         return (state as any[]).map(v => formStateToFormResult(schema.fields, v) as any)
     if (Array.isArray(state) && schema.type === "list")
         return (state as any[]).map(v => inputStateToInputResult(schema.field, v) as any)
-
     const s: InputState<T> = state as any
     if ((s.visited || s.active) && s.validationResult) return s.validationResult
     const value = schema.toValue ? schema.toValue((state as any).value) : (state as any).value
@@ -122,7 +121,7 @@ export function toInputState<T>(
     }
 }
 
-export type InputPropsBase<TState, TSchema, TDelta> = {
+export type InputPropsBase<TState, TSchema extends InputSchemaBase<any>, TDelta> = {
     state: TState
     schema: TSchema
     setDelta: TDelta
@@ -130,39 +129,35 @@ export type InputPropsBase<TState, TSchema, TDelta> = {
 
 export type InputProps<T> = InputPropsBase<InputState<T>, SimpleInputSchema<T>, F1<Partial<InputState<T>>>>
 
-export const getInputProps = <T, T2 = HTMLInputElement>({ state, schema, setDelta }: InputProps<T>) => {
-    const validate = (value: T) => {
-        let displayedValue = value
-        if (schema.toValue) {
-            displayedValue = schema.toValue(`${value}`) as T
-        } else if (schema.type === "number") {
-            if ((value as any) === "") displayedValue = undefined as any
-            if (((value as any) as string).endsWith(".") || ((value as any) as string).endsWith(","))
-                displayedValue = value
-            else {
-                const numberValue = parseFloat(value as any) as any
-                displayedValue = isNaN(numberValue) ? displayedValue : numberValue
-            }
-        }
-
-        const validationResult = schema.validators
-            ? runValidatorsRaw<T, string>(schema.validators, displayedValue)
-            : Ok(displayedValue)
-
-        setDelta({ ...state, validationResult, value: displayedValue })
-        return validationResult
-    }
-    return {
-        id: schema.name,
-        value: state.value === undefined ? "" : state.value,
-        // value: state.value,
-        disabled: (schema as InputBoxSchema<T>).disabled || false,
-        placeholder: (schema as InputBoxSchema<T>).placeholder || "",
-        onChange: (e: React.ChangeEvent<T2>) => validate(e.target ? ((e as any).target.value as any) : null),
-        onFocus: () => setDelta({ ...state, active: true }),
-        onBlur: () => setDelta({ ...state, active: false, visited: true })
-    }
+const getNumberValue = (v: any): any => {
+    if (`${v}` === "") return undefined as any
+    if (`${v}`.endsWith(".") || `${v}`.endsWith(",")) return v
+    const numberValue = parseFloat(v as any)
+    return isNaN(numberValue) ? v : numberValue
 }
+
+const validate = <T>({ state, schema: { toValue, type, validators }, setDelta }: InputProps<T>, v: any) => {
+    const value = toValue ? toValue(`${v}`) : type === "number" ? getNumberValue(v) : v
+    const validationResult = validators ? runValidatorsRaw<T, string>(validators, value) : Ok(value)
+    setDelta({ ...state, validationResult, value })
+    return validationResult
+}
+
+export type ExtInputProps<T> = React.InputHTMLAttributes<T> & {
+    onChange: F1<React.ChangeEvent<T>>
+    onFocus: F0
+    onBlur: F0
+}
+
+export const getInputProps = <T, T2 = HTMLInputElement>(p: InputProps<T>): ExtInputProps<T2> => ({
+    id: p.schema.name,
+    value: (p.state.value === undefined ? "" : p.state.value) as any,
+    disabled: p.schema.disabled || false,
+    placeholder: p.schema.placeholder || "",
+    onChange: e => validate(p, (e as any).target.value || null),
+    onFocus: () => p.setDelta({ ...p.state, active: true }),
+    onBlur: () => p.setDelta({ ...p.state, active: false, visited: true })
+})
 
 export type DropdownInputProps<T> = InputPropsBase<InputState<T>, InputOptionSchema<T>, F1<any>>
 
