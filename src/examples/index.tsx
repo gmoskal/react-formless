@@ -2,24 +2,19 @@ import * as React from "react"
 import { render } from "react-dom"
 import { Switch, Route, BrowserRouter as Router } from "react-router-dom"
 import { LoginForm } from "./loginForm"
+import { selectCreateDiv } from "./helpers"
+import { _noop } from "../utils"
 
-const selectCreateDiv = (id: string) => {
-    let d: any = document.getElementById(id)
-    if (d) return d
-    d = document.createElement("div")
-    document.body.appendChild(d)
-    d.setAttribute("id", id)
-    return d
-}
+const LoginFormView: React.FC = () => (
+    <>
+        <LoginForm initialValue={{ email: "", password: "" }} onSubmit={_noop} />
+    </>
+)
 
 render(
     <Router>
         <Switch>
-            <Route
-                path="/"
-                component={() => <LoginForm initialValue={{ password: "", email: "" }} onSubmit={console.log} />}
-                exact
-            />
+            <Route path="/" component={LoginFormView} exact />
         </Switch>
     </Router>,
     selectCreateDiv("app")

@@ -13,7 +13,9 @@ export const LoginForm: React.FC<Props> = p => {
     const { formViewProps, onSubmitClick } = useFormHook({ ...p, schema })
     return (
         <>
+            <h2>Login Form</h2>
             <FormView {...formViewProps} />
+            <pre>formViewProps.state: {JSON.stringify(formViewProps.state, null, 2)}</pre>
             <button onClick={onSubmitClick}>Login</button>
         </>
     )

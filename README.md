@@ -19,7 +19,7 @@ export type Credentials = { email: string; password: string }
 type Props = Pick<FormHookProps<Credentials>, "initialValue" | "onSubmit">
 
 const schema: FormSchema<Credentials> = {
-    email: { type: "text", placeholder: "Email" },
+    email: { type: "text", placeholder: "Email", validators: [] },
     password: { type: "password", placeholder: "Secret" }
 }
 
@@ -27,13 +27,18 @@ export const LoginForm: React.FC<Props> = p => {
     const { formViewProps, onSubmitClick } = useFormHook({ ...p, schema })
     return (
         <>
+            <h2>Login Form</h2>
             <FormView {...formViewProps} />
+            <pre>formViewProps.state: {JSON.stringify(formViewProps.state, null, 2)}</pre>
             <button onClick={onSubmitClick}>Login</button>
         </>
     )
 }
 
 ```
+
+![simple login form example](./assets/LoginForm.gif)
+
 
 ## the most wanted form features
 
