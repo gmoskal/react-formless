@@ -96,35 +96,90 @@ describe("Map utils", () => {
 
     describe("remap()", () => {
         it("remaps empty object", () =>
-            expect(remap({ a: 1, b: 2 }, k => k, v => v.toString())).toEqual({ a: "1", b: "2" }))
-        it("remaps empty object", () => expect(remap({ a: 1, b: 2 }, k => k, (_, k) => k)).toEqual({ a: "a", b: "b" }))
+            expect(
+                remap(
+                    { a: 1, b: 2 },
+                    k => k,
+                    v => v.toString()
+                )
+            ).toEqual({ a: "1", b: "2" }))
+        it("remaps empty object", () =>
+            expect(
+                remap(
+                    { a: 1, b: 2 },
+                    k => k,
+                    (_, k) => k
+                )
+            ).toEqual({ a: "a", b: "b" }))
         it("remaps empty object and keeps null values by default", () =>
-            expect(remap({ a: 1, b: 2 }, k => k, (_, k) => (k === "b" ? null : k))).toEqual({ a: "a", b: null }))
+            expect(
+                remap(
+                    { a: 1, b: 2 },
+                    k => k,
+                    (_, k) => (k === "b" ? null : k)
+                )
+            ).toEqual({ a: "a", b: null }))
         it("remaps empty object and skips null", () =>
-            expect(remap({ a: 1, b: 2 }, k => k, (_, k) => (k === "b" ? null : k), true)).toEqual({ a: "a" }))
+            expect(
+                remap(
+                    { a: 1, b: 2 },
+                    k => k,
+                    (_, k) => (k === "b" ? null : k),
+                    true
+                )
+            ).toEqual({ a: "a" }))
     })
 
     describe("toMap()", () => {
-        it("returns empty map when empty array is given", () => expect(toMap([], _ => "foo", v => v)).toEqual({}))
+        it("returns empty map when empty array is given", () =>
+            expect(
+                toMap(
+                    [],
+                    _ => "foo",
+                    v => v
+                )
+            ).toEqual({}))
 
         it("returns valid map for array with one element", () =>
-            expect(toMap([{ a: "foo" }], _ => _.a, v => v)).toEqual({ foo: { a: "foo" } }))
+            expect(
+                toMap(
+                    [{ a: "foo" }],
+                    _ => _.a,
+                    v => v
+                )
+            ).toEqual({ foo: { a: "foo" } }))
 
         it("returns valid map for array with two elements", () =>
-            expect(toMap([{ a: "foo" }, { a: "bar" }], _ => _.a, v => v.a)).toEqual({ foo: "foo", bar: "bar" }))
+            expect(
+                toMap(
+                    [{ a: "foo" }, { a: "bar" }],
+                    _ => _.a,
+                    v => v.a
+                )
+            ).toEqual({ foo: "foo", bar: "bar" }))
 
         it("skips null keys if options is present", () =>
             expect(
-                toMap([{ a: "foo" }, { a: "bar" }], k => (k.a === "foo" ? null : k.a), v => v.a, { skipNullKeys: true })
+                toMap(
+                    [{ a: "foo" }, { a: "bar" }],
+                    k => (k.a === "foo" ? null : k.a),
+                    v => v.a,
+                    { skipNullKeys: true }
+                )
             ).toEqual({
                 bar: "bar"
             }))
 
         it("skips null values if options is present", () =>
             expect(
-                toMap([{ a: "foo" }, { a: "bar" }], k => k.a, v => (v.a === "foo" ? null : v.a), {
-                    skipNullValues: true
-                })
+                toMap(
+                    [{ a: "foo" }, { a: "bar" }],
+                    k => k.a,
+                    v => (v.a === "foo" ? null : v.a),
+                    {
+                        skipNullValues: true
+                    }
+                )
             ).toEqual({
                 bar: "bar"
             }))
