@@ -8,7 +8,7 @@ const ErrorLabel: React.FC<InputState<any>> = ({ validationResult, visited }) =>
     </div>
 )
 
-export const BasicInput: React.FC<InputProps<any>> = p => (
+export const renderBasicInput = (p: InputProps<any>) => (
     <>
         {p.schema.sectionTitle ? <h1>{p.schema.sectionTitle}</h1> : null}
         <div className="InputWrapper">
@@ -19,54 +19,43 @@ export const BasicInput: React.FC<InputProps<any>> = p => (
     </>
 )
 
-type FormInputProps<T> = { schema: InputSchema<T>; state: any; setDelta: F1<any> }
-export const FormInput = <T extends any>({ schema, ...p }: FormInputProps<T>): React.ReactElement => {
-    switch (schema.type) {
-        case "text":
-        case "email":
-        case "number":
-        case "password":
-            return <BasicInput {...p} schema={schema} />
-        default:
-            return <pre>{JSON.stringify(p)}</pre>
+type FormInputProps<T> = { schema: InputSchema<T>; state: InputState<T>; setDelta: F1<any> }
+type Payload<T> = T extends State<any, infer T> ? T : never
 
-        // case "textarea":
-        //     return <TextAreaInput {...p} schema={schema} />
+export type InputRenderer<T, P extends Type<InputSchema<any>>> = (
+    p: FormInputProps<T> & { schema: State<P, Payload<InputSchema<any>>> }
+) => React.ReactElement
 
-        // case "collection":
-        //     return <CollectionInput {...p} schema={schema} />
+export type InputRenderMap = { [P in Type<InputSchema<any>>]: InputRenderer<any, P> }
 
-        // case "list":
-        //     return <ListInput {...p} schema={schema} />
-
-        // case "radio":
-        //     return <RadioInput {...p} schema={schema} />
-
-        // case "chips":
-        //     return <CreatableChipsInput {...p} schema={schema} />
-
-        // case "dropdown":
-        //     return <DropdownInput {...p} schema={schema} />
-
-        // case "selectableChips":
-        //     return <ChipsInput {...p} schema={schema} />
-    }
+export const defaultRenderMap: Partial<InputRenderMap> = {
+    email: renderBasicInput,
+    password: renderBasicInput,
+    text: renderBasicInput
 }
+
+const defaultRenderer: InputRenderer<any, any> = p => <h3>Schema type not supported {JSON.stringify(p.schema)}</h3>
+
+export const FormInput = <T extends any>(p: FormInputProps<T>): React.ReactElement =>
+    (defaultRenderMap[p.schema.type] || defaultRenderer)(p as any)
 
 export type FormViewProps<T> = {
     setState: F1<FormState<T>>
     state: FormState<T>
     schema: FormSchema<T>
     columns?: number
+    customRenderMap?: Partial<InputRenderMap>
 }
 
-export function FormView<T extends any>(p: FormViewProps<T>): React.ReactElement {
+export function FormView<T extends any>({ customRenderMap = {}, ...p }: FormViewProps<T>): React.ReactElement {
     const setDelta = (key: keyof T) => (value: any) => p.setState({ ...p.state, [key]: value })
     return (
         <>
-            {toArray(p.schema, (schema, key) => ({ schema, key, state: p.state[key] as any })).map(s => (
-                <FormInput {...s} setDelta={setDelta(s.key)} />
-            ))}
+            {toArray(p.schema, (schema, key) => ({ schema, key, state: p.state[key] as any })).map(s => {
+                const props = { ...s, setDelta: setDelta(s.key) }
+                const renderer = customRenderMap[s.schema.type] || defaultRenderMap[s.schema.type] || defaultRenderer
+                return renderer(props as any)
+            })}
         </>
     )
 }

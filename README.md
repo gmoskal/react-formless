@@ -2,6 +2,8 @@
 
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
+## Data Driven react forms
+
 The way you deal with forms depends on the way you think about the data.
 This library employs advanced `typescript` types to automatically generate forms even
 from quite complex data structures (defined by `type` and `schema`).
@@ -11,22 +13,18 @@ Checkout simple login form example
 
 ```typescript jsx
 import * as React from "react"
-import { useFormHook, FormView } from "typed-react-forms"
+import { useFormHook, FormHookProps, FormView, InputRenderMap } from "typed-react-forms"
 
-type Credentials = { email: string; password: string }
+export type Credentials = { email: string; password: string }
+type Props = Pick<FormHookProps<Credentials>, "initialValue" | "onSubmit">
 
 const schema: FormSchema<Credentials> = {
-    email: { name: "Email", type: "text" },
-    password: { name: "Password", type: "password" }
+    email: { type: "text", placeholder: "Email" },
+    password: { type: "password", placeholder: "Secret" }
 }
 
-export const LoginForm: React.FC<{ tryLogin: (data: Credentials) => void }> = p => {
-    const { formViewProps, onSubmitClick } = useFormHook({
-        schema,
-        initialValue: { email: "", password: "" },
-        onSubmit: p.tryLogin
-    })
-
+export const LoginForm: React.FC<Props> = p => {
+    const { formViewProps, onSubmitClick } = useFormHook({ ...p, schema })
     return (
         <>
             <FormView {...formViewProps} />
@@ -36,3 +34,32 @@ export const LoginForm: React.FC<{ tryLogin: (data: Credentials) => void }> = p 
 }
 
 ```
+
+## the most wanted form features
+
+### Custom renderers
+
+```typescript jsx
+
+export const CustomLoginForm: React.FC<Props> = p => {
+    const { formViewProps, onSubmitClick } = useFormHook({ ...p, schema })
+    const customRenderMap: Partial<InputRenderMap> = {
+        text: p => <h1>Readonly {p.state.value}</h1>,
+        password: p => <h2>Readonly {p.state.value}</h2>
+    }
+    return (
+        <>
+            <FormView {...formViewProps} customRenderMap={customRenderMap} />
+            <button onClick={onSubmitClick}>Login</button>
+        </>
+    )
+}
+```
+
+### Custom validators
+
+### Collections support
+
+### Typings
+
+### Simplicity

@@ -121,7 +121,7 @@ export function toInputState<T>(
     }
 }
 
-export type InputPropsBase<TState, TSchema extends InputSchemaBase<any>, TDelta> = {
+export type InputPropsBase<TState, TSchema extends InputSchemaBase<string, any>, TDelta> = {
     state: TState
     schema: TSchema
     setDelta: TDelta
@@ -149,11 +149,15 @@ export type ExtInputProps<T> = React.InputHTMLAttributes<T> & {
     onBlur: F0
 }
 
+const get = <T>(v: Partial<T>, field: keyof T) => (v[field] !== undefined ? { [field]: v[field] } : {})
+
 export const getInputProps = <T, T2 = HTMLInputElement>(p: InputProps<T>): ExtInputProps<T2> => ({
-    id: p.schema.name,
+    ...get(p.schema, "name"),
+    ...get(p.schema, "id"),
+    ...get(p.schema, "placeholder"),
     value: (p.state.value === undefined ? "" : p.state.value) as any,
     disabled: p.schema.disabled || false,
-    placeholder: p.schema.placeholder || "",
+
     onChange: e => validate(p, (e as any).target.value || null),
     onFocus: () => p.setDelta({ ...p.state, active: true }),
     onBlur: () => p.setDelta({ ...p.state, active: false, visited: true })

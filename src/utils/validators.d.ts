@@ -17,5 +17,5 @@ type ValidatedCollection<T, E = ExtErrors<T>> = { valid: SMap<T>; invalid: SMap<
 type IsType = (v: any, msg?: string) => null | string
 
 type Value<T> = T extends ValueState<string, infer T2> ? T2 : never
-type Type<T> = T extends ValueState<infer T2, any> ? T2 : never
+type Type<T> = T extends State<infer T2> ? T2 : never
 type Constructor<T> = (payload: Value<T>) => T
