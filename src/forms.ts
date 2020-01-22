@@ -155,7 +155,7 @@ export const getInputProps = <T, T2 = HTMLInputElement>(p: InputProps<T>): ExtIn
     ...get(p.schema, "name"),
     ...get(p.schema, "id"),
     ...get(p.schema, "placeholder"),
-    value: (p.state.value === undefined ? "" : p.state.value) as any,
+    value: (p.state.value === undefined || p.state.value === null ? "" : p.state.value) as any,
     disabled: p.schema.disabled || false,
 
     onChange: e => validate(p, (e as any).target.value || null),

@@ -16,6 +16,17 @@ export const values = <T>(t: T) => keys(t || (({} as any) as T)).map(k => t[k])
 export const iterateMap = <T>(map: SMap<T>, cb: (key: keyof SMap<T>, v: T, index: number) => void) =>
     keys(map).forEach((key, index) => cb(key, map[key], index))
 
+export const mapOn = <T, TV2 extends Casted<T, any>>(
+    o: T,
+    toValue: <TKey extends keyof T>(key: TKey, value: T[TKey]) => TV2[TKey]
+) => keys(o).map(k => toValue(k, o[k]))
+
+export const mapOn2 = <T, T2, TV2 extends Casted<T, any>>(
+    o: T,
+    toValue: <TKey extends keyof T>(key: TKey, value: T[TKey]) => T2,
+    toValue2: <TKey extends keyof T>(key: string, value: T2) => TV2[TKey]
+) => keys(o).map(k => toValue2(k + "", toValue(k, o[k])))
+
 export const mapObject = <T, TV2 extends Casted<T, any>>(
     o: T,
     toValue: <TKey extends keyof T>(key: TKey, value: T[TKey]) => TV2[TKey]

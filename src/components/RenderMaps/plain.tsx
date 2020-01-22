@@ -19,7 +19,7 @@ export const renderBasicInput = (p: InputProps<any>) => (
     </>
 )
 
-export const htmlRenderMap: Partial<InputRenderMap> = {
+export const plainRenderMap: Partial<InputRenderMap> = {
     email: renderBasicInput,
     password: renderBasicInput,
     text: renderBasicInput
