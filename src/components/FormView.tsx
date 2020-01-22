@@ -1,43 +1,18 @@
 import * as React from "react"
-import { InputProps, getInputProps } from "../forms"
 import { toArray } from "../utils/map"
-
-const ErrorLabel: React.FC<InputState<any>> = ({ validationResult, visited }) => (
-    <div className="ErrorLabel">
-        {validationResult && visited && validationResult.type === "Err" ? validationResult.value : ""}
-    </div>
-)
-
-export const renderBasicInput = (p: InputProps<any>) => (
-    <>
-        {p.schema.sectionTitle ? <h1>{p.schema.sectionTitle}</h1> : null}
-        <div className="InputWrapper">
-            <p>{p.schema.name}</p>
-            <input {...getInputProps(p)} type={p.schema.type === "number" ? "text" : p.schema.type} />
-            <ErrorLabel {...p.state} />
-        </div>
-    </>
-)
+import { htmlRenderMap } from "./renderMaps/html"
 
 type FormInputProps<T> = { schema: InputSchema<T>; state: InputState<T>; setDelta: F1<any> }
 type Payload<T> = T extends State<any, infer T> ? T : never
 
-export type InputRenderer<T, P extends Type<InputSchema<any>>> = (
+export type InputRenderer<P extends Type<InputSchema<any>>, T = any> = (
     p: FormInputProps<T> & { schema: State<P, Payload<InputSchema<any>>> }
 ) => React.ReactElement
 
-export type InputRenderMap = { [P in Type<InputSchema<any>>]: InputRenderer<any, P> }
-
-export const defaultRenderMap: Partial<InputRenderMap> = {
-    email: renderBasicInput,
-    password: renderBasicInput,
-    text: renderBasicInput
-}
+export type InputRenderMap = { [P in Type<InputSchema<any>>]: InputRenderer<P> }
 
 const defaultRenderer: InputRenderer<any, any> = p => <h3>Schema type not supported {JSON.stringify(p.schema)}</h3>
-
-export const FormInput = <T extends any>(p: FormInputProps<T>): React.ReactElement =>
-    (defaultRenderMap[p.schema.type] || defaultRenderer)(p as any)
+const defaultRenderMap = htmlRenderMap
 
 export type FormViewProps<T> = {
     setState: F1<FormState<T>>
