@@ -9,13 +9,13 @@ export const MultiRenderFormView: Props = ({ title, onSubmitClick, ...p }) => (
     <>
         <h2>{title}</h2>
 
-        <h3>using Plain renderer</h3>
+        <h3>Plain HTML renderer</h3>
         <FormView {...p} />
 
-        <h3>using AntDesign renderer</h3>
+        <h3>Ant Design renderer</h3>
         <FormView {...p} rendeType="AntDesign" />
 
-        <h3>usign Custom renderer</h3>
+        <h3>Custom (Readonly) renderer</h3>
         <FormView {...p} customRenderMap={readOnlyRenderMap} />
 
         {onSubmitClick ? <button onClick={onSubmitClick}>Login</button> : null}

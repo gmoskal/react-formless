@@ -57,7 +57,9 @@ const SelectInput: InputOptionRenderFn = p => {
             <Label text={p.schema.name} />
             <select name={p.schema.name} {...getInputProps<HTMLSelectElement>(p)}>
                 {p.schema.values.map(([name, value]) => (
-                    <option value={value}>{name}</option>
+                    <option value={value} key={value}>
+                        {name}
+                    </option>
                 ))}
             </select>
         </>
