@@ -1,9 +1,10 @@
 import * as React from "react"
 import { render } from "react-dom"
-import { Switch, Route, BrowserRouter } from "react-router-dom"
+import { Switch, Route, BrowserRouter, Link } from "react-router-dom"
 import { InputSelectForm } from "./InputSelect"
 import { InputRadioForm } from "./InputRadio"
 import { InputsForms } from "./Inputs"
+import { iterateMap, keys } from "../utils/map"
 
 export const createDiv = (id: string) => {
     const d = document.createElement("div")
@@ -11,14 +12,31 @@ export const createDiv = (id: string) => {
     d.setAttribute("id", id)
     return d
 }
-
+const paths: Dict<string, React.FC> = {
+    "/inputs": InputSelectForm,
+    "/radio": InputRadioForm,
+    "/select": InputsForms
+}
+const Main = () => {
+    return (
+        <>
+            {keys(paths).map(path => (
+                <p>
+                    <Link key={path} to={path}>
+                        {path}
+                    </Link>
+                </p>
+            ))}
+        </>
+    )
+}
 render(
     <BrowserRouter>
         <Switch>
-            <Route path="/select" component={InputSelectForm} />
-            <Route path="/radio" component={InputRadioForm} />
-            <Route path="/inputs" component={InputsForms} />
-            <Route path="/" component={InputsForms} exact />
+            {keys(paths).map(path => (
+                <Route key={path} path={path} component={paths[path]} />
+            ))}
+            <Route path="/" component={Main} exact />
         </Switch>
     </BrowserRouter>,
     createDiv("app")
