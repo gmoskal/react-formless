@@ -137,12 +137,6 @@ const validate = <T>({ state, schema: { toValue, type, validators }, setDelta }:
     return validationResult
 }
 
-type StandarInputProps<T> = Pick<
-    React.InputHTMLAttributes<T>,
-    "name" | "placeholder" | "id" | "onChange" | "value" | "disabled"
->
-export type ExtInputProps<T> = StandarInputProps<T> & { onFocus: F0; onBlur: F0 }
-
 const get = <T>(v: Partial<T>, field: keyof T) => (v[field] !== undefined ? { [field]: v[field] } : {})
 
 export const getInputProps = <T2 = HTMLInputElement>(p: SimpleInputProps): ExtInputProps<T2> => ({

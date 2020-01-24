@@ -9,7 +9,8 @@ const Error: React.FC<InputState<any>> = ({ validationResult, visited }) => (
         {validationResult && visited && validationResult.type === "Err" ? validationResult.value : ""}
     </div>
 )
-const BasicInput: InputBoxRenderFn = p => (
+
+const Input: InputBoxRenderFn = p => (
     <>
         <Title text={p.schema.sectionTitle} />
         <div className="InputWrapper">
@@ -34,43 +35,44 @@ const TextAreaInput: InputBoxRenderFn<any> = p => (
     </>
 )
 
-const RadioInput: InputOptionRenderFn = p => (
-    <>
-        <Title text={p.schema.sectionTitle} />
-        <Label text={p.schema.name} />
-        {p.schema.values.map(([name, value]) => {
-            const { onChange, ...inputProps } = getInputProps(p)
-            return (
-                <div key={value} onClick={() => (onChange ? onChange({ target: { value } } as any) : null)}>
-                    <input {...inputProps} value={value} type="radio" checked={`${p.state.value}` === `${value}`} />
-                    <span>{name}</span>
-                </div>
-            )
-        })}
-    </>
-)
-
-const SelectInput: InputOptionRenderFn = p => {
+const RadioInput: InputOptionRenderFn = p => {
+    const { onChange, ...inputProps } = getInputProps(p)
+    const handleClick = (value: string) => () => (onChange ? onChange({ target: { value } } as any) : null)
     return (
         <>
             <Title text={p.schema.sectionTitle} />
             <Label text={p.schema.name} />
-            <select name={p.schema.name} {...getInputProps<HTMLSelectElement>(p)}>
-                {p.schema.values.map(([name, value]) => (
-                    <option value={value} key={value}>
-                        {name}
-                    </option>
-                ))}
-            </select>
+            {p.schema.values.map(([name, value]) => {
+                return (
+                    <div key={value} onClick={handleClick(value)}>
+                        <input {...inputProps} value={value} type="radio" checked={`${p.state.value}` === `${value}`} />
+                        <span>{name}</span>
+                    </div>
+                )
+            })}
         </>
     )
 }
+
+const SelectInput: InputOptionRenderFn = p => (
+    <>
+        <Title text={p.schema.sectionTitle} />
+        <Label text={p.schema.name} />
+        <select name={p.schema.name} {...getInputProps<HTMLSelectElement>(p)}>
+            {p.schema.values.map(([name, value]) => (
+                <option value={value} key={value}>
+                    {name}
+                </option>
+            ))}
+        </select>
+    </>
+)
 
 export const plainHtmlRenderMap: Partial<InputRenderMap> = {
     ...toMap<InputBoxType, InputBoxRenderFn>(
         ["text", "email", "password", "number", "customBox"],
         k => k,
-        () => BasicInput
+        () => Input
     ),
     textarea: TextAreaInput,
     radio: RadioInput,

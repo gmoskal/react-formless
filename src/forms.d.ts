@@ -3,15 +3,21 @@
 type Tuples<T = string> = Array<[string, T]>
 type ArrayItem<T> = T extends Array<infer E> ? E : T
 
-type SharedInputProps = Pick<React.InputHTMLAttributes<any>, "disabled" | "placeholder" | "name" | "id">
-type InputSchemaBase<TName extends InputType, T, TExtra = {}> = State<
+type StandardInputProps<T> = Pick<
+    React.InputHTMLAttributes<T>,
+    "name" | "placeholder" | "id" | "onChange" | "value" | "disabled"
+>
+
+type ExtInputProps<T> = StandardInputProps<T> & { onFocus: F0; onBlur: F0 }
+
+type InputSchemaBase<TName extends InputType = InputType, T = any, TExtra = {}> = State<
     TName,
     {
         validators?: Validators<T, string>
         toValue?: F1<string, T | null>
         fromValue?: F1<T | null, string>
         sectionTitle?: string
-    } & SharedInputProps &
+    } & StandardInputProps<T> &
         TExtra
 >
 
@@ -45,7 +51,7 @@ type InputResult<T> = T extends Array<infer E> ? Array<FormResult<E>> : Result<T
 
 type FormResult<T> = { [P in keyof T]: InputResult<T[P]> }
 
-type InputPropsBase<TSchema extends InputSchemaBase<InputType, any>, TState, TDelta = F1<any>> = {
+type InputPropsBase<TSchema extends InputSchemaBase, TState, TDelta = F1<any>> = {
     schema: TSchema
     state: TState
     setDelta: TDelta
@@ -54,7 +60,7 @@ type InputPropsBase<TSchema extends InputSchemaBase<InputType, any>, TState, TDe
 type SimpleInputProps = ArrayItem<FArgs<InputRenderMap[keyof Omit<InputRenderMap, "list" | "collection">]>>
 type InputProps = ArrayItem<FArgs<InputRenderMap[keyof InputRenderMap]>>
 
-type RenderFn<TSchema extends InputSchemaBase<InputType, any>, TState, TDelta = F1<TState>> = F1<
+type RenderFn<TSchema extends InputSchemaBase, TState, TDelta = F1<TState>> = F1<
     InputPropsBase<TSchema, TState, TDelta>,
     React.ReactElement
 >
