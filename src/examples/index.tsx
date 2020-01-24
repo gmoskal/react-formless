@@ -4,7 +4,7 @@ import { Switch, Route, BrowserRouter, Link } from "react-router-dom"
 import { InputSelectForm } from "./InputSelect"
 import { InputRadioForm } from "./InputRadio"
 import { InputsForms } from "./Inputs"
-import { iterateMap, keys } from "../utils/map"
+import { keys } from "../utils/map"
 
 export const createDiv = (id: string) => {
     const d = document.createElement("div")
@@ -12,24 +12,25 @@ export const createDiv = (id: string) => {
     d.setAttribute("id", id)
     return d
 }
+
 const paths: Dict<string, React.FC> = {
     "/inputs": InputSelectForm,
     "/radio": InputRadioForm,
     "/select": InputsForms
 }
-const Main = () => {
-    return (
-        <>
-            {keys(paths).map(path => (
-                <p>
-                    <Link key={path} to={path}>
-                        {path}
-                    </Link>
-                </p>
-            ))}
-        </>
-    )
-}
+
+const Main = () => (
+    <>
+        {keys(paths).map(path => (
+            <p>
+                <Link key={path} to={path}>
+                    {path}
+                </Link>
+            </p>
+        ))}
+    </>
+)
+
 render(
     <BrowserRouter>
         <Switch>
