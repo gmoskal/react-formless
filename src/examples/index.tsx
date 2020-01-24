@@ -1,17 +1,17 @@
 import * as React from "react"
 import { render } from "react-dom"
-import { Switch, Route, BrowserRouter as Router } from "react-router-dom"
-import { LoginForm, LoginFormProps } from "./loginForm"
+import { Switch, Route, BrowserRouter } from "react-router-dom"
+import { LoginForm } from "./loginForm"
 import { selectCreateDiv } from "./helpers"
 import { _noop } from "../utils"
-
-const loginFormProps: LoginFormProps = { initialValue: { email: "", password: "" }, onSubmit: _noop }
+import { InfoForm } from "./infoForm"
 
 render(
-    <Router>
+    <BrowserRouter>
         <Switch>
-            <Route path="/" component={() => <LoginForm {...loginFormProps} />} exact />
+            <Route path="/" component={InfoForm} />
+            <Route path="/" component={LoginForm} exact />
         </Switch>
-    </Router>,
+    </BrowserRouter>,
     selectCreateDiv("app")
 )

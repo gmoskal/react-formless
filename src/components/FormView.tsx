@@ -1,20 +1,20 @@
 import * as React from "react"
 import { mapOn2 } from "../utils/map"
-import { plainRenderMap } from "./renderMaps/plain"
-import { antDesignRenderMap, AntDesignInputWrapper } from "./renderMaps/antDesign"
+import { plainHtmlRenderMap } from "./renderMaps/PlainHtmlRenderMap"
+import { antDesignRenderMap, AntDesignInputWrapper } from "./renderMaps/AntDesignRenderMap"
 
-type FormInputProps<T> = { schema: InputSchema<T>; state: InputState<T>; setDelta: F1<any> }
-type Payload<T> = T extends State<any, infer T> ? T : never
+export type FormInputProps<T> = { schema: InputSchema<T>; state: InputState<T>; setDelta: F1<any> }
+export type Payload<T> = T extends State<any, infer T> ? T : never
 
 export type InputRenderer<P extends Type<InputSchema<any>>, T = any> = (
     p: FormInputProps<T> & { schema: State<P, Payload<InputSchema<any>>> }
 ) => React.ReactElement
 
-export type InputRenderMap = { [P in Type<InputSchema<any>>]: InputRenderer<P> }
+// export type InputRenderMap = { [P in Type<InputSchema<any>>]: InputRenderer<P> }
 
 type RenderMapProps = {
     ItemWrapper?: () => React.ReactElement
-    customRenderMap?: Partial<InputRenderMap>
+    customRenderMap?: Partial<InputRenderMap<any>>
     rendeType?: "Plain" | "AntDesign"
 }
 
@@ -26,7 +26,7 @@ export type FormViewProps<T> = RenderMapProps & {
 
 const getRenderMap = (p: RenderMapProps) => {
     if (p.customRenderMap) return p.customRenderMap
-    return p.rendeType === "AntDesign" ? antDesignRenderMap : plainRenderMap
+    return p.rendeType === "AntDesign" ? antDesignRenderMap : plainHtmlRenderMap
 }
 
 const getItemWrapper = (p: RenderMapProps) => {
@@ -35,11 +35,11 @@ const getItemWrapper = (p: RenderMapProps) => {
     return React.Fragment
 }
 
-const DefaultRenderer: InputRenderer<any> = p => <h3>Not supported {JSON.stringify(p.schema)}</h3>
+const DefaultRenderer: RenderFn<any, any> = p => <h3>Not supported {JSON.stringify(p.schema)}</h3>
 
 export function FormView<T extends any>(p: FormViewProps<T>): React.ReactElement {
     const setDelta = (key: keyof T) => (value: any) => p.setState({ ...p.state, [key]: value })
-    const renderMap = { ...plainRenderMap, ...getRenderMap(p) }
+    const renderMap = { ...plainHtmlRenderMap, ...getRenderMap(p) }
     const ItemWrapper = getItemWrapper(p)
     return (
         <>

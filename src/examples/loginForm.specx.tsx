@@ -5,7 +5,7 @@ import { Credentials, LoginForm } from "./loginForm"
 const initialValue: Credentials = { email: "em@a.il", password: "foo" }
 describe("<LoginForm>", () => {
     it.skip("renders two inputs with inital values", () => {
-        const inputs = mount(<LoginForm onSubmit={jest.fn} initialValue={initialValue} />).find("input")
+        const inputs = mount(<LoginForm />).find("input")
 
         const emailProps = inputs.at(0).props()
         expect(emailProps.placeholder).toEqual("Email")

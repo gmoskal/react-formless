@@ -18,9 +18,11 @@ type Datum<T extends string | number = string> = { e: T; a: string; v: SimpleVal
 type EidDatum = Datum<number>
 type UuidDatum = Datum<string>
 
-type Casted<T, S> = { [P in keyof T]: S }
-type Subtype<T> = { [P in keyof T]: T[keyof T] }
-type SCasted<T, S> = { [P in keyof T]?: S }
+type SDict<Keys extends string | number | symbol, S> = Partial<Dict<Keys, S>>
+type Dict<Keys extends string | number | symbol, S> = { [P in Keys]: S }
+type Casted<T, S> = Dict<keyof T, S>
+type Subtype<T> = Dict<keyof T, T[keyof T]>
+type SCasted<T, S> = SDict<keyof T, S>
 
 type StateType<T> = T extends State<infer E> ? E : T
 type State<T extends string, T2 = {}> = { type: T } & T2

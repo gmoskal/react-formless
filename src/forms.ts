@@ -108,8 +108,10 @@ export function toInputState<T>(
         case "chips":
         case "selectableChips":
             return InputState<string[]>([], value as any)
+        case "customOption":
         case "radio":
             return InputState<T>("" as any, (value as any).toString())
+        case "customBox":
         case "dropdown":
         case "text":
         case "textarea":
@@ -121,14 +123,6 @@ export function toInputState<T>(
     }
 }
 
-export type InputPropsBase<TState, TSchema extends InputSchemaBase<string, any>, TDelta> = {
-    state: TState
-    schema: TSchema
-    setDelta: TDelta
-}
-
-export type InputProps<T> = InputPropsBase<InputState<T>, SimpleInputSchema<T>, F1<Partial<InputState<T>>>>
-
 const getNumberValue = (v: any): any => {
     if (`${v}` === "") return undefined as any
     if (`${v}`.endsWith(".") || `${v}`.endsWith(",")) return v
@@ -136,7 +130,7 @@ const getNumberValue = (v: any): any => {
     return isNaN(numberValue) ? v : numberValue
 }
 
-const validate = <T>({ state, schema: { toValue, type, validators }, setDelta }: InputProps<T>, v: any) => {
+const validate = <T>({ state, schema: { toValue, type, validators }, setDelta }: SimpleInputProps, v: any) => {
     const value = toValue ? toValue(`${v}`) : type === "number" ? getNumberValue(v) : v
     const validationResult = validators ? runValidatorsRaw<T, string>(validators, value) : Ok(value)
     setDelta({ ...state, validationResult, value })
@@ -151,7 +145,7 @@ export type ExtInputProps<T> = StandarInputProps<T> & { onFocus: F0; onBlur: F0 
 
 const get = <T>(v: Partial<T>, field: keyof T) => (v[field] !== undefined ? { [field]: v[field] } : {})
 
-export const getInputProps = <T, T2 = HTMLInputElement>(p: InputProps<T>): ExtInputProps<T2> => ({
+export const getInputProps = <T, T2 = HTMLInputElement>(p: SimpleInputProps): ExtInputProps<T2> => ({
     ...get(p.schema, "name"),
     ...get(p.schema, "id"),
     ...get(p.schema, "placeholder"),
@@ -163,9 +157,11 @@ export const getInputProps = <T, T2 = HTMLInputElement>(p: InputProps<T>): ExtIn
     onBlur: () => p.setDelta({ ...p.state, active: false, visited: true })
 })
 
-export type DropdownInputProps<T> = InputPropsBase<InputState<T>, InputOptionSchema<T>, F1<any>>
-
-export const getDropdownInputProps = <T>({ state, schema, setDelta }: DropdownInputProps<T>) => {
+export const getDropdownInputProps = <T>({
+    state,
+    schema,
+    setDelta
+}: InputPropsBase<InputOptionSchema<T>, InputState<T>>) => {
     const currentValue = schema.values.find(v => v[1] === state.value)
     const validate = (v: T) => (schema.validators ? runValidatorsRaw<T, string>(schema.validators, v) : Ok(v))
     const options = schema.values.map(v => toOption(v[0], v[1]))
