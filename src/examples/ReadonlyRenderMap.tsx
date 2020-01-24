@@ -1,4 +1,5 @@
 import * as React from "react"
+import { toMap } from "../utils/map"
 
 export const ReadonlyInputWithLength: InputBoxRenderFn<any> = p => (
     <>
@@ -10,7 +11,7 @@ export const ReadonlyInputWithLength: InputBoxRenderFn<any> = p => (
 )
 
 const styleBase: React.CSSProperties = { border: "2px solid red", padding: 5, margin: 5, borderRadius: 5 }
-export const ReadonlyRadioInput: InputOptionRenderFn = p => (
+export const ReadonlySelectInput: InputOptionRenderFn = p => (
     <>
         {p.schema.values.map(([name, value]) => (
             <span style={{ ...styleBase, borderColor: p.state.value === value ? "#29f" : "#ddd" }} key={value}>
@@ -19,3 +20,16 @@ export const ReadonlyRadioInput: InputOptionRenderFn = p => (
         ))}
     </>
 )
+
+export const readOnlyRenderMap: Partial<InputRenderMap> = {
+    ...toMap<InputBoxType, InputBoxRenderFn>(
+        ["text", "email", "password", "number", "customBox", "textarea"],
+        k => k,
+        () => ReadonlyInputWithLength
+    ),
+    ...toMap<InputOptionType, InputOptionRenderFn>(
+        ["radio", "select"],
+        k => k,
+        () => ReadonlySelectInput
+    )
+}

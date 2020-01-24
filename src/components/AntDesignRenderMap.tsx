@@ -1,6 +1,6 @@
 import * as React from "react"
-import { InputNumber, Input, Radio } from "antd"
-import { getInputProps } from "../../forms"
+import { InputNumber, Input, Radio, Select } from "antd"
+import { getInputProps } from "../forms"
 
 import "antd/lib/style/components.less"
 
@@ -8,9 +8,9 @@ const wrapperProps: React.HTMLAttributes<HTMLDivElement> = { style: { padding: "
 export const AntDesignInputWrapper: React.FC = p => <div {...wrapperProps}>{p.children}</div>
 
 export const RadioInput: InputOptionRenderFn = p => {
-    const inputProps = getInputProps(p)
+    const { value, onChange } = getInputProps<HTMLSelectElement>(p)
     return (
-        <Radio.Group value={inputProps.value} onChange={inputProps.onChange as any}>
+        <Radio.Group value={value} onChange={onChange as any}>
             {p.schema.values.map(([name, value]) => (
                 <Radio key={value} value={value}>
                     {name}
@@ -30,11 +30,27 @@ const AntInputNumber: InputBoxRenderFn = p => {
 
     return <InputNumber {...props} onChange={onChangeHandler} value={v} />
 }
-
+const AntSelect: InputOptionRenderFn = p => {
+    const { onChange, value, ...props } = getInputProps(p)
+    const handleChange = (v: any) => {
+        if (!onChange || v === undefined) return
+        onChange({ target: { value: `${v}` } } as any)
+    }
+    return (
+        <Select value={value} onChange={handleChange} style={{ width: 120 }}>
+            {p.schema.values.map(([name, value]) => (
+                <Select.Option key={value} value={value}>
+                    {name}
+                </Select.Option>
+            ))}
+        </Select>
+    )
+}
 export const antDesignRenderMap: Partial<InputRenderMap> = {
     text: p => <Input {...getInputProps(p)} />,
     password: p => <Input.Password {...getInputProps(p)} />,
     textarea: p => <Input.TextArea {...getInputProps(p)} />,
     number: AntInputNumber,
-    radio: RadioInput
+    radio: RadioInput,
+    select: AntSelect
 }

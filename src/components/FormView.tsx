@@ -1,7 +1,7 @@
 import * as React from "react"
 import { mapOn2 } from "../utils/map"
-import { plainHtmlRenderMap } from "./renderMaps/PlainHtmlRenderMap"
-import { antDesignRenderMap, AntDesignInputWrapper } from "./renderMaps/AntDesignRenderMap"
+import { plainHtmlRenderMap } from "./PlainHtmlRenderMap"
+import { antDesignRenderMap, AntDesignInputWrapper } from "./AntDesignRenderMap"
 
 export type FormInputProps<T> = { schema: InputSchema<T>; state: InputState<T>; setDelta: F1<any> }
 export type Payload<T> = T extends State<any, infer T> ? T : never

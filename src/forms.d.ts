@@ -63,7 +63,7 @@ type InputBoxType = "text" | "email" | "number" | "textarea" | "password" | "cus
 type InputBoxRenderFn<T = any> = RenderFn<InputBoxSchema<T>, InputState<T>>
 type InputBoxRenderMap<T = any> = Dict<InputBoxType, InputBoxRenderFn<T>>
 
-type InputOptionType = "radio" | "dropdown" | "selectableChips" | "customOption"
+type InputOptionType = "radio" | "select" | "selectableChips" | "customOption"
 type InputOptionRenderFn<T = any> = RenderFn<InputOptionSchema<T>, InputState<T>>
 type InputOptionRenderMap<T = any> = Dict<InputOptionType, InputOptionRenderFn<T>>
 

@@ -112,7 +112,7 @@ export function toInputState<T>(
         case "radio":
             return InputState<T>("" as any, (value as any).toString())
         case "customBox":
-        case "dropdown":
+        case "select":
         case "text":
         case "textarea":
         case "email":

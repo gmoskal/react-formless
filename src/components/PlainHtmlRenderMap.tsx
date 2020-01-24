@@ -1,6 +1,6 @@
 import * as React from "react"
-import { getInputProps } from "../../forms"
-import { toMap } from "../../utils/map"
+import { getInputProps } from "../forms"
+import { toMap } from "../utils/map"
 
 const Title: React.FC<{ text?: string }> = p => (p.text ? <h1>{p.text}</h1> : null)
 const Label: React.FC<{ text?: string }> = p => (p.text ? <p>{p.text}</p> : null)
@@ -50,12 +50,27 @@ const RadioInput: InputOptionRenderFn = p => (
     </>
 )
 
+const SelectInput: InputOptionRenderFn = p => {
+    return (
+        <>
+            <Title text={p.schema.sectionTitle} />
+            <Label text={p.schema.name} />
+            <select name={p.schema.name} {...getInputProps<HTMLSelectElement>(p)}>
+                {p.schema.values.map(([name, value]) => (
+                    <option value={value}>{name}</option>
+                ))}
+            </select>
+        </>
+    )
+}
+
 export const plainHtmlRenderMap: Partial<InputRenderMap> = {
-    ...toMap<InputType, InputBoxRenderFn>(
+    ...toMap<InputBoxType, InputBoxRenderFn>(
         ["text", "email", "password", "number", "customBox"],
         k => k,
         () => BasicInput
     ),
     textarea: TextAreaInput,
-    radio: RadioInput
+    radio: RadioInput,
+    select: SelectInput
 }
