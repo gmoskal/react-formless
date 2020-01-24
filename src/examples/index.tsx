@@ -1,32 +1,22 @@
 import * as React from "react"
 import { render } from "react-dom"
 import { Switch, Route, BrowserRouter, Link } from "react-router-dom"
+
+import { mapOn } from "../utils/map"
+import { createDiv } from "../utils"
 import { InputSelectForm } from "./InputSelect"
 import { InputRadioForm } from "./InputRadio"
 import { InputsForms } from "./Inputs"
-import { keys } from "../utils/map"
 
-export const createDiv = (id: string) => {
-    const d = document.createElement("div")
-    document.body.appendChild(d)
-    d.setAttribute("id", id)
-    return d
-}
-
-const paths: Dict<string, React.FC> = {
-    "/inputs": InputSelectForm,
-    "/radio": InputRadioForm,
-    "/select": InputsForms
-}
+const paths = { "/inputs": InputsForms, "/radio": InputRadioForm, "/select": InputSelectForm }
 
 const Main = () => (
     <>
-        {keys(paths).map(path => (
-            <p>
-                <Link key={path} to={path}>
-                    {path}
-                </Link>
-            </p>
+        <h2>Select form demo</h2>
+        {mapOn(paths, path => (
+            <Link key={path} to={path}>
+                <h3>{path.replace("/", "").toUpperCase()}</h3>
+            </Link>
         ))}
     </>
 )
@@ -34,10 +24,10 @@ const Main = () => (
 render(
     <BrowserRouter>
         <Switch>
-            {keys(paths).map(path => (
-                <Route key={path} path={path} component={paths[path]} />
-            ))}
             <Route path="/" component={Main} exact />
+            {mapOn(paths, (path, C) => (
+                <Route key={path} path={path} component={C} exact />
+            ))}
         </Switch>
     </BrowserRouter>,
     createDiv("app")
