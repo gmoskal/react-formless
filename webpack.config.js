@@ -1,41 +1,44 @@
 const path = require("path")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
-// const { CleanWebpackPlugin } = require("clean-webpack-plugin")
-// console.log({ CleanWebpackPlugin, HtmlWebpackPlugin })
-module.exports = {
-    entry: "./src/examples/index.tsx",
+const env = process.env.NODE_ENV || "dev"
+const distPath = path.resolve(__dirname, "lib")
+
+const commonPlugins = [new HtmlWebpackPlugin({ template: "./assets/template.html" })]
+
+const configBase = {
+    entry: { index: "./src/examples/index.tsx" },
+    output: { filename: "[name].bundle.js", chunkFilename: "[name].js", path: distPath },
+    devtool: "source-map",
+    resolve: { extensions: [".ts", ".tsx", ".js", ".json"] },
     module: {
         rules: [
-            {
-                test: /\.tsx?$/,
-                use: "ts-loader",
-                exclude: /node_modules/
-            },
-            {
-                test: /\.css$/i,
-                use: ["style-loader", "css-loader"]
-            },
-            {
-                test: /\.less$/,
-                use: ["style-loader", 'css-loader', 'less-loader']
-            }
+            { test: /\.less$/, use: ["style-loader", "css-loader", "less-loader"] },
+            { test: /\.css$/i, use: ["style-loader", "css-loader"] },
+            { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
+            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
         ]
     },
-    resolve: {
-        extensions: [".tsx", ".ts", ".js"]
-    },
-    devtool: "inline-source-map",
-    devServer: {
-        contentBase: "./dist"
-    },
-    plugins: [
-        // new CleanWebpackPlugin(["dist"]),
-        new HtmlWebpackPlugin({
-            template: "./index.html"
-        })
-    ],
-    output: {
-        filename: "[name].bundle.js",
-        path: path.resolve(__dirname, "dist")
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                default: false,
+                vendors: { test: /node_modules/, name: "vendors", chunks: chunk => chunk.name !== "pre-main.min" }
+            }
+        }
     }
 }
+
+const dev = {
+    mode: "development",
+    watch: true,
+    devServer: { contentBase: path.join(__dirname), compress: true, port: 8888, historyApiFallback: true },
+    plugins: commonPlugins
+}
+
+const prod = {
+    mode: "production",
+    plugins: commonPlugins,
+    optimization: { ...configBase.optimization, minimize: true }
+}
+const config = Object.assign(configBase, env == "production" ? prod : dev)
+module.exports = config

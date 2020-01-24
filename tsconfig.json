@@ -2,7 +2,8 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "jsx": "react",
+	"jsx": "react",
+	"sourceMap": true,
     "declaration": true,
     "outDir": "./lib",
     "types": ["jest"],
@@ -10,7 +11,7 @@
     "strict": true,
     "baseUrl": "./",
     "paths": {
-      "*": ["src/@types/*", "*"]
+      "*": ["*"]
     }
   },
   "allowJS": false,

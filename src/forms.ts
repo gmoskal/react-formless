@@ -145,7 +145,7 @@ export type ExtInputProps<T> = StandarInputProps<T> & { onFocus: F0; onBlur: F0 
 
 const get = <T>(v: Partial<T>, field: keyof T) => (v[field] !== undefined ? { [field]: v[field] } : {})
 
-export const getInputProps = <T, T2 = HTMLInputElement>(p: SimpleInputProps): ExtInputProps<T2> => ({
+export const getInputProps = <T2 = HTMLInputElement>(p: SimpleInputProps): ExtInputProps<T2> => ({
     ...get(p.schema, "name"),
     ...get(p.schema, "id"),
     ...get(p.schema, "placeholder"),

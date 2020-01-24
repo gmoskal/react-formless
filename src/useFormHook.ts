@@ -9,7 +9,7 @@ export type FormViewProps<T> = {
 }
 
 export type FormHookProps<T> = {
-    initialValue: T
+    initialValue?: Partial<T>
     schema: FormSchema<T>
     onSubmit: F1<T>
 }
@@ -23,13 +23,13 @@ export type FormHookResult<T> = {
 }
 
 export const useFormHook = <T>({ schema, ...p }: FormHookProps<T>): FormHookResult<T> => {
-    const [state, setState] = React.useState(toFormState(schema, p.initialValue))
+    const [state, setState] = React.useState(toFormState<T>(schema, (p.initialValue || {}) as any))
     const onSubmitClick = () => {
         const res = toResult(schema, state)
         if (res.type === "Err") setState(validateForm(schema, state))
         else p.onSubmit(res.value)
     }
-    const resetState = () => setState(toFormState(schema, p.initialValue))
+    const resetState = () => setState(toFormState(schema, p.initialValue as any))
     return {
         onSubmitClick,
         onSubmitClickReset: () => {

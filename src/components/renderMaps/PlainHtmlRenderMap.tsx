@@ -1,34 +1,47 @@
 import * as React from "react"
 import { getInputProps } from "../../forms"
+import { toMap } from "../../utils/map"
 
-const ErrorLabel: React.FC<InputState<any>> = ({ validationResult, visited }) => (
+const Title: React.FC<{ text?: string }> = p => (p.text ? <h1>{p.text}</h1> : null)
+const Label: React.FC<{ text?: string }> = p => (p.text ? <p>{p.text}</p> : null)
+const Error: React.FC<InputState<any>> = ({ validationResult, visited }) => (
     <div className="ErrorLabel">
         {validationResult && visited && validationResult.type === "Err" ? validationResult.value : ""}
     </div>
 )
-
-export const renderBasicInput: InputBoxRenderFn<any> = p => (
+const BasicInput: InputBoxRenderFn = p => (
     <>
-        {p.schema.sectionTitle ? <h1>{p.schema.sectionTitle}</h1> : null}
+        <Title text={p.schema.sectionTitle} />
         <div className="InputWrapper">
             <p>{p.schema.name}</p>
-            <input {...getInputProps(p)} type={p.schema.type === "number" ? "text" : p.schema.type} />
-            <ErrorLabel {...p.state} />
+            <input
+                {...getInputProps(p)}
+                type={p.schema.type === "number" ? "number" : p.schema.type === "password" ? "password" : "text"}
+            />
+            <Error {...p.state} />
         </div>
     </>
 )
 
-export const Title: React.FC<{ text?: string }> = p => (p.text ? <h1>{p.text}</h1> : null)
-export const Label: React.FC<{ text?: string }> = p => (p.text ? <p>{p.text}</p> : null)
+const TextAreaInput: InputBoxRenderFn<any> = p => (
+    <>
+        <Title text={p.schema.sectionTitle} />
+        <div className="InputWrapper">
+            <p>{p.schema.name}</p>
+            <textarea {...getInputProps<HTMLTextAreaElement>(p)} />
+            <Error {...p.state} />
+        </div>
+    </>
+)
 
-export const RadioInput: InputOptionRenderFn = p => (
+const RadioInput: InputOptionRenderFn = p => (
     <>
         <Title text={p.schema.sectionTitle} />
         <Label text={p.schema.name} />
         {p.schema.values.map(([name, value]) => {
-            const inputProps = getInputProps(p)
+            const { onChange, ...inputProps } = getInputProps(p)
             return (
-                <div key={value} {...inputProps}>
+                <div key={value} onClick={() => (onChange ? onChange({ target: { value } } as any) : null)}>
                     <input {...inputProps} value={value} type="radio" checked={`${p.state.value}` === `${value}`} />
                     <span>{name}</span>
                 </div>
@@ -38,8 +51,11 @@ export const RadioInput: InputOptionRenderFn = p => (
 )
 
 export const plainHtmlRenderMap: Partial<InputRenderMap> = {
-    email: renderBasicInput,
-    password: renderBasicInput,
-    text: renderBasicInput,
+    ...toMap<InputType, InputBoxRenderFn>(
+        ["text", "email", "password", "number", "customBox"],
+        k => k,
+        () => BasicInput
+    ),
+    textarea: TextAreaInput,
     radio: RadioInput
 }
