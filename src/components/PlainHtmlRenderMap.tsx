@@ -1,7 +1,7 @@
 import * as React from "react"
 import { getInputProps, toFormState, toInputState } from "../forms"
 import { toMap, replace } from "../utils/map"
-import { FormView, InputView } from "./FormView"
+import { FormView, InputView, getElementsRenderMap, ItemChildrenWrapperRF, ButtonRF, TitleRF } from "./FormView"
 
 const Title: React.FC<{ text?: string }> = p => (p.text ? <h3>{p.text}</h3> : null)
 const Label: React.FC<{ text?: string }> = p =>
@@ -13,65 +13,72 @@ const Error: React.FC<InputState<any>> = ({ validationResult, visited }) => (
     </div>
 )
 
-const Input: InputBoxRenderFn = p => (
-    <>
-        <Title text={p.schema.sectionTitle} />
-        <div style={{ padding: "5px 0" }}>
-            <Label text={p.schema.name} />
+const Input: InputBoxRenderFn = p => {
+    const r = getElementsRenderMap(p.renderOptions)
+
+    return (
+        <>
+            <r.Title text={p.schema.sectionTitle} />
+            <r.Label text={p.schema.name} />
             <input
                 {...getInputProps(p)}
                 type={p.schema.type === "number" ? "number" : p.schema.type === "password" ? "password" : "text"}
             />
-            <Error {...p.state} />
-        </div>
-    </>
-)
-
-const TextAreaInput: InputBoxRenderFn<any> = p => (
-    <>
-        <Title text={p.schema.sectionTitle} />
-        <div className="InputWrapper">
-            <p>{p.schema.name}</p>
-            <textarea {...getInputProps<HTMLTextAreaElement>(p)} />
-            <Error {...p.state} />
-        </div>
-    </>
-)
-
-const RadioInput: InputOptionRenderFn = p => {
-    const { onChange, ...inputProps } = getInputProps(p)
-    const handleClick = (value: string) => () => (onChange ? onChange({ target: { value } } as any) : null)
-    return (
-        <>
-            <Title text={p.schema.sectionTitle} />
-            <Label text={p.schema.name} />
-            {p.schema.values.map(([name, value]) => {
-                return (
-                    <div key={value} onClick={handleClick(value)}>
-                        <input {...inputProps} value={value} type="radio" checked={`${p.state.value}` === `${value}`} />
-                        <span>{name}</span>
-                    </div>
-                )
-            })}
+            <r.Error {...p.state} />
         </>
     )
 }
 
-const SelectInput: InputOptionRenderFn = p => (
-    <>
-        <Title text={p.schema.sectionTitle} />
-        <Label text={p.schema.name} />
-        <select name={p.schema.name} {...getInputProps<HTMLSelectElement>(p)}>
+const TextAreaInput: InputBoxRenderFn<any> = p => {
+    const r = getElementsRenderMap(p.renderOptions)
+
+    return (
+        <>
+            <r.Title text={p.schema.sectionTitle} />
+            <r.Label text={p.schema.name} />
+            <textarea {...getInputProps<HTMLTextAreaElement>(p)} />
+            <r.Error {...p.state} />
+        </>
+    )
+}
+
+const RadioInput: InputOptionRenderFn = p => {
+    const r = getElementsRenderMap(p.renderOptions)
+    const { onChange, ...inputProps } = getInputProps(p)
+    const handleClick = (value: string) => () => (onChange ? onChange({ target: { value } } as any) : null)
+    return (
+        <>
+            <r.Title text={p.schema.sectionTitle} />
+            <r.Label text={p.schema.name} />
             {p.schema.values.map(([name, value]) => (
-                <option value={value} key={value}>
-                    {name}
-                </option>
+                <r.ItemWrapper key={value} onClick={handleClick(value)}>
+                    <input {...inputProps} value={value} type="radio" checked={`${p.state.value}` === `${value}`} />
+                    <span>{name}</span>
+                </r.ItemWrapper>
             ))}
-        </select>
-    </>
-)
+        </>
+    )
+}
+
+const SelectInput: InputOptionRenderFn = p => {
+    const r = getElementsRenderMap(p.renderOptions)
+    return (
+        <>
+            <r.Title text={p.schema.sectionTitle} />
+            <r.Label text={p.schema.name} />
+            <select name={p.schema.name} {...getInputProps<HTMLSelectElement>(p)}>
+                {p.schema.values.map(([name, value]) => (
+                    <option value={value} key={value}>
+                        {name}
+                    </option>
+                ))}
+            </select>
+        </>
+    )
+}
 
 export const CollectionInput: InputCollectionRenderFn = p => {
+    const r = getElementsRenderMap(p.renderOptions)
     const { mutate } = p.schema
 
     const onAddClick = () =>
@@ -79,64 +86,70 @@ export const CollectionInput: InputCollectionRenderFn = p => {
 
     const onRemoveClick = (i: number) => () => p.setDelta(p.state.filter((_, i2) => i2 !== i))
 
-    const getLabel = () => {
-        if (!mutate) return ""
-        return p.state.length ? mutate.addNextLabel : mutate.addFirstLabel || mutate.addNextLabel
-    }
+    const getLabel = () =>
+        mutate ? (p.state.length ? mutate.addNextLabel : mutate.addFirstLabel || mutate.addNextLabel) : ""
 
     if (!p.state.length)
         return (
-            <div>
-                <Label text={p.schema.sectionTitle} />
-                {mutate && <button onClick={onAddClick}>{getLabel()}</button>}
-            </div>
+            <>
+                <r.Title text={p.schema.sectionTitle} />
+                <r.Label text={p.schema.name} />
+                {mutate && <r.Button onClick={onAddClick}>{getLabel()}</r.Button>}
+            </>
         )
 
     return (
         <>
-            <Label text={p.schema.sectionTitle} />
-            {p.state.map((state, index) => (
-                <div key={index}>
-                    <FormView
-                        schema={p.schema.fields}
-                        state={state}
-                        setState={d => p.setDelta(replace(p.state, index, d))}
-                    />
-                    {mutate && p.state.length > 0 ? (
-                        <button onClick={onRemoveClick(index)}>{mutate.removeLabel || "Remove"}</button>
-                    ) : null}
-                </div>
-            ))}
-            {mutate && <button onClick={onAddClick}>{getLabel()}</button>}
+            <r.Title text={p.schema.sectionTitle} />
+            <r.Label text={p.schema.name} />
+            <r.ItemChildrenWrapper>
+                {p.state.map((state, index) => (
+                    <React.Fragment key={index}>
+                        <FormView
+                            schema={p.schema.fields}
+                            state={state}
+                            setState={d => p.setDelta(replace(p.state, index, d))}
+                            {...p.renderOptions}
+                        />
+                        {mutate && p.state.length > 0 ? (
+                            <r.Button onClick={onRemoveClick(index)}>{mutate.removeLabel || "Remove"}</r.Button>
+                        ) : null}
+                    </React.Fragment>
+                ))}
+                {mutate && <r.Button onClick={onAddClick}>{getLabel()}</r.Button>}
+            </r.ItemChildrenWrapper>
         </>
     )
 }
 
 export const ListInput: InputListRenderFn = p => {
     const { mutate } = p.schema
+    const r = getElementsRenderMap(p.renderOptions)
+
     const onAdd = () => p.setDelta([...p.state, toInputState(p.schema.field, mutate!.createValue)])
-    const onRemove = (i: number) => () => p.setDelta(p.state.filter((_, i) => i !== i))
+    const onRemove = (i2: number) => () => p.setDelta(p.state.filter((_, i) => i2 !== i))
     return (
         <>
-            <Title text={p.schema.sectionTitle} />
-            {p.state.map((s, index) => (
-                <React.Fragment key={`${p.schema.type}-${index}`}>
-                    <InputView
-                        schema={p.schema.field}
-                        state={s}
-                        setDelta={value => p.setDelta(replace(p.state, index, value))}
-                        extra={p.extra}
-                    />
-                    {mutate && p.state.length > 0 ? (
-                        <button onClick={onRemove(index)}>{mutate.removeLabel || "Remove"}</button>
-                    ) : null}
-                </React.Fragment>
-            ))}
-            {mutate && <button onClick={onAdd}>{mutate.addNextLabel}</button>}
+            <r.Title text={p.schema.sectionTitle} />
+            <r.ItemChildrenWrapper>
+                {p.state.map((s, index) => (
+                    <React.Fragment key={`${p.schema.type}-${index}`}>
+                        <InputView
+                            schema={p.schema.field}
+                            state={s}
+                            setDelta={value => p.setDelta(replace(p.state, index, value))}
+                            renderOptions={p.renderOptions}
+                        />
+                        {mutate && p.state.length > 0 ? (
+                            <r.Button onClick={onRemove(index)}>{mutate.removeLabel || "Remove"}</r.Button>
+                        ) : null}
+                    </React.Fragment>
+                ))}
+            </r.ItemChildrenWrapper>
+            {mutate && <r.Button onClick={onAdd}>{mutate.addNextLabel}</r.Button>}
         </>
     )
 }
-
 export const plainHtmlRenderMap: Partial<InputRenderMap> = {
     ...toMap<InputBoxType, InputBoxRenderFn>(
         ["text", "email", "password", "number", "customBox"],
@@ -148,4 +161,14 @@ export const plainHtmlRenderMap: Partial<InputRenderMap> = {
     select: SelectInput,
     collection: CollectionInput,
     list: ListInput
+}
+
+export const plainHtmlElementRenderMap: ElementsRenderMap = {
+    ItemWrapper: React.Fragment,
+    Button: ({ children, ...p2 }) => <button {...p2}>{children}</button>,
+    ItemChildrenWrapper: React.Fragment,
+    DefaultFormItem: () => <h1>Not supported</h1>,
+    Title,
+    Label,
+    Error
 }

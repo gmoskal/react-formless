@@ -3,13 +3,27 @@
 type Tuples<T = string> = Array<[string, T]>
 type ArrayItem<T> = T extends Array<infer E> ? E : T
 
-type RenderMapProps = {
-    ItemWrapper?: React.FC
-    customRenderMap?: Partial<InputRenderMap<any>>
-    rendeType?: "Plain" | "AntDesign"
+type RProps<T> = T extends React.FC<infer P> ? React.PropsWithChildren<P> : never
+type RDiv = React.FC<React.HTMLAttributes<HTMLDivElement>>
+type RButton = React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>>
+
+type ElementsRenderMap = {
+    Button: RButton
+    ItemWrapper: RDiv
+    ItemChildrenWrapper: RDiv
+    DefaultFormItem: RenderFn<any, any>
+    Title: React.FC<{ text?: string }>
+    Label: React.FC<{ text?: string } | { htmlFor: string }>
+    Error: React.FC<InputState<any>>
 }
 
-type FormViewProps<T> = RenderMapProps & {
+type RenderOptions = {
+    elementsRenderMap?: Partial<ElementsRenderMap>
+    inputsRenderMap?: Partial<InputRenderMap<any>>
+    renderType?: "Plain" | "AntDesign"
+}
+
+type FormViewProps<T> = RenderOptions & {
     setState: F1<FormState<T>>
     state: FormState<T>
     schema: FormSchema<T>
@@ -65,26 +79,25 @@ type InputResult<T> = T extends Array<infer E> ? Array<FormResult<E>> : Result<T
 
 type FormResult<T> = { [P in keyof T]: InputResult<T[P]> }
 
-type InputPropsBase<TSchema extends InputSchemaBase, TState, TDelta = F1<any>> = {
+type RenderOptionsProps = { renderOptions: RenderOptions }
+type InputPropsBase<TSchema extends InputSchemaBase = any, TState = any, TDelta = F1<any>> = {
     schema: TSchema
     state: TState
     setDelta: TDelta
-    extra: RenderMapProps
-}
+} & RenderOptionsProps
 
 type SimpleInputProps = ArrayItem<FArgs<InputRenderMap[keyof Omit<InputRenderMap, "list" | "collection">]>>
 type InputProps = ArrayItem<FArgs<InputRenderMap[keyof InputRenderMap]>>
 
-type RenderFn<TSchema extends InputSchemaBase, TState, TDelta = F1<TState>> = F1<
-    InputPropsBase<TSchema, TState, TDelta>,
-    React.ReactElement
+type RenderFn<TSchema extends InputSchemaBase, TState, TDelta = F1<TState>> = React.FC<
+    InputPropsBase<TSchema, TState, TDelta>
 >
 
 type InputBoxType = "text" | "email" | "number" | "textarea" | "password" | "customBox"
 type InputBoxRenderFn<T = any> = RenderFn<InputBoxSchema<T>, InputState<T>>
 type InputBoxRenderMap<T = any> = Dict<InputBoxType, InputBoxRenderFn<T>>
 
-type InputOptionType = "radio" | "select" | "selectableChips" | "customOption"
+type InputOptionType = "radio" | "select" | "customOption"
 type InputOptionRenderFn<T = any> = RenderFn<InputOptionSchema<T>, InputState<T>>
 type InputOptionRenderMap<T = any> = Dict<InputOptionType, InputOptionRenderFn<T>>
 

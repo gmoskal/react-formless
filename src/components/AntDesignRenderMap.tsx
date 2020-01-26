@@ -1,11 +1,23 @@
 import * as React from "react"
-import { InputNumber, Input, Radio, Select } from "antd"
+import { InputNumber, Input, Radio, Select, Button } from "antd"
 import { getInputProps } from "../forms"
 
 import "antd/lib/style/components.less"
 
 const wrapperProps: React.HTMLAttributes<HTMLDivElement> = { style: { padding: "5px 0" }, className: "InputWrapper" }
-export const AntDesignInputWrapper: React.FC = p => <div {...wrapperProps}>{p.children}</div>
+
+const ItemWrapper: React.FC = ({ children, ...p }) => (
+    <div {...wrapperProps} {...p}>
+        {children}
+    </div>
+)
+
+export const antDesignElementRenderMap: Partial<ElementsRenderMap> = {
+    ItemWrapper,
+    Button: Button as any,
+    ItemChildrenWrapper: React.Fragment,
+    DefaultFormItem: () => <h1>Not supported</h1>
+}
 
 export const RadioInput: InputOptionRenderFn = p => {
     const { value, onChange } = getInputProps<HTMLSelectElement>(p)

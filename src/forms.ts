@@ -2,11 +2,6 @@ import { runValidatorsRaw, Ok, Err, isEmpty } from "./utils/validators"
 import { mapObject, arrify } from "./utils/map"
 import { toOption } from "./utils/types"
 
-export const toFormState = <T>(schema: FormSchema<T>, value: T): FormState<T> =>
-    mapObject(schema, (k, s: InputSchema<any>) =>
-        toInputState(s as any, s.fromValue ? s.fromValue(value[k] as any) : value[k])
-    ) as any
-
 export const validateForm = <T>(schema: FormSchema<T>, state: FormState<T>): FormState<T> =>
     mapObject(schema, (k, s: InputSchema<any>) => validateInput(s as any, (state as any)[k]) as any)
 
@@ -81,6 +76,11 @@ function inputStateToResult<T>(
     return res.value
 }
 
+export const toFormState = <T>(schema: FormSchema<T>, value: T): FormState<T> =>
+    mapObject(schema, (k, s: InputSchema<any>) =>
+        toInputState(s as any, s.fromValue ? s.fromValue(value[k] as any) : value[k])
+    ) as any
+
 export const InputState = <T>(
     defValue: T,
     value: T,
@@ -106,7 +106,6 @@ export function toInputState<T>(
         case "list":
             return arrify(isEmpty(value) ? [] : value).map(v => InputState<T>("" as any, v))
         case "chips":
-        case "selectableChips":
             return InputState<string[]>([], value as any)
         case "customOption":
         case "radio":
@@ -145,7 +144,6 @@ export const getInputProps = <T2 = HTMLInputElement>(p: SimpleInputProps): ExtIn
     ...get(p.schema, "placeholder"),
     value: (p.state.value === undefined || p.state.value === null ? "" : p.state.value) as any,
     disabled: p.schema.disabled || false,
-
     onChange: e => validate(p, (e as any).target.value || null),
     onFocus: () => p.setDelta({ ...p.state, active: true }),
     onBlur: () => p.setDelta({ ...p.state, active: false, visited: true })

@@ -59,7 +59,7 @@ export const ReadonlyCollectionInput: InputCollectionRenderFn = p => {
                         schema={p.schema.fields}
                         state={state}
                         setState={d => p.setDelta(replace(p.state, index, d))}
-                        {...p.extra}
+                        {...p.renderOptions}
                     />
                 </div>
             ))}
