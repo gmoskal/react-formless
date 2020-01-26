@@ -17,10 +17,11 @@ type ElementsRenderMap = {
     Error: React.FC<InputState<any>>
 }
 
+type RenderType = "Plain" | "AntDesign" | "Custom"
 type RenderOptions = {
     elementsRenderMap?: Partial<ElementsRenderMap>
     inputsRenderMap?: Partial<InputRenderMap<any>>
-    renderType?: "Plain" | "AntDesign"
+    renderType?: RenderType
 }
 
 type FormViewProps<T> = RenderOptions & {
