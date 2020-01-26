@@ -1,7 +1,7 @@
 import * as React from "react"
 import { getInputProps, toFormState, toInputState } from "../forms"
 import { toMap, replace } from "../utils/map"
-import { FormView, InputView, getElementsRenderMap, ItemChildrenWrapperRF, ButtonRF, TitleRF } from "./FormView"
+import { FormView, FormItemView, getElementsRenderMap } from "./FormView"
 
 const Title: React.FC<{ text?: string }> = p => (p.text ? <h3>{p.text}</h3> : null)
 const Label: React.FC<{ text?: string }> = p =>
@@ -51,10 +51,15 @@ const RadioInput: InputOptionRenderFn = p => {
             <r.Title text={p.schema.sectionTitle} />
             <r.Label text={p.schema.name} />
             {p.schema.values.map(([name, value]) => (
-                <r.ItemWrapper key={value} onClick={handleClick(value)}>
-                    <input {...inputProps} value={value} type="radio" checked={`${p.state.value}` === `${value}`} />
+                <div key={value} onClick={handleClick(value)}>
+                    <input
+                        {...inputProps}
+                        type="radio"
+                        checked={`${p.state.value}` === `${value}`}
+                        onChange={handleClick(value)}
+                    />
                     <span>{name}</span>
-                </r.ItemWrapper>
+                </div>
             ))}
         </>
     )
@@ -134,7 +139,7 @@ export const ListInput: InputListRenderFn = p => {
             <r.ItemChildrenWrapper>
                 {p.state.map((s, index) => (
                     <React.Fragment key={`${p.schema.type}-${index}`}>
-                        <InputView
+                        <FormItemView
                             schema={p.schema.field}
                             state={s}
                             setDelta={value => p.setDelta(replace(p.state, index, value))}
@@ -164,9 +169,9 @@ export const plainHtmlRenderMap: Partial<InputRenderMap> = {
 }
 
 export const plainHtmlElementRenderMap: ElementsRenderMap = {
-    ItemWrapper: React.Fragment,
-    Button: ({ children, ...p2 }) => <button {...p2}>{children}</button>,
-    ItemChildrenWrapper: React.Fragment,
+    ItemWrapper: p => <div {...p} />,
+    Button: p => <button {...p} />,
+    ItemChildrenWrapper: p => <div {...p} />,
     DefaultFormItem: () => <h1>Not supported</h1>,
     Title,
     Label,

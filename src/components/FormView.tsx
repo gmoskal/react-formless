@@ -14,33 +14,18 @@ export const getElementsRenderMap = (p: RenderOptions): ElementsRenderMap => {
     return { ...plainHtmlElementRenderMap, ...map }
 }
 
-type ElementName = keyof ElementsRenderMap
-type ElementProps<K extends ElementName> = RenderOptionsProps & RProps<ElementsRenderMap[K]>
-export const renderElement = <K extends ElementName>(name: K) => ({
-    renderOptions,
-    ...p
-}: ElementProps<K>): React.ReactElement => {
-    const E = getElementsRenderMap(renderOptions)[name] as any
-    return <E {...p} />
-}
-
-export const ButtonRF = renderElement("Button")
-export const ItemWrapperRF = renderElement("ItemWrapper")
-export const ItemChildrenWrapperRF = renderElement("ItemChildrenWrapper")
-export const TitleRF = renderElement("Title")
-export const LabelRF = renderElement("Label")
-export const ErrorRF = renderElement("Error")
-
 const DefaultRenderFn: RenderFn<any, any> = p => <h3>Not supported {JSON.stringify(p.schema)}</h3>
 
 type InputViewProps = InputPropsBase<InputSchema<any>, FormLeafState<any>, F1<InputState<any>>>
-export const InputView: React.FC<InputViewProps> = p => {
+export const FormItemView: React.FC<InputViewProps> = p => {
     const customRenderMap = { ...plainHtmlRenderMap, ...getRenderMap(p.renderOptions) }
-    const RenderFn = customRenderMap![p.schema.type] || DefaultRenderFn
+    const { ItemWrapper, DefaultFormItem } = getElementsRenderMap(p.renderOptions)
+    const FormItem = customRenderMap![p.schema.type] || DefaultFormItem || DefaultRenderFn
+
     return (
-        <ItemWrapperRF renderOptions={p.renderOptions}>
-            <RenderFn {...(p as any)} />
-        </ItemWrapperRF>
+        <ItemWrapper>
+            <FormItem {...(p as any)} />
+        </ItemWrapper>
     )
 }
 
@@ -59,7 +44,7 @@ export const FormView = <T extends any>(p: FormViewProps<T>): React.ReactElement
         <>
             {mapOn2(p.schema, getProps, (key, p) => (
                 <React.Fragment key={key}>
-                    <InputView {...p} />
+                    <FormItemView {...p} />
                 </React.Fragment>
             ))}
         </>
