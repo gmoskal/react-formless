@@ -7,8 +7,14 @@ import { createDiv } from "../utils"
 import { InputSelectForm } from "./InputSelect"
 import { InputRadioForm } from "./InputRadio"
 import { InputsForms } from "./Inputs"
+import { InputCollectionForm } from "./InputCollection"
 
-const paths = { "/inputs": InputsForms, "/radio": InputRadioForm, "/select": InputSelectForm }
+const paths = {
+    "/inputs": InputsForms,
+    "/radio": InputRadioForm,
+    "/select": InputSelectForm,
+    "/collection": InputCollectionForm
+}
 
 const Main = () => (
     <>

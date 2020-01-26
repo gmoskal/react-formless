@@ -1,9 +1,12 @@
 import * as React from "react"
-import { getInputProps } from "../forms"
-import { toMap } from "../utils/map"
+import { getInputProps, toFormState } from "../forms"
+import { toMap, replace } from "../utils/map"
+import { FormView } from "./FormView"
 
-const Title: React.FC<{ text?: string }> = p => (p.text ? <h1>{p.text}</h1> : null)
-const Label: React.FC<{ text?: string }> = p => (p.text ? <p>{p.text}</p> : null)
+const Title: React.FC<{ text?: string }> = p => (p.text ? <h3>{p.text}</h3> : null)
+const Label: React.FC<{ text?: string }> = p =>
+    p.text ? <div style={{ fontSize: "12px", color: "#777" }}>{p.text}</div> : null
+
 const Error: React.FC<InputState<any>> = ({ validationResult, visited }) => (
     <div className="ErrorLabel">
         {validationResult && visited && validationResult.type === "Err" ? validationResult.value : ""}
@@ -13,8 +16,8 @@ const Error: React.FC<InputState<any>> = ({ validationResult, visited }) => (
 const Input: InputBoxRenderFn = p => (
     <>
         <Title text={p.schema.sectionTitle} />
-        <div className="InputWrapper">
-            <p>{p.schema.name}</p>
+        <div style={{ padding: "5px 0" }}>
+            <Label text={p.schema.name} />
             <input
                 {...getInputProps(p)}
                 type={p.schema.type === "number" ? "number" : p.schema.type === "password" ? "password" : "text"}
@@ -68,6 +71,47 @@ const SelectInput: InputOptionRenderFn = p => (
     </>
 )
 
+export const CollectionInput: InputCollectionRenderFn = p => {
+    const { mutate } = p.schema
+
+    const onAddClick = () =>
+        p.setDelta([...p.state, toFormState(p.schema.fields, () => (mutate ? mutate.createValue : null))])
+
+    const onRemoveClick = (i: number) => () => p.setDelta(p.state.filter((_, i2) => i2 !== i))
+
+    const getLabel = () => {
+        if (!mutate) return ""
+        return p.state.length ? mutate.addNextLabel : mutate.addFirstLabel || mutate.addNextLabel
+    }
+
+    if (!p.state.length)
+        return (
+            <div>
+                <Label text={p.schema.sectionTitle} />
+                {mutate && <button onClick={onAddClick}>{getLabel()}</button>}
+            </div>
+        )
+
+    return (
+        <>
+            <Label text={p.schema.sectionTitle} />
+            {p.state.map((state, index) => (
+                <div key={index}>
+                    <FormView
+                        schema={p.schema.fields}
+                        state={state}
+                        setState={d => p.setDelta(replace(p.state, index, d))}
+                    />
+                    {mutate && p.state.length > 0 ? (
+                        <button onClick={onRemoveClick(index)}>{mutate.removeLabel || "Remove"}</button>
+                    ) : null}
+                </div>
+            ))}
+            {mutate && <button onClick={onAddClick}>{getLabel()}</button>}
+        </>
+    )
+}
+
 export const plainHtmlRenderMap: Partial<InputRenderMap> = {
     ...toMap<InputBoxType, InputBoxRenderFn>(
         ["text", "email", "password", "number", "customBox"],
@@ -76,5 +120,6 @@ export const plainHtmlRenderMap: Partial<InputRenderMap> = {
     ),
     textarea: TextAreaInput,
     radio: RadioInput,
-    select: SelectInput
+    select: SelectInput,
+    collection: CollectionInput
 }

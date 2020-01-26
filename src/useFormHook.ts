@@ -5,7 +5,6 @@ export type FormViewProps<T> = {
     setState: F1<FormState<T>>
     state: FormState<T>
     schema: FormSchema<T>
-    columns?: number
 }
 
 export type FormHookProps<T> = {

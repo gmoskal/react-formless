@@ -3,6 +3,18 @@
 type Tuples<T = string> = Array<[string, T]>
 type ArrayItem<T> = T extends Array<infer E> ? E : T
 
+type RenderMapProps = {
+    ItemWrapper?: () => React.ReactElement
+    customRenderMap?: Partial<InputRenderMap<any>>
+    rendeType?: "Plain" | "AntDesign"
+}
+
+type FormViewProps<T> = RenderMapProps & {
+    setState: F1<FormState<T>>
+    state: FormState<T>
+    schema: FormSchema<T>
+}
+
 type StandardInputProps<T> = Pick<
     React.InputHTMLAttributes<T>,
     "name" | "placeholder" | "id" | "onChange" | "value" | "disabled"
@@ -25,7 +37,9 @@ type InputBoxSchema<T> = InputSchemaBase<InputBoxType, T>
 type InputOptionSchema<T> = InputSchemaBase<InputOptionType, T, { values: Tuples<T> }>
 type SimpleInputSchema<T> = InputBoxSchema<T> | InputOptionSchema<ArrayItem<T>>
 
-type Mutable<T> = { mutate?: { createValue: ArrayItem<T>; createLabel: string; removeLabel?: string } }
+type Mutable<T> = {
+    mutate?: { createValue: ArrayItem<T>; addFirstLabel?: string; addNextLabel: string; removeLabel?: string }
+}
 type CollectionInputSchema<T> = InputSchemaBase<"collection", T, { fields: FormSchema<ArrayItem<T>> } & Mutable<T>>
 type ListInputSchema<T> = InputSchemaBase<"list", T, { field: SimpleInputSchema<T> } & Mutable<T>>
 type ChipsInputSchema<T = string> = InputSchemaBase<"chips", T, { field: SimpleInputSchema<T[]> } & Mutable<T>>
@@ -51,17 +65,18 @@ type InputResult<T> = T extends Array<infer E> ? Array<FormResult<E>> : Result<T
 
 type FormResult<T> = { [P in keyof T]: InputResult<T[P]> }
 
-type InputPropsBase<TSchema extends InputSchemaBase, TState, TDelta = F1<any>> = {
+type InputPropsBase<TSchema extends InputSchemaBase, TState, TDelta = F1<any>, TExtra = never> = {
     schema: TSchema
     state: TState
     setDelta: TDelta
+    extra?: TExtra
 }
 
 type SimpleInputProps = ArrayItem<FArgs<InputRenderMap[keyof Omit<InputRenderMap, "list" | "collection">]>>
 type InputProps = ArrayItem<FArgs<InputRenderMap[keyof InputRenderMap]>>
 
-type RenderFn<TSchema extends InputSchemaBase, TState, TDelta = F1<TState>> = F1<
-    InputPropsBase<TSchema, TState, TDelta>,
+type RenderFn<TSchema extends InputSchemaBase, TState, TDelta = F1<TState>, TExtra = never> = F1<
+    InputPropsBase<TSchema, TState, TDelta, TExtra>,
     React.ReactElement
 >
 
@@ -75,7 +90,12 @@ type InputOptionRenderMap<T = any> = Dict<InputOptionType, InputOptionRenderFn<T
 
 type InputChipstRenderFn<T = any> = RenderFn<InputOptionSchema<T>, InputState<T[]>, F1<InputState<T[]>>>
 type InputListRenderFn<T = any> = RenderFn<ListInputSchema<T>, Array<InputState<T>>>
-type InputCollectionRenderFn<T = any> = RenderFn<CollectionInputSchema<T>, Array<FormState<T>>>
+type InputCollectionRenderFn<T = any> = RenderFn<
+    CollectionInputSchema<T>,
+    Array<FormState<T>>,
+    F1<Array<FormState<T>>>,
+    RenderMapProps
+>
 
 type InputRenderMap<T = any> = InputBoxRenderMap<T> &
     InputOptionRenderMap<T> & {
