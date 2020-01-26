@@ -13,11 +13,7 @@ const skillSchema: FormSchema<Skill> = {
         name: "Tags",
         type: "collection",
         sectionTitle: "Tags",
-        mutate: {
-            addFirstLabel: "Add first tag",
-            addNextLabel: "Add another tag",
-            createValue: { name: "" }
-        },
+        mutate: { addNextLabel: "Add Tag", createValue: { name: "" } },
         fields: { name: { name: "Tag Name", type: "text" } }
     }
 }
@@ -27,11 +23,7 @@ const userSchema: FormSchema<User> = {
     skills: {
         name: "Skills",
         type: "collection",
-        mutate: {
-            addFirstLabel: "Add first skill",
-            addNextLabel: "Add another skill",
-            createValue: { name: "", level: 0, tags: [] }
-        },
+        mutate: { addNextLabel: "Add skill", createValue: { name: "", level: 0, tags: [] } },
         fields: skillSchema
     }
 }
