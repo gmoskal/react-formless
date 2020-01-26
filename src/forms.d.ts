@@ -4,7 +4,7 @@ type Tuples<T = string> = Array<[string, T]>
 type ArrayItem<T> = T extends Array<infer E> ? E : T
 
 type RenderMapProps = {
-    ItemWrapper?: () => React.ReactElement
+    ItemWrapper?: React.FC
     customRenderMap?: Partial<InputRenderMap<any>>
     rendeType?: "Plain" | "AntDesign"
 }
@@ -65,18 +65,18 @@ type InputResult<T> = T extends Array<infer E> ? Array<FormResult<E>> : Result<T
 
 type FormResult<T> = { [P in keyof T]: InputResult<T[P]> }
 
-type InputPropsBase<TSchema extends InputSchemaBase, TState, TDelta = F1<any>, TExtra = never> = {
+type InputPropsBase<TSchema extends InputSchemaBase, TState, TDelta = F1<any>> = {
     schema: TSchema
     state: TState
     setDelta: TDelta
-    extra?: TExtra
+    extra: RenderMapProps
 }
 
 type SimpleInputProps = ArrayItem<FArgs<InputRenderMap[keyof Omit<InputRenderMap, "list" | "collection">]>>
 type InputProps = ArrayItem<FArgs<InputRenderMap[keyof InputRenderMap]>>
 
-type RenderFn<TSchema extends InputSchemaBase, TState, TDelta = F1<TState>, TExtra = never> = F1<
-    InputPropsBase<TSchema, TState, TDelta, TExtra>,
+type RenderFn<TSchema extends InputSchemaBase, TState, TDelta = F1<TState>> = F1<
+    InputPropsBase<TSchema, TState, TDelta>,
     React.ReactElement
 >
 
@@ -90,12 +90,7 @@ type InputOptionRenderMap<T = any> = Dict<InputOptionType, InputOptionRenderFn<T
 
 type InputChipstRenderFn<T = any> = RenderFn<InputOptionSchema<T>, InputState<T[]>, F1<InputState<T[]>>>
 type InputListRenderFn<T = any> = RenderFn<ListInputSchema<T>, Array<InputState<T>>>
-type InputCollectionRenderFn<T = any> = RenderFn<
-    CollectionInputSchema<T>,
-    Array<FormState<T>>,
-    F1<Array<FormState<T>>>,
-    RenderMapProps
->
+type InputCollectionRenderFn<T = any> = RenderFn<CollectionInputSchema<T>, Array<FormState<T>>, F1<Array<FormState<T>>>>
 
 type InputRenderMap<T = any> = InputBoxRenderMap<T> &
     InputOptionRenderMap<T> & {

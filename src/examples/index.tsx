@@ -8,11 +8,13 @@ import { InputSelectForm } from "./InputSelect"
 import { InputRadioForm } from "./InputRadio"
 import { InputsForms } from "./Inputs"
 import { InputCollectionForm } from "./InputCollection"
+import { InputList } from "./InputList"
 
 const paths = {
     "/inputs": InputsForms,
     "/radio": InputRadioForm,
     "/select": InputSelectForm,
+    "/list": InputList,
     "/collection": InputCollectionForm
 }
 

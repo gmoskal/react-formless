@@ -1,7 +1,7 @@
 import * as React from "react"
-import { getInputProps, toFormState } from "../forms"
+import { getInputProps, toFormState, toInputState } from "../forms"
 import { toMap, replace } from "../utils/map"
-import { FormView } from "./FormView"
+import { FormView, InputView } from "./FormView"
 
 const Title: React.FC<{ text?: string }> = p => (p.text ? <h3>{p.text}</h3> : null)
 const Label: React.FC<{ text?: string }> = p =>
@@ -112,6 +112,31 @@ export const CollectionInput: InputCollectionRenderFn = p => {
     )
 }
 
+export const ListInput: InputListRenderFn = p => {
+    const { mutate } = p.schema
+    const onAdd = () => p.setDelta([...p.state, toInputState(p.schema.field, mutate!.createValue)])
+    const onRemove = (i: number) => () => p.setDelta(p.state.filter((_, i) => i !== i))
+    return (
+        <>
+            <Title text={p.schema.sectionTitle} />
+            {p.state.map((s, index) => (
+                <React.Fragment key={`${p.schema.type}-${index}`}>
+                    <InputView
+                        schema={p.schema.field}
+                        state={s}
+                        setDelta={value => p.setDelta(replace(p.state, index, value))}
+                        extra={p.extra}
+                    />
+                    {mutate && p.state.length > 0 ? (
+                        <button onClick={onRemove(index)}>{mutate.removeLabel || "Remove"}</button>
+                    ) : null}
+                </React.Fragment>
+            ))}
+            {mutate && <button onClick={onAdd}>{mutate.addNextLabel}</button>}
+        </>
+    )
+}
+
 export const plainHtmlRenderMap: Partial<InputRenderMap> = {
     ...toMap<InputBoxType, InputBoxRenderFn>(
         ["text", "email", "password", "number", "customBox"],
@@ -121,5 +146,6 @@ export const plainHtmlRenderMap: Partial<InputRenderMap> = {
     textarea: TextAreaInput,
     radio: RadioInput,
     select: SelectInput,
-    collection: CollectionInput
+    collection: CollectionInput,
+    list: ListInput
 }

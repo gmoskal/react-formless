@@ -23,6 +23,8 @@ const userSchema: FormSchema<User> = {
     skills: {
         name: "Skills",
         type: "collection",
+        sectionTitle: "Skills",
+
         mutate: { addNextLabel: "Add skill", createValue: { name: "", level: 0, tags: [] } },
         fields: skillSchema
     }
