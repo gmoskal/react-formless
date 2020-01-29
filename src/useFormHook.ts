@@ -26,7 +26,7 @@ export const useFormHook = <T>({ schema, ...p }: FormHookProps<T>): FormHookResu
     const onSubmitClick = () => {
         const res = toResult(schema, state)
         if (res.type === "Err") setState(validateForm(schema, state))
-        if (p.onSubmit) p.onSubmit(res.value)
+        else if (p.onSubmit) p.onSubmit(res.value)
     }
     const resetState = () => setState(toFormState(schema, p.initialValue as any))
     return {
