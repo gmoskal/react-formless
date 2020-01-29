@@ -13,7 +13,7 @@ Checkout simple login form example
 
 ```typescript jsx
 import * as React from "react"
-import { useFormHook, FormHookProps, FormView, InputRenderMap } from "typed-react-forms"
+import { useFormHook, FormHookProps, FormView, InputRenderMap } from "formless"
 
 export type Credentials = { email: string; password: string }
 type Props = Pick<FormHookProps<Credentials>, "initialValue" | "onSubmit">
