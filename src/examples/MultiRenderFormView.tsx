@@ -3,14 +3,13 @@ import { FormViewProps, useFormHook } from "../useFormHook"
 import { FormView } from "../components/FormView"
 import { readOnlyRenderMap } from "./ReadonlyRenderMap"
 import { toResult } from "../forms"
+import { labelize } from "../utils"
+import { react95Inputs, react95Elements } from "./React95"
+import { antDesignRenderMap } from "./AntDesignRenderMap"
+const renderTypes = ["Plain", "AntDesign", "Readonly", "React95"] as const
+const themes: Array<[string, string]> = renderTypes.map(v => [labelize(v), v])
 
-const themes: Array<[string, RenderType]> = [
-    ["Plain Html", "Plain"],
-    ["Ant Design", "AntDesign"],
-    ["Readonly", "Custom"]
-]
-
-const schema: FormSchema<{ renderType: RenderType }> = {
+const schema: FormSchema<{ renderType: string }> = {
     renderType: { type: "select", values: themes }
 }
 
@@ -20,8 +19,21 @@ export const MultiRenderFormView: Props = ({ title, ...p }) => {
     const { formViewProps } = useFormHook({ initialValue: { renderType: "Plain" }, schema })
     const [renderOptions, setRenderOptions] = React.useState<RenderOptions>({ renderType: "Plain" })
     React.useEffect(() => {
-        const renderType: RenderType = formViewProps.state.renderType.value || "Plain"
-        setRenderOptions({ renderType, ...(renderType === "Custom" ? { inputsRenderMap: readOnlyRenderMap } : {}) })
+        const selectedRender = formViewProps.state.renderType.value
+        const renderType: RenderType = selectedRender === "Plain" ? "Plain" : "Custom"
+        const options = ((): RenderOptions => {
+            switch (selectedRender) {
+                case "React95":
+                    return { inputsRenderMap: react95Inputs, elementsRenderMap: react95Elements }
+                case "AntDesign":
+                    return { inputsRenderMap: antDesignRenderMap }
+                case "Readonly":
+                    return { inputsRenderMap: readOnlyRenderMap }
+            }
+            return {}
+        })()
+
+        setRenderOptions({ renderType, ...options })
     }, [formViewProps.state, formViewProps.state.renderType.value])
 
     return (

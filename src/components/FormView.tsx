@@ -1,18 +1,13 @@
 import * as React from "react"
 import { mapOn2, pickObject } from "../utils/map"
 import { plainHtmlRenderMap, plainHtmlElementRenderMap } from "./PlainHtmlRenderMap"
-import { antDesignRenderMap, antDesignElementRenderMap } from "./AntDesignRenderMap"
 
-const getRenderMap = (p: RenderOptions) => {
-    if (p.inputsRenderMap) return p.inputsRenderMap
-    return p.renderType === "AntDesign" ? antDesignRenderMap : plainHtmlRenderMap
-}
+const getRenderMap = (p: RenderOptions) => p.inputsRenderMap || plainHtmlRenderMap
 
-export const getElementsRenderMap = (p: RenderOptions): ElementsRenderMap => {
-    const map: Partial<ElementsRenderMap> =
-        p.elementsRenderMap || (p.renderType === "AntDesign" ? antDesignElementRenderMap : {})
-    return { ...plainHtmlElementRenderMap, ...map }
-}
+export const getElementsRenderMap = (p: RenderOptions): ElementsRenderMap => ({
+    ...plainHtmlElementRenderMap,
+    ...(p.elementsRenderMap || {})
+})
 
 const DefaultRenderFn: RenderFn<any, any> = p => <h3>Not supported {JSON.stringify(p.schema)}</h3>
 

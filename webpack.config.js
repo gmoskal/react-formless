@@ -2,6 +2,8 @@ const path = require("path")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 const env = process.env.NODE_ENV || "dev"
 const distPath = path.resolve(__dirname, "lib")
+const createStyledComponentsTransformer = require("typescript-plugin-styled-components").default
+const styledComponentsTransformer = createStyledComponentsTransformer()
 
 const commonPlugins = [new HtmlWebpackPlugin({ template: "./assets/template.html" })]
 
@@ -14,8 +16,15 @@ const configBase = {
         rules: [
             { test: /\.less$/, use: ["style-loader", "css-loader", "less-loader"] },
             { test: /\.css$/i, use: ["style-loader", "css-loader"] },
-            { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
-            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
+            {
+                test: /\.tsx?$/,
+                loader: "awesome-typescript-loader",
+                options: {
+                    getCustomTransformers: () => ({ before: [styledComponentsTransformer] })
+                }
+            },
+            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
+            { test: /\.(png|jpe?g|gif|ico|svg|woff2?|ttf|eot)$/i, use: [{ loader: "file-loader" }] }
         ]
     },
     optimization: {

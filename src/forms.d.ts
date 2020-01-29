@@ -20,7 +20,7 @@ type ElementsRenderMap = {
 type RenderType = "Plain" | "AntDesign" | "Custom"
 type RenderOptions = {
     elementsRenderMap?: Partial<ElementsRenderMap>
-    inputsRenderMap?: Partial<InputRenderMap<any>>
+    inputsRenderMap?: Partial<InputRenderMap>
     renderType?: RenderType
 }
 
