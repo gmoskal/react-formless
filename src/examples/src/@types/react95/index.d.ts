@@ -10,4 +10,8 @@ declare module "@react95/core" {
         HTMLTextAreaElement
     >
     export const TextArea: React.FC<TextAreaProps>
+    type DropdownProps = React.DetailedHTMLProps<React.SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement> & {
+        options: string[]
+    }
+    export const Dropdown: React.FC<DropdownProps>
 }

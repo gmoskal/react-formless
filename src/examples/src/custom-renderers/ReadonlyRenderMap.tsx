@@ -1,6 +1,6 @@
 import * as React from "react"
-import { toMap, replace } from "../utils/map"
-import { FormView } from "../components/FormView"
+import { toMap, replace } from "../../../utils/map"
+import { FormView } from "../../../components/FormView"
 
 type CSS = React.CSSProperties
 

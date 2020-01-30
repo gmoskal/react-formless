@@ -15,10 +15,12 @@ describe("useFormHook()", () => {
         name: { name: "Skill Name", type: "text", validators: [validateNotEmpty, validateAZ] },
         level: { name: "Level", type: "number", validators: validNumber, toValue: v => parseInt(v, 10) }
     }
-    const schemaWithNoValidators: FormSchema<Skill> = {
+
+    const schemaNoValidators: FormSchema<Skill> = {
         name: { name: "Skill Name", type: "text", validators: [] },
         level: { name: "Level", type: "number", validators: [], toValue: v => parseInt(v, 10) }
     }
+
     it("returns correct form state when initialized", () => {
         const expected: FormState<Skill> = { name: stringInputStateFixture(), level: numberInputStateFixture() }
 
@@ -27,13 +29,13 @@ describe("useFormHook()", () => {
     })
 
     it("returns correct result when no errors", () => {
-        const { result } = getFormHook<Skill>({ schema: schemaWithNoValidators, initialValue, onSubmit: _noop })
+        const { result } = getFormHook<Skill>({ schema: schemaNoValidators, initialValue, onSubmit: _noop })
         expect(result.current.result).toEqual(Ok(initialValue))
     })
 
     it("returns initial values on submit without changes", () => {
         const resultSpy = jest.fn()
-        const { result } = getFormHook({ schema: schemaWithNoValidators, initialValue, onSubmit: resultSpy })
+        const { result } = getFormHook({ schema: schemaNoValidators, initialValue, onSubmit: resultSpy })
         result.current.onSubmitClick()
         expect(resultSpy).toBeCalledWith(initialValue)
     })

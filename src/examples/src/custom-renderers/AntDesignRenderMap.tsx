@@ -1,6 +1,6 @@
 import * as React from "react"
 import { InputNumber, Input, Radio, Select, Button } from "antd"
-import { getInputProps } from "../forms"
+import { getInputProps } from "../../../forms"
 
 import "antd/lib/style/components.less"
 

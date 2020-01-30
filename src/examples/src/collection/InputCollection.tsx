@@ -1,6 +1,5 @@
 import * as React from "react"
-import { useFormHook } from ".."
-import { MultiRenderFormView } from "./MultiRenderFormView"
+import { FormView, useFormHook, toResult } from "../../.."
 
 type User = { name: string; skills: Skill[] }
 type Skill = { name: string; level: number; tags: Tag[] }
@@ -31,6 +30,13 @@ const userSchema: FormSchema<User> = {
 }
 
 export const InputCollectionForm: React.FC = () => {
-    const { formViewProps } = useFormHook({ schema: userSchema })
-    return <MultiRenderFormView title="Text" {...formViewProps} />
+    const { formViewProps: p } = useFormHook({ schema: userSchema })
+    return (
+        <>
+            <FormView {...p} />
+            <pre>{JSON.stringify(toResult(p.schema, p.state), null, 2)}</pre>
+            <h3>State</h3>
+            <pre>{JSON.stringify(p.state, null, 2)}</pre>
+        </>
+    )
 }

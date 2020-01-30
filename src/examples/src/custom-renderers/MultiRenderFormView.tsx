@@ -1,11 +1,10 @@
 import * as React from "react"
-import { FormViewProps, useFormHook } from "../useFormHook"
-import { FormView } from "../components/FormView"
+import { useFormHook, toResult, FormView } from "../../../"
+import { labelize } from "../../../utils"
 import { readOnlyRenderMap } from "./ReadonlyRenderMap"
-import { toResult } from "../forms"
-import { labelize } from "../utils"
 import { react95Inputs, react95Elements } from "./React95"
 import { antDesignRenderMap } from "./AntDesignRenderMap"
+
 const renderTypes = ["Plain", "AntDesign", "Readonly", "React95"] as const
 const themes: Array<[string, string]> = renderTypes.map(v => [labelize(v), v])
 
