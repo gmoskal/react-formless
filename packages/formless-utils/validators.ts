@@ -182,13 +182,6 @@ export const validString = [validateString, validateNotEmpty]
 export const validEmail = [validateEmail]
 export const validBoolean = [validateBoolean]
 export const validArrayString = [validateArray(validString)]
-export const validPassword = [
-    validateString,
-    validateNotEmpty,
-    validateMinLength(8),
-    validateUppercasePresent,
-    validateNumberPresent
-]
 
 export const validDef = <T>(def: T, v: Validator<T>) => [defualtV(def)(v)]
 export const validNumberDef = validDef(0, validateNumber)
@@ -200,7 +193,7 @@ export const validArrayStringDef = validArrayDef(validString)
 
 export const validMapDef = <T>(vs: Array<Validator<T>>) => [(v: any, m?: string) => validateMap(vs)(v || {}, m)]
 
-export const validators = { validNumber, validString, validEmail, validBoolean, validArrayString, Ok: mkOk, Err: mkErr }
+export const validators = { validNumber, validString, validEmail, validBoolean, validArrayString, mkOk, mkErr }
 export const guards = {
     isString,
     isObject,

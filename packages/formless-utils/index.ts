@@ -51,3 +51,22 @@ export {
     toOption
 } from "./types"
 export { guards, validators, runValidators, runValidatorsRaw, Result, Ok, Err } from "./validators"
+export {
+    validNumber,
+    validString,
+    validEmail,
+    validBoolean,
+    validArrayString,
+    validateNotEmpty,
+    validateAZ,
+    validDef,
+    validNumberDef,
+    validStringDef,
+    validBooleanDef,
+    validArrayDef,
+    validArrayStringDef,
+    validMapDef,
+    mkOk,
+    mkErr
+} from "./validators"
+export { isString, isObject, isArray, isValid, isNumber, isBoolean, isEmpty, isEmail, isOk, isErr } from "./validators"

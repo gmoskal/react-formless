@@ -1,10 +1,10 @@
 module.exports = {
     transform: { ".(ts|tsx)": "ts-jest" },
-    testMatch: ["<rootDir>/src/**/*.spec.(ts|tsx)"],
+    testMatch: ["<rootDir>/**/*.spec.(ts|tsx)"],
     moduleFileExtensions: ["js", "ts", "tsx", "json"],
     setupFiles: ["<rootDir>/../../jest.setup.ts"],
 
-    testPathIgnorePatterns: ["<rootDir>[/\\\\](build|docs|lib|.next)[/\\\\]"],
+    testPathIgnorePatterns: ["<rootDir>[/\\\\](build|node_modules|docs|lib|.next)[/\\\\]"],
     transformIgnorePatterns: ["^.*.+\\.js$"]
 
     // testEnvironment: "jsdom",
