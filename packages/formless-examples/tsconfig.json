@@ -4,6 +4,8 @@
 	  "rootDir": "src",
 	  "outDir": "dist"
 	},
-	"references": [{ "path": "../formless-core" }, {"path": "../formless-antd"}]
+	"include": ["**/*.d.ts", "**/*.tsx", "**/*.ts"],
+	"exclude": ["node_modules/**", "lib", "dist"],
+	"references": [{ "path": "../formless-core" }, {"path": "../formless-antd"}, {"path": "../formless-utils"}]
   }
   

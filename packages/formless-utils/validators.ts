@@ -1,5 +1,5 @@
 import { iterateMap, keys, copyDefinedFields, SMap } from "./map"
-import { Nothing, Just, SCasted, ValueState, State, F1, Maybe } from "./types"
+import { mkNothing, mkJust, SCasted, ValueState, State, F1, Maybe } from "./types"
 
 export type Errors<T> = SCasted<T, string>
 export type ErrArray<T> = Array<Err<ExtErrors<T>>>
@@ -153,9 +153,9 @@ export const validateArray = <T>(validators: Validators<T>) => (v: any, msg?: st
 }
 
 export const optional = <T>(validator: Validator<T>): Validator<Maybe<T>> => (v: any, msg?: string) => {
-    if (v === undefined || v === null) return mkOk(Nothing())
+    if (v === undefined || v === null) return mkOk(mkNothing())
     const result = validator(v, msg)
-    return result.type === "Ok" ? mkOk(Just(result.value)) : mkErr(Just(result.value), result.obj)
+    return result.type === "Ok" ? mkOk(mkJust(result.value)) : mkErr(mkJust(result.value), result.obj)
 }
 
 export const defualtV = <T>(def: T) => (validator: Validator<T>): Validator<T> => (v: any, msg?: string) =>

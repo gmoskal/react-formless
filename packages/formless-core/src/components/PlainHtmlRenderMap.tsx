@@ -1,6 +1,6 @@
 import * as React from "react"
 import { getInputProps, toFormState, toInputState } from "../forms"
-import { toMap, replace } from "../utils/map"
+import { toMap, replace } from "@formless/utils"
 import {
     FormView,
     FormItemView,

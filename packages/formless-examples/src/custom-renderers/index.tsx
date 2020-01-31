@@ -3,7 +3,7 @@ import * as React from "react"
 import { useFormHook, toResult, FormView, FormSchema, RenderOptions, FormViewProps, ArrayItem } from "@formless/core"
 import { antDesignRenderMap } from "@formless/antd"
 
-import { labelize } from "../utils"
+import { labelize } from "@formless/utils/misc"
 
 import { readOnlyRenderMap } from "./ReadonlyRenderMap"
 import { react95Inputs, react95Elements } from "./React95"

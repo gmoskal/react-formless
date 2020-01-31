@@ -1,8 +1,8 @@
 import * as React from "react"
 import { toFormState, toResult, validateForm } from "./forms"
 import { FormState, FormSchema } from "."
-import { F1, F0 } from "./utils/types"
-import { Result } from "./utils/validators"
+import { F1, F0 } from "@formless/utils/types"
+import { Result } from "@formless/utils/validators"
 
 export type FormViewProps<T> = {
     setState: F1<FormState<T>>

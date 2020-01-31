@@ -1,5 +1,5 @@
 import * as React from "react"
-import { mapOn2, pickObject } from "../utils/map"
+import { F1, pickObject, mapOn2 } from "@formless/utils"
 import { plainHtmlRenderMap, plainHtmlElementRenderMap } from "./PlainHtmlRenderMap"
 import {
     RenderOptions,
@@ -12,7 +12,6 @@ import {
     InputSchema,
     FormSchema
 } from ".."
-import { F1 } from "../utils/types"
 
 const getRenderMap = (p: RenderOptions) => p.inputsRenderMap || plainHtmlRenderMap
 

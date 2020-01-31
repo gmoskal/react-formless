@@ -52,20 +52,20 @@ export type Intersect<T, T2> = Pick<T, Extract<keyof T, keyof T2>>
 export type Defaultize<Props, Defaults> = Partial<Pick<Props, Extract<keyof Props, keyof Defaults>>> &
     Pick<Props, Exclude<keyof Props, keyof Defaults>>
 
-export const Nothing = (): Nothing => ({ type: "Nothing" })
-export const Just = <T>(value: T): Just<T> => ({ type: "Just", value })
+export const mkNothing = (): Nothing => ({ type: "Nothing" })
+export const mkJust = <T>(value: T): Just<T> => ({ type: "Just", value })
 export const equal = <T>(l: Maybe<T>, r: Maybe<T>) =>
     l.type === r.type && l.type === "Just" && r.type === "Just" && l.value === r.value
 
-export const Fetched = <T>(value: T): AsyncFetched<T> => ({ type: "Fetched", value })
-export const NotFetched = (): AsyncNotFetched => ({ type: "NotFetched" })
-export const Fetching = (): AsyncFetching => ({ type: "Fetching" })
-export const FetchError = (value: string): AsyncFetchError => ({ type: "FetchError", value })
+export const mkFetched = <T>(value: T): AsyncFetched<T> => ({ type: "Fetched", value })
+export const mkNotFetched = (): AsyncNotFetched => ({ type: "NotFetched" })
+export const mkFetching = (): AsyncFetching => ({ type: "Fetching" })
+export const mkFetchError = (value: string): AsyncFetchError => ({ type: "FetchError", value })
 
 export const isJust = <T>(v: any): v is Just<T> => v && v.type === "Just"
 export const isNothing = (v: any): v is Nothing => v && v.type === "Nothing"
 
-export const Maybe = <T>(v?: T): Maybe<T> => (v !== undefined && v !== null ? Just(v) : Nothing())
+export const mkMaybe = <T>(v?: T): Maybe<T> => (v !== undefined && v !== null ? mkJust(v) : mkNothing())
 
 export const isNotFetched = (v: any): v is AsyncNotFetched => !v || v.type === "NotFetched"
 

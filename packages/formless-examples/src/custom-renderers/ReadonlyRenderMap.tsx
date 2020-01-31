@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { toMap, replace } from "@formless/core/src/utils/map"
+import { toMap, replace } from "@formless/utils"
 
 import {
     InputBoxRenderFn,

@@ -8,7 +8,7 @@
 		"packages/*"
 	],
 	"scripts": {
-		"build": "tsc -b packages/formless-core packages/formless-antd packages/formless-examples",
+		"build": "tsc -b packages/formless-utils packages/formless-core packages/formless-antd packages/formless-examples",
 		"build:all": "lerna exec yarn build",
 		"clean": "./cleanup.sh",
 		"bootstrap": "lerna bootstrap",

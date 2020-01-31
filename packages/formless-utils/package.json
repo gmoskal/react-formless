@@ -1,0 +1,15 @@
+{
+  "name": "@formless/utils",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+	  "test": "../../node_modules/.bin/jest -c $(pwd)/jest.config.js --rootDir ."
+  },
+  "keywords": [],
+  "author": "Grzegorz Moskal",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}

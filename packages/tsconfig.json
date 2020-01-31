@@ -1,4 +1,4 @@
 {
 	"files": [],
-	"references": [{ "path": "formless-core" }, { "path": "formless-antd" } , { "path": "formless-examples" }]
+	"references": [{ "path": "formless-core" }, { "path": "formless-antd" } , { "path": "formless-examples" }, { "path": "formless-utils" }]
 }

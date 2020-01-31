@@ -2,7 +2,8 @@ import * as React from "react"
 import { render } from "react-dom"
 import { Switch, Route, BrowserRouter, Link } from "react-router-dom"
 
-import { mapOn } from "./utils"
+import { mapOn } from "@formless/utils"
+
 import { InputSelectForm } from "./select/InputSelect"
 import { InputListForm } from "./list/InputList"
 import { InputRadioForm } from "./radio/InputRadio"

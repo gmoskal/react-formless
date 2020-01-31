@@ -1,8 +1,8 @@
 import { useFormHook, FormHookProps } from "./useFormHook"
 import { renderHook, act } from "@testing-library/react-hooks"
-import { factory } from "./utils/map"
-import { _noop } from "./utils"
-import { validateAZ, validNumber, validateNotEmpty, mkOk } from "./utils/validators"
+import { factory } from "@formless/utils/map"
+import { _noop } from "@formless/utils/misc"
+import { validateAZ, validNumber, validateNotEmpty, mkOk } from "@formless/utils/validators"
 import { InputState, FormSchema, FormState } from "."
 
 describe("useFormHook()", () => {

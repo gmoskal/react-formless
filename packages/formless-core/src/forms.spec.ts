@@ -1,5 +1,5 @@
 import { toFormState, toResult, validateForm, mkInputState } from "./forms"
-import { mkOk } from "./utils/validators"
+import { mkOk } from "@formless/utils/validators"
 import { FormSchema, FormState, Tuples } from "."
 
 type Tag2 = { name: string }
