@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "jsx": "react",
+    "declaration": true,
+    "lib": ["dom", "es2015.promise", "es2015", "esnext"],
+    "declarationMap": true,
+    "sourceMap": true,
+    "strict": true,
+	"composite": true,
+	"types": [ "react", "jest", "node" ]
+  },
+  
+  "allowJS": false,
+  "exclude": ["node_modules/**", "dist", "lib/**", "node_modules/@types/**"]
+}

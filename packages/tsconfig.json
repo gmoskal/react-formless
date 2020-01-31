@@ -1,0 +1,4 @@
+{
+	"files": [],
+	"references": [{ "path": "formless-core" }, { "path": "formless-antd" } , { "path": "formless-examples" }]
+}

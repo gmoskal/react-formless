@@ -1,0 +1,9 @@
+{
+	"extends": "../tsconfig.settings.json",
+	"compilerOptions": {
+	  "rootDir": "src",
+	  "outDir": "dist"
+	},
+	"references": [{ "path": "../formless-core" }, {"path": "../formless-antd"}]
+  }
+  

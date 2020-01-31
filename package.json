@@ -1,126 +1,46 @@
 {
-  "name": "typed-react-forms",
-  "version": "1.0.0",
-  "description": "Strongly typed react forms",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "scripts": {
-    "start": "npx webpack-dev-server",
-    "build": "tsc",
-    "test": "jest",
-    "format": "prettier --write \"src/**/*.ts\"",
-    "lint": "eslint src/**/*.tsx src/**/*.ts",
-    "lint:fix": "eslint src/**/*.tsx src/**/*.ts --fix",
-    "precommit": "lint-staged",
-    "prepare": "npm run build",
-    "prepublishOnly": "npm test && npm run lint",
-    "preversion": "npm run lint",
-    "version": "npm run format && git add -A src",
-    "postversion": "git push && git push --tags"
-  },
-  "files": [
-    "lib/**/*"
-  ],
-  "keywords": [
-    "typed",
-    "typescript",
-    "forms"
-  ],
-  "author": "Grzegorz Moskal",
-  "license": "ISC",
-  "dependencies": {
-  
-    "react": "16.12.0",
-    "react-dom": "16.12.0"
-  },
-  "devDependencies": {
-    "@hapi/joi": "^17.1.0",
-    "@testing-library/react-hooks": "^3.2.1",
-    "@types/enzyme": "3.10.4",
-    "@types/enzyme-adapter-react-16": "1.0.5",
-    "@types/hapi__joi": "^16.0.7",
-    "@types/jest": "24.9.0",
-    "@types/node": "13.1.8",
-    "@types/react": "16.9.19",
-    "@types/react-dom": "16.9.5",
-    "@types/react-router-dom": "^5.1.3",
-    "@types/styled-components": "^4.4.2",
-    "@typescript-eslint/eslint-plugin": "2.17.0",
-    "@typescript-eslint/parser": "2.17.0",
-    "awesome-typescript-loader": "^5.2.1",
-    "clean-webpack-plugin": "^3.0.0",
-    "core-js": "3.6.4",
-    "css-loader": "^3.4.2",
-    "enzyme": "3.11.0",
-    "enzyme-adapter-react-16": "1.15.2",
-    "eslint": "6.8.0",
-    "eslint-config-prettier": "6.9.0",
-    "eslint-plugin-import": "2.20.0",
-    "eslint-plugin-prettier": "3.1.2",
-    "eslint-plugin-react": "7.18.0",
-    "eslint-plugin-react-app": "6.1.0",
-    "eslint-plugin-react-hooks": "2.3.0",
-    "file-loader": "^5.0.2",
-    "html-webpack-plugin": "^3.2.0",
-    "husky": "4.2.0",
-    "jest": "24.9.0",
-    "lerna": "^3.20.2",
-    "less": "2.7.2",
-    "less-loader": "^5.0.0",
-    "lint-staged": "10.0.2",
-    "prettier": "1.19.1",
-    "react-router-dom": "5.1.2",
-    "react-test-renderer": "16.12.0",
-    "source-map-loader": "^0.2.4",
-    "style-loader": "^1.1.3",
-    "styled-components": "^5.0.0",
-    "ts-jest": "24.3.0",
-    "ts-loader": "6.2.1",
-    "typescript": "3.7.5",
-    "typescript-plugin-styled-components": "^1.4.4",
-    "webpack": "4.41.5",
-    "webpack-cli": "3.3.10",
-    "webpack-dev-server": "3.10.1"
-  },
-  "optionalDependencies": {
-    "fsevents": "2.0.7"
-  },
-  "jest": {
-    "transform": {
-      ".(ts|tsx)": "ts-jest"
-    },
-    "testMatch": [
-      "<rootDir>/(src|functions)/**/*.(spec|test).(ts|tsx)"
-    ],
-    "moduleDirectories": [
-      "node_modules"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ],
-    "setupFiles": [
-      "<rootDir>/tests/setup.ts",
-      "core-js"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "npm run lint && npm test"
-    }
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "npx prettier --config .prettierrc.js --write",
-      "git add"
-    ]
-  },
-  "engines": {
-    "node": ">= 10.0 < 12.0"
-  }
+	"name": "formless",
+	"description": "Data driven react forms (written in ts)",
+	"license": "MIT",
+	"private": true,
+	"version": "1.0.0",
+	"workspaces": [
+		"packages/*"
+	],
+	"scripts": {
+		"build": "tsc -b packages/formless-core packages/formless-antd packages/formless-examples",
+		"build:all": "lerna exec yarn build",
+		"clean": "./cleanup.sh",
+		"bootstrap": "lerna bootstrap",
+		"test": "lerna exec yarn test",
+		"info": "yarn workspaces info"
+	},
+	"devDependencies": {
+		"ts-jest": "25.1.0",
+		"@types/react": "16.9.19",
+		"lerna": "3.20.2",
+		"typescript": "3.7.5",
+		"@testing-library/react-hooks": "3.2.1",
+		"@types/enzyme": "3.10.4",
+		"enzyme-adapter-react-16": "1.15.2",
+		"@types/enzyme-adapter-react-16": "1.0.5",
+		"@types/jest": "25.1.1",
+		"enzyme": "3.11.0",
+		"eslint": "6.8.0",
+		"eslint-config-prettier": "6.10.0",
+		"eslint-plugin-import": "2.20.0",
+		"eslint-plugin-prettier": "3.1.2",
+		"eslint-plugin-react": "7.18.0",
+		"eslint-plugin-react-app": "6.1.0",
+		"eslint-plugin-react-hooks": "2.3.0",
+		"husky": "4.2.1",
+		"jest": "25.1.0",
+		"prettier": "1.19.1"
+	},
+	"dependencies": {
+		"react": "16.12.0"
+	},
+	"optionalDependencies": {
+		"fsevents": "2.1.2"
+	}
 }

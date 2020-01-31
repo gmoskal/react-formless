@@ -13,34 +13,30 @@ Checkout simple login form example
 
 ```typescript tsx
 import * as React from "react"
-import { useFormHook, FormHookProps, FormView, InputRenderMap } from "formless"
+import { FormView, useFormHook, toResult, FormSchema } from "@formless/core"
 
-export type Credentials = { email: string; password: string }
-type Props = Pick<FormHookProps<Credentials>, "initialValue" | "onSubmit">
+export type BasicInputs = { name: string; password: string; age: number; bio: string }
 
-const schema: FormSchema<Credentials> = {
-    email: { type: "text", placeholder: "Email", validators: [] },
-    password: { type: "password", placeholder: "Secret" }
+const schema: FormSchema<BasicInputs> = {
+    name: { type: "text", placeholder: "Name" },
+    password: { type: "password", placeholder: "Password" },
+    age: { type: "number", placeholder: "Age" },
+    bio: { type: "textarea", placeholder: "Bio" }
 }
 
-export const LoginForm: React.FC<Props> = p => {
-    const { formViewProps, onSubmitClick } = useFormHook({ ...p, schema })
+export const InputsForms: React.FC = () => {
+    const { formViewProps: p } = useFormHook({ schema })
     return (
         <>
-            <h2>Login Form</h2>
-            <FormView {...formViewProps} />
-            <pre>formViewProps.state: {JSON.stringify(formViewProps.state, null, 2)}</pre>
-            <button onClick={onSubmitClick}>Login</button>
+            <FormView {...p} />
+            <pre>{JSON.stringify(toResult(p.schema, p.state), null, 2)}</pre>
+            <h3>State</h3>
+            <pre>{JSON.stringify(p.state, null, 2)}</pre>
         </>
     )
 }
 
 ```
-
-![simple login form example](./assets/LoginForm.gif)
-
-
-## the most wanted form features
 
 ### Custom renderers
 

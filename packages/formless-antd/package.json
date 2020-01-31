@@ -1,0 +1,19 @@
+{
+  "name": "@formless/antd",
+  "version": "1.0.0",
+  "description": "ant-design renderer for @formless/core",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "license": "MIT",
+  "dependencies": {
+	"@formless/core": "^1.0.0",
+	"antd": "3.26.7",
+	
+	"less": "2.7.2",
+    "less-loader": "^5.0.0"
+  },
+  "devDependencies": {},
+  "optionalDependencies": {
+    "fsevents": "2.0.7"
+  }
+}
