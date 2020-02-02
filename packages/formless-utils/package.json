@@ -1,17 +1,20 @@
 {
   "name": "@formless/utils",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "set of very useful ts utils (including Elm style validators)",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
     "test": "../../node_modules/.bin/jest -c $(pwd)/jest.config.js --rootDir ."
   },
-  "keywords": ["utils", "typescript", "react", "elm"],
+  "keywords": [
+    "utils",
+    "typescript",
+    "react",
+    "elm"
+  ],
   "author": "Grzegorz Moskal",
   "license": "MIT",
-  "dependencies": {},
-  "devDependencies": {},
   "homepage": "https://github.com/gmoskal/formless#readme",
   "directories": {
     "lib": "lib",
