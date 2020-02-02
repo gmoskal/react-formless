@@ -13,7 +13,7 @@ import {
     InputRenderMap,
     InputBoxType,
     ElementsRenderMap
-} from ".."
+} from "../../src"
 
 const Title: React.FC<{ text?: string }> = p => (p.text ? <h3>{p.text}</h3> : null)
 const Label: React.FC<{ text?: string }> = p =>

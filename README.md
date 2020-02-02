@@ -57,6 +57,20 @@ export const CustomLoginForm: React.FC<Props> = p => {
 }
 ```
 
+## Examples
+
+To compile and run project with examples type:
+
+```bash
+yarn
+yarn build
+yarn workspace @react-formless/examples start
+```
+
+then parcel should run example project on http://localhost:1234
+
+More documentation comming soon
+
 ### Custom validators
 
 ### Collections support

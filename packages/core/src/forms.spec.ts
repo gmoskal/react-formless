@@ -1,6 +1,6 @@
 import { toFormState, toResult, validateForm, mkInputState } from "./forms"
 import { mkOk } from "@react-formless/utils/validators"
-import { FormSchema, FormState, Tuples } from "."
+import { FormSchema, FormState, Tuples } from "../src"
 
 type Tag2 = { name: string }
 type Skill = { name: string; level: number }

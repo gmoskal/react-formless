@@ -1,0 +1,18 @@
+{
+	"extends": "../tsconfig.settings.json",
+	"compilerOptions": {
+		"rootDir": "src",
+		"outDir": "dist"
+	},
+	"references": [
+		{
+			"path": "../utils"
+		},
+		{
+			"path": "../core"
+		},
+		{
+			"path": "../antd"
+		}
+	]
+}

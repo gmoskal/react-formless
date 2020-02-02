@@ -43,6 +43,7 @@ export {
     ValueState,
     Casted,
     Dict,
+    FArgs,
     SDict,
     SCasted,
     SimpleValue,
@@ -67,6 +68,7 @@ export {
     validArrayStringDef,
     validMapDef,
     mkOk,
-    mkErr
+    mkErr,
+    Validators
 } from "./validators"
 export { isString, isObject, isArray, isValid, isNumber, isBoolean, isEmpty, isEmail, isOk, isErr } from "./validators"

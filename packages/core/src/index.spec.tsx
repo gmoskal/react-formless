@@ -1,11 +1,10 @@
 import { renderHook, act } from "@testing-library/react-hooks"
 import { validateAZ, validNumber, validateNotEmpty, mkOk, _noop, factory } from "@react-formless/utils"
 
-import { useFormHook, FormHookProps } from "./useFormHook"
-import { InputState, FormSchema, FormState } from "."
+import { useFormHook, FormHookProps, InputState, FormSchema, FormState } from "."
 
 describe("useFormHook()", () => {
-    const getFormHook = <T>(p: FormHookProps<T>) => renderHook(() => useFormHook(p))
+    const getFormHook = <T extends any>(p: FormHookProps<T>) => renderHook(() => useFormHook(p))
     type Skill = { name: string; level: number }
     const stringInputStateFixture = factory<InputState<string>>({ active: false, visited: false, value: "" })
     const numberInputStateFixture = factory<InputState<number>>({ active: false, visited: false, value: 0 })

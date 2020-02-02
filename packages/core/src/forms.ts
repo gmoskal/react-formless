@@ -18,7 +18,7 @@ import {
     InputPropsBase,
     InputOptionSchema,
     InputState
-} from "."
+} from "../src"
 
 export const validateForm = <T>(schema: FormSchema<T>, state: FormState<T>): FormState<T> =>
     mapObject(schema, (k, s: InputSchema<any>) => validateInput(s as any, (state as any)[k]) as any)

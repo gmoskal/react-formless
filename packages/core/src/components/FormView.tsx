@@ -11,7 +11,7 @@ import {
     InputPropsBase,
     InputSchema,
     FormSchema
-} from ".."
+} from "../../src"
 
 const getRenderMap = (p: RenderOptions) => p.inputsRenderMap || plainHtmlRenderMap
 
