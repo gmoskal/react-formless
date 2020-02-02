@@ -21,5 +21,18 @@
   "optionalDependencies": {
     "fsevents": "2.0.7"
   },
-  "gitHead": "b2eff583285ff25812fccc70fdd80ae131300d80"
+  "author": "Grzegorz Moskal",
+  "license": "MIT",
+  "homepage": "https://github.com/gmoskal/formless#readme",
+  "publishConfig": {
+    "access": "private"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gmoskal/formless.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gmoskal/formless/issues"
+  },
+  "gitHead": "4682a31e2af594503e78655c49ffed945b6f3314"
 }

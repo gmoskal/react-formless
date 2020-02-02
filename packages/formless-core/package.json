@@ -8,10 +8,24 @@
     "test": "../../node_modules/.bin/jest -c $(pwd)/jest.config.js --rootDir ."
   },
   "keywords": [],
-  "author": "",
+  "author": "Grzegorz Moskal",
   "license": "MIT",
-  "optionalDependencies": {
-    "fsevents": "2.0.7"
+  "homepage": "https://github.com/gmoskal/formless#readme",
+  "directories": {
+    "lib": "lib"
   },
-  "gitHead": "b2eff583285ff25812fccc70fdd80ae131300d80"
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gmoskal/formless.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gmoskal/formless/issues"
+  },
+  "gitHead": "4682a31e2af594503e78655c49ffed945b6f3314"
 }

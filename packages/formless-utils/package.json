@@ -17,8 +17,7 @@
   "license": "MIT",
   "homepage": "https://github.com/gmoskal/formless#readme",
   "directories": {
-    "lib": "lib",
-    "test": "__tests__"
+    "lib": "lib"
   },
   "files": [
     "lib"
@@ -33,5 +32,5 @@
   "bugs": {
     "url": "https://github.com/gmoskal/formless/issues"
   },
-  "gitHead": "b2eff583285ff25812fccc70fdd80ae131300d80"
+  "gitHead": "4682a31e2af594503e78655c49ffed945b6f3314"
 }
