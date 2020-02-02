@@ -1,7 +1,7 @@
-import { Result, Validators } from "@formless/utils/validators"
-import { F1, F0, State, FArgs, Dict } from "@formless/utils/types"
+import { Result, Validators } from "@react-formless/utils/validators"
+import { F1, F0, State, FArgs, Dict } from "@react-formless/utils/types"
 
-export { validators, guards } from "@formless/utils/validators"
+export { validators, guards } from "@react-formless/utils/validators"
 export { useFormHook, FormHookProps } from "./useFormHook"
 export { getInputProps, toResult } from "./forms"
 export { FormView, getElementsRenderMap, FormItemView } from "./components/FormView"

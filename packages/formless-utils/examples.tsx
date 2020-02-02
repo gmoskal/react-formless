@@ -1,5 +1,5 @@
 import * as React from "react"
-import { extend } from "@formless/utils"
+import { extend } from "./map"
 
 export const Comp = () => {
     const [state, setState] = React.useState({ foo: 1, bar: 2 })
@@ -24,7 +24,7 @@ export const Comp2 = () => {
             <button onClick={_ => setState(s => extend(s)({ foo: 0 }))}>reset</button>
             <h1>bar {state.bar}</h1>
             <button onClick={_ => setState(s => extend(s)({ bar: s.bar + 1 }))}>+</button>
-            <button onClick={_ => setState(s => extend(s)({ bra: 0 }))}>reset</button>
+            {/* <button onClick={_ => setState(s => extend(s)({ bra: 0 }))}>reset</button> */}
         </>
     )
 }

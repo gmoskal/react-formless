@@ -1,10 +1,10 @@
 import * as React from "react"
-import { useFormHook, toResult, FormView, FormSchema, RenderOptions } from "@formless/core"
+import { useFormHook, toResult, FormView, FormSchema, RenderOptions, FormViewProps } from "@react-formless/core"
+import { labelize } from "@react-formless/utils"
+import { antDesignRenderMap } from "@react-formless/antd"
+
 import { readOnlyRenderMap } from "./ReadonlyRenderMap"
 import { react95Inputs, react95Elements } from "./React95"
-import { FormViewProps } from "@formless/core/src/useFormHook"
-import { antDesignRenderMap } from "@formless/antd"
-import { labelize } from "@formless/utils"
 
 const renderTypes = ["Plain", "AntDesign", "Readonly", "React95"] as const
 const themes: Array<[string, string]> = renderTypes.map(v => [labelize(v), v])

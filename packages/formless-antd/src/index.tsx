@@ -1,6 +1,12 @@
 import * as React from "react"
 import { InputNumber, Input, Radio, Select, Button } from "antd"
-import { getInputProps, ElementsRenderMap, InputOptionRenderFn, InputBoxRenderFn, InputRenderMap } from "@formless/core"
+import {
+    getInputProps,
+    ElementsRenderMap,
+    InputOptionRenderFn,
+    InputBoxRenderFn,
+    InputRenderMap
+} from "@react-formless/core"
 
 import "antd/lib/style/components.less"
 

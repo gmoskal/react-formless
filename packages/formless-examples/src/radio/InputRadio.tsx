@@ -1,5 +1,5 @@
 import * as React from "react"
-import { FormView, useFormHook, toResult, FormSchema } from "@formless/core"
+import { FormView, useFormHook, toResult, FormSchema } from "@react-formless/core"
 
 export type Info = { sex: string }
 

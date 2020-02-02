@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { toMap, replace } from "@formless/utils"
+import { toMap, replace } from "@react-formless/utils"
 
 import {
     InputBoxRenderFn,
@@ -10,7 +10,7 @@ import {
     InputRenderMap,
     InputBoxType,
     InputOptionType
-} from "@formless/core"
+} from "@react-formless/core"
 
 type CSS = React.CSSProperties
 

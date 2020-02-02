@@ -1,5 +1,5 @@
 import * as React from "react"
-import { FormView, useFormHook, toResult, FormSchema } from "@formless/core"
+import { FormView, useFormHook, toResult, FormSchema } from "@react-formless/core"
 
 type User = { name: string; skills: Skill[] }
 type Skill = { name: string; level: number; tags: Tag[] }

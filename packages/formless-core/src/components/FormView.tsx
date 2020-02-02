@@ -1,5 +1,5 @@
 import * as React from "react"
-import { F1, pickObject, mapOn2 } from "@formless/utils"
+import { F1, pickObject, mapOn2 } from "@react-formless/utils"
 import { plainHtmlRenderMap, plainHtmlElementRenderMap } from "./PlainHtmlRenderMap"
 import {
     RenderOptions,
