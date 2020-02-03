@@ -40,7 +40,6 @@ export const InputsForms: React.FC = () => {
 
 ### Custom renderers
 
-
 ```typescript jsx
 
 export const CustomLoginForm: React.FC<Props> = p => {

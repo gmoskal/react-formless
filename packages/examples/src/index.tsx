@@ -30,14 +30,14 @@ const Main = () => (
         ))}
     </>
 )
-
+console.log("test")
 render(
     <BrowserRouter>
         <Switch>
-            <Route path="/" component={Main} exact />
             {mapOn(paths, (path, C) => (
-                <Route key={path} path={path} component={C} exact />
+                <Route key={path} path={path} component={C} />
             ))}
+            <Route path="/" component={Main} />
         </Switch>
     </BrowserRouter>,
     document.getElementById("root")
