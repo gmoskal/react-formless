@@ -9,7 +9,7 @@ This set of functions that I found very useful writing typescript (and react) ap
 `extend` is one of those simple functions that gives you type safety when manipulating state.
 
 ```typescript
-import { extend } from "@formless/utils"
+import { extend } from "@react-formless/utils"
 
 type T =  { foo: number, bar: number}
 type ReduceFn = (state: T) => T
@@ -44,7 +44,7 @@ now consider same component with using `extend function`
 
 ```typescript
 import * as React from "react"
-import { extend } from "@formless/utils"
+import { extend } from "@react-formless/utils"
 
 export const Comp2 = () => {
     const [state, setState] = React.useState({ foo: 1, bar: 2 })

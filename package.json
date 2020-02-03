@@ -4,11 +4,9 @@
 	"license": "MIT",
 	"private": true,
 	"version": "1.0.0",
-	"workspaces": [
-		"packages/*"
-	],
+	"workspaces": [ "packages/*" ],
 	"scripts": {
-		"build": "tsc -b packages/formless-utils packages/formless-core packages/formless-antd packages/formless-examples",
+		"build": "tsc -b packages/utils packages/core packages/antd packages/examples",
 		"build:all": "lerna exec yarn build",
 		"clean": "./cleanup.sh",
 		"bootstrap": "lerna bootstrap",
@@ -28,9 +26,9 @@
 		"enzyme": "3.11.0",
 		"eslint": "6.8.0",
 		"eslint-config-prettier": "6.10.0",
-		"eslint-plugin-import": "2.20.0",
+		"eslint-plugin-import": "2.20.1",
 		"eslint-plugin-prettier": "3.1.2",
-		"eslint-plugin-react": "7.18.0",
+		"eslint-plugin-react": "7.18.3",
 		"eslint-plugin-react-app": "6.1.0",
 		"eslint-plugin-react-hooks": "2.3.0",
 		"husky": "4.2.1",
