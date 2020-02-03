@@ -30,7 +30,7 @@ const Main = () => (
         ))}
     </>
 )
-console.log("test")
+
 render(
     <BrowserRouter>
         <Switch>
