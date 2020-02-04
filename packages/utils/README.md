@@ -11,9 +11,8 @@ type extendFunction = <T>(object: T) => (delta: Partial<T>) => T
 
 ### Description
 
-`extend` takes any object and returns function that takes any part of that object and then returns those two combained.
-Using `extend` function together with `react.useState` gives certainty that the reduction step was done properly.
-
+It takes any object and returns function that takes any part of that object and returns this object and part combained.
+Tip: _When used together with `react.useState` it gives certainty that the reduction step was done in a proper way._
 
 ### Example
 
@@ -51,7 +50,7 @@ export const Comp = () => {
 }
 ```
 
-now consider same component with using `extend function`
+Same component with `extend()` use
 
 ```typescript
 import * as React from "react"
