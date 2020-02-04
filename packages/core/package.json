@@ -10,10 +10,10 @@
   "author": "Grzegorz Moskal",
   "license": "MIT",
   "homepage": "https://github.com/gmoskal/react-formless/tree/master/packages/core/README.md",
+  "repository": "https://github.com/gmoskal/react-formless/tree/master/packages/core",
+  "bugs": { "url": "https://github.com/gmoskal/react-formless/issues" },
   "directories": { "lib": "lib" },
   "files": [ "lib" ],
   "publishConfig": { "access": "public" },
-  "repository": "https://github.com/gmoskal/react-formless/tree/master/packages/core",
-  "bugs": { "url": "https://github.com/gmoskal/react-formless/issues" },
   "gitHead": "d9ac1d64346ff38314d9af0455170a5c50ebf4cb"
 }
