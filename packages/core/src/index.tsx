@@ -5,7 +5,7 @@ export { validators, guards } from "@react-formless/utils"
 
 export { toFormState, toInputState, getInputProps, toResult } from "./forms"
 export { FormView, getElementsRenderMap, FormItemView } from "./components/FormView"
-export { plainHtmlRenderMap } from "./components/PlainHtmlRenderMap"
+export { plainHtmlRenderMap, plainHtmlElementRenderMap } from "./components/PlainHtmlRenderMap"
 
 export type Tuples<T = string> = Array<[string, T]>
 export type ArrayItem<T> = T extends Array<infer E> ? E : T

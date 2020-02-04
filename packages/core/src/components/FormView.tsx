@@ -1,7 +1,10 @@
 import * as React from "react"
+
 import { F1, pickObject, mapOn2 } from "@react-formless/utils"
-import { plainHtmlRenderMap, plainHtmlElementRenderMap } from "./PlainHtmlRenderMap"
+
 import {
+    plainHtmlRenderMap,
+    plainHtmlElementRenderMap,
     RenderOptions,
     ElementsRenderMap,
     RenderFn,
@@ -11,7 +14,7 @@ import {
     InputPropsBase,
     InputSchema,
     FormSchema
-} from "../../src"
+} from ".."
 
 const getRenderMap = (p: RenderOptions) => p.inputsRenderMap || plainHtmlRenderMap
 

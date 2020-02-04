@@ -1,5 +1,15 @@
-import { mapObject, arrify, toOption, Option } from "@react-formless/utils"
-import { F1, Result, mkOk, mkErr, isEmpty, runValidatorsRaw } from "@react-formless/utils"
+import {
+    mapObject,
+    arrify,
+    toOption,
+    Option,
+    F1,
+    Result,
+    mkOk,
+    mkErr,
+    isEmpty,
+    runValidatorsRaw
+} from "@react-formless/utils"
 
 import {
     FormSchema,
@@ -17,7 +27,7 @@ import {
     InputPropsBase,
     InputOptionSchema,
     InputState
-} from "../src"
+} from "."
 
 export const validateForm = <T>(schema: FormSchema<T>, state: FormState<T>): FormState<T> =>
     mapObject(schema, (k, s: InputSchema<any>) => validateInput(s as any, (state as any)[k]) as any)

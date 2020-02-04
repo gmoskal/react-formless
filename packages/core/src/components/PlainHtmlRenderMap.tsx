@@ -1,4 +1,5 @@
 import * as React from "react"
+
 import { toMap, replace } from "@react-formless/utils"
 import {
     FormView,
@@ -15,7 +16,7 @@ import {
     getInputProps,
     toFormState,
     toInputState
-} from "../"
+} from ".."
 
 const Title: React.FC<{ text?: string }> = p => (p.text ? <h3>{p.text}</h3> : null)
 const Label: React.FC<{ text?: string }> = p =>
