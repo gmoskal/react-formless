@@ -1,6 +1,6 @@
 {
   "name": "@react-formless/examples",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "scripts": {
     "start": "parcel serve *.html",
     "build": "rm -rf ../../docs; npx parcel build index.html --public-url . --no-cache --experimental-scope-hoisting --out-dir ../../docs; rm ../../docs/*.ico"
@@ -13,8 +13,8 @@
     "styled-components": "^5.0.0"
   },
   "dependencies": {
-    "@react-formless/antd": "^1.1.6",
-    "@react-formless/core": "^1.1.6",
+    "@react-formless/antd": "^1.1.7",
+    "@react-formless/core": "^1.1.7",
     "@react-formless/utils": "^1.1.4",
     "@react95/core": "2.4.5",
     "react-dom": "16.12.0",
