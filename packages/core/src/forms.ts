@@ -1,6 +1,5 @@
 import { mapObject, arrify, toOption, Option } from "@react-formless/utils"
-import { F1 } from "@react-formless/utils/types"
-import { Result, mkOk, mkErr, isEmpty, runValidatorsRaw } from "@react-formless/utils/validators"
+import { F1, Result, mkOk, mkErr, isEmpty, runValidatorsRaw } from "@react-formless/utils"
 
 import {
     FormSchema,
