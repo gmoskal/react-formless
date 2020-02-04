@@ -60,7 +60,8 @@ export const Comp2 = () => {
     )
 }
 ```
-You can play with that example [stackblitz](https://stackblitz.com/edit/react-ts-n3sg2e?embed=1&file=index.tsx&hideExplorer=1)
+
+[Check it out your self](https://stackblitz.com/edit/react-ts-n3sg2e?embed=1&file=index.tsx&hideExplorer=1)
 
 ## TODO
 
