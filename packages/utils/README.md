@@ -1,6 +1,6 @@
 # `@react-formless/utils`
 
-This is a set of functions that I found very useful when writing typescript/react applications.
+The set of functions that I found very useful when writing typescript/react applications.
 
 ## extend function
 
