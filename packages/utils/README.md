@@ -1,6 +1,6 @@
-# `@formless/utils`
+# `@react-formless/utils`
 
-This set of functions that I found very useful writing typescript (and react) applications.
+This is a set of functions that I found very useful when writing typescript/react applications.
 
 ## Usage
 
@@ -60,6 +60,7 @@ export const Comp2 = () => {
     )
 }
 ```
+You can play with that example [stackblitz](https://stackblitz.com/edit/react-ts-n3sg2e?embed=1&file=index.tsx&hideExplorer=1)
 
 ## TODO
 
