@@ -2,7 +2,7 @@
 
 > Ant Design render map for `@react-formless/core`.
 
-Check custom renderers in [action](https://gmoskal.github.io/custom-renderers)
+Check custom renderers in [action](https://gmoskal.github.io/react-formless/)
 
 ```typescript
 import * as React from "react"
