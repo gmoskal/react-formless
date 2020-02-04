@@ -1,7 +1,7 @@
 import * as React from "react"
 
 import { useFormHook, FormView, FormSchema } from "@react-formless/core"
-import { antDesignRenderMap } from "@react-formless/antd"
+import { antDesignRenderMap } from "."
 
 export type Car = { make: string }
 
