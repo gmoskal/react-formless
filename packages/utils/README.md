@@ -2,16 +2,21 @@
 
 This is a set of functions that I found very useful when writing typescript/react applications.
 
-## Usage
+## extend function
 
-### extend()
+### Signature
+
 ```typescript
 type extendFunction = <T>(object: T) => (delta: Partial<T>) => T
 ```
 
-`extend` takes any object and returns function that takes any part of that object and then returns those two combained.
+### Description
 
-Take a look at an example
+`extend` takes any object and returns function that takes any part of that object and then returns those two combained.
+Using `extend` function together with `react.useState` gives certainty that the reduction step was done properly.
+
+
+### Example
 
 ```typescript
 import { extend } from "@react-formless/utils"
@@ -26,8 +31,6 @@ const reduce: ReduceFn = state => ({ ...state, bra: 1 })
 // is not assignable to parameter of type 'Partial<T>'.
 const reduce: ReduceFn = state => extend(state)({bra: 1})
 ```
-
-Using of `extend function` together with `react.useState` gives certainty that we did reduction step properly.
 
 Consider a `react world` example
 
