@@ -1,5 +1,4 @@
 import * as React from "react"
-import { getInputProps, toFormState, toInputState } from "../forms"
 import { toMap, replace } from "@react-formless/utils"
 import {
     FormView,
@@ -12,8 +11,11 @@ import {
     InputListRenderFn,
     InputRenderMap,
     InputBoxType,
-    ElementsRenderMap
-} from "../../src"
+    ElementsRenderMap,
+    getInputProps,
+    toFormState,
+    toInputState
+} from "../"
 
 const Title: React.FC<{ text?: string }> = p => (p.text ? <h3>{p.text}</h3> : null)
 const Label: React.FC<{ text?: string }> = p =>

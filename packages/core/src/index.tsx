@@ -1,10 +1,9 @@
 import * as React from "react"
 import { F1, F0, State, FArgs, Dict, Result, Validators } from "@react-formless/utils"
-import { toFormState, toResult, validateForm } from "./forms"
 
 export { validators, guards } from "@react-formless/utils"
 
-export { getInputProps, toResult } from "./forms"
+export { toFormState, toInputState, getInputProps, toResult } from "./forms"
 export { FormView, getElementsRenderMap, FormItemView } from "./components/FormView"
 export { plainHtmlRenderMap } from "./components/PlainHtmlRenderMap"
 
@@ -143,6 +142,7 @@ export type FormHookResult<T> = {
     resetState: F0
 }
 
+import { toFormState, toResult, validateForm } from "./forms"
 export const useFormHook = <T extends any>({ schema, ...p }: FormHookProps<T>): FormHookResult<T> => {
     const [state, setState] = React.useState(toFormState<T>(schema, (p.initialValue || {}) as any))
     const onSubmitClick = () => {
