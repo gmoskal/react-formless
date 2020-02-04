@@ -4,9 +4,13 @@ This is a set of functions that I found very useful when writing typescript/reac
 
 ## Usage
 
-### extend: `<T>(o: T) => (delta: Partial<T>) => T`
+### extend
+```typescript
+type extendFunction = <T>(object: T) => (delta: Partial<T>) => T
+```
 
-`extend` is one of those simple functions that gives you type safety when manipulating state.
+`extend` takes any object and returns function that takes any part of that object and then returns those two combained.
+Take a look on an example, when it is useful. 
 
 ```typescript
 import { extend } from "@react-formless/utils"
