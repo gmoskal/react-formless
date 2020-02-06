@@ -1,3 +1,4 @@
+import * as React from "react"
 import { renderHook, act } from "@testing-library/react-hooks"
 import { validateAZ, validNumber, validateNotEmpty, mkOk, _noop, factory } from "@react-formless/utils"
 
@@ -35,7 +36,7 @@ describe("useFormHook()", () => {
     it("returns initial values on submit without changes", () => {
         const resultSpy = jest.fn()
         const { result } = getFormHook({ schema: schemaNoValidators, initialValue, onSubmit: resultSpy })
-        result.current.onSubmitClick()
+        result.current.handleSubmit({ preventDefault: _noop } as React.FormEvent)
         expect(resultSpy).toBeCalledWith(initialValue)
     })
 
@@ -60,13 +61,13 @@ describe("useFormHook()", () => {
         }
 
         act(() => result.current.formViewProps.setState(delta))
-        act(() => result.current.onSubmitClick())
+        act(() => result.current.handleSubmit({ preventDefault: _noop } as React.FormEvent))
 
         expect(result.current.formViewProps.state.name.validationResult!.type).toEqual("Err")
         expect(onSubmit).toBeCalledTimes(0)
     })
 
-    it("calls onSubmitClick when validation passed", () => {
+    it("calls onSubmit when validation passed", () => {
         const onSubmit = jest.fn()
         const { result } = getFormHook<Skill>({ schema, initialValue, onSubmit })
         const delta: FormState<Skill> = {
@@ -74,8 +75,20 @@ describe("useFormHook()", () => {
             level: numberInputStateFixture()
         }
         act(() => result.current.formViewProps.setState(delta))
-        act(() => result.current.onSubmitClick())
+        act(() => result.current.handleSubmit({ preventDefault: _noop } as React.FormEvent))
         expect(onSubmit).toBeCalledTimes(1)
+    })
+
+    it("prevents default browser behaviour upon submission", () => {
+        const ev = ({
+            preventDefault: jest.fn()
+        } as unknown) as React.FormEvent
+
+        const { result } = getFormHook<Skill>({ schema, initialValue })
+
+        act(() => result.current.handleSubmit(ev))
+
+        expect(ev.preventDefault).toHaveBeenCalled()
     })
 
     it("returns new props when setState prop is called", () => {

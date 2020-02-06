@@ -136,8 +136,7 @@ export type FormHookProps<T> = {
 
 export type FormHookResult<T> = {
     formViewProps: FormViewProps<T>
-    onSubmitClick: F0
-    onSubmitClickReset: F0
+    handleSubmit: React.FormEventHandler
     result: Result<T, T>
     resetState: F0
 }
@@ -145,18 +144,16 @@ export type FormHookResult<T> = {
 import { toFormState, toResult, validateForm } from "./forms"
 export const useFormHook = <T extends any>({ schema, ...p }: FormHookProps<T>): FormHookResult<T> => {
     const [state, setState] = React.useState(toFormState<T>(schema, (p.initialValue || {}) as any))
-    const onSubmitClick = () => {
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault()
+
         const res = toResult(schema, state)
         if (res.type === "Err") setState(validateForm(schema, state))
         else if (p.onSubmit) p.onSubmit(res.value)
     }
     const resetState = () => setState(toFormState(schema, p.initialValue as any))
     return {
-        onSubmitClick,
-        onSubmitClickReset: () => {
-            onSubmitClick()
-            resetState()
-        },
+        handleSubmit,
         result: toResult(schema, state),
         formViewProps: { state, setState, schema },
         resetState
