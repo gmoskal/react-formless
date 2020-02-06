@@ -3,7 +3,8 @@
   "version": "1.1.8",
   "scripts": {
     "start": "parcel serve *.html",
-    "build": "rm -rf ../../docs; npx parcel build index.html --public-url . --no-cache --experimental-scope-hoisting --out-dir ../../docs; rm ../../docs/*.ico"
+    "build": "rm -rf ../../docs; npx parcel build index.html --public-url . --no-cache --experimental-scope-hoisting --out-dir ../../docs; rm ../../docs/*.ico",
+    "test": "exit 0"
   },
   "devDependencies": {
     "@types/react-dom": "16.9.5",
