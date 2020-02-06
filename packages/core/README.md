@@ -1,5 +1,7 @@
 # @react-formless/core
 
+![tests status](https://github.com/gmoskal/react-formless/workflows/CI/badge.svg)
+
 > react-formless core.
 
 See main documentation of [@react-formless](https://github.com/gmoskal/react-formless).

@@ -1,4 +1,9 @@
-# `@react-formless/utils`
+# @react-formless/utils
+
+> typescript/react utils
+
+![tests status](https://github.com/gmoskal/react-formless/workflows/CI/badge.svg)
+
 The set of functions that I found very useful for writing an application using react and typescript
 
 ## extend()
