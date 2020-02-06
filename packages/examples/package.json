@@ -2,7 +2,8 @@
   "name": "@react-formless/examples",
   "version": "1.1.8",
   "scripts": {
-    "start": "parcel serve *.html",
+	"start": "parcel serve *.html",
+	"test": "echo soon",
     "build": "rm -rf ../../docs; npx parcel build index.html --public-url . --no-cache --experimental-scope-hoisting --out-dir ../../docs; rm ../../docs/*.ico"
   },
   "devDependencies": {

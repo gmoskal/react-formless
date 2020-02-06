@@ -10,6 +10,7 @@ import { InputRadioForm } from "./radio/InputRadio"
 import { InputCollectionForm } from "./collection/InputCollection"
 import { InputsForms } from "./basic/Inputs"
 import { CustomRenderersForm } from "./custom-renderers"
+type A = { foo: true }
 
 const paths = {
     "/basic-inputs": InputsForms,
