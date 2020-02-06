@@ -1,5 +1,6 @@
 # Formless
-![](https://github.com/gmoskal/react-formless/workflows/.github/workflows/ci.yml/badge.svg)
+
+![tests status](https://github.com/gmoskal/react-formless/workflows/CI/badge.svg)
 
 ## Data-driven react forms library written in typescript
 
