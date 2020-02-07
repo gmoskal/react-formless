@@ -1,4 +1,6 @@
-# uniforms-antd
+# @react-formless/antd
+
+![tests status](https://github.com/gmoskal/react-formless/workflows/CI/badge.svg)
 
 > Ant Design render map for `@react-formless/core`.
 
