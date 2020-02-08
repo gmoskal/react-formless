@@ -49,7 +49,7 @@ const AntInputNumber: InputBoxRenderFn = p => {
     return <InputNumber {...props} onChange={onChangeHandler} value={v} />
 }
 const AntSelect: InputOptionRenderFn = p => {
-    const { onChange, value, ...props } = getInputProps(p)
+    const { onChange, value } = getInputProps(p)
     const handleChange = (v: any) => {
         if (!onChange || v === undefined) return
         onChange({ target: { value: `${v}` } } as any)

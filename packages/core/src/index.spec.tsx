@@ -63,6 +63,7 @@ describe("useFormHook()", () => {
         act(() => result.current.formViewProps.setState(delta))
         act(() => result.current.handleSubmit({ preventDefault: _noop } as React.FormEvent))
 
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         expect(result.current.formViewProps.state.name.validationResult!.type).toEqual("Err")
         expect(onSubmit).toBeCalledTimes(0)
     })
