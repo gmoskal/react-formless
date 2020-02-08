@@ -14,7 +14,7 @@
 		"bootstrap": "lerna bootstrap",
 		"test": "lerna exec yarn test",
 		"info": "yarn workspaces info",
-		"lint": "eslint 'packages/**/*.{ts,tsx}'"
+		"lint": "eslint 'packages/**/*.{js,ts,tsx}'"
 	},
 	"husky": {
 		"hooks": {
@@ -24,8 +24,7 @@
 	},
 	"lint-staged": {
 		"*.{js,ts,tsx}": [
-			"eslint --fix",
-			"git add"
+			"eslint 'packages/**/*.{js,ts,tsx}' --fix"
 		]
 	},
 	"devDependencies": {
