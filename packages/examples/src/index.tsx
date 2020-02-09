@@ -10,7 +10,7 @@ import { InputRadioForm } from "./radio/InputRadio"
 import { InputCollectionForm } from "./collection/InputCollection"
 import { InputsForms } from "./basic/Inputs"
 import { CustomRenderersForm } from "./custom-renderers"
-type A = { foo: true }
+import { Validation } from "./validation/Validation"
 
 const paths = {
     "/basic-inputs": InputsForms,
@@ -18,7 +18,8 @@ const paths = {
     "/list": InputListForm,
     "/radio": InputRadioForm,
     "/collection": InputCollectionForm,
-    "/custom-renderers": CustomRenderersForm
+    "/custom-renderers": CustomRenderersForm,
+    "/validation": Validation
 }
 
 const Main = () => (
