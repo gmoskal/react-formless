@@ -78,7 +78,8 @@ yarn workspace @react-formless/examples start
 
 example project should be running on http://localhost:1234
 
-You may check running online version [here](https://gmoskal.github.io/react-formless))
+You may check running online version [here](https://gmoskal.github.io/react-formless)
+
 More documentation comming soon
 
 ### Custom validators
