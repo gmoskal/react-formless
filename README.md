@@ -1,4 +1,4 @@
-# Formless
+# Formless: WIP
 
 ![tests status](https://github.com/gmoskal/react-formless/workflows/CI/badge.svg)
 
