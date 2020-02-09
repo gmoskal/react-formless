@@ -68,7 +68,7 @@ export const CustomLoginForm: React.FC<Props> = p => {
 
 ## More examples
 
-To compile and run project with examples type:
+To compile and run project's examples, clone this repo and type
 
 ```bash
 yarn
@@ -76,8 +76,9 @@ yarn build
 yarn workspace @react-formless/examples start
 ```
 
-then parcel should run example project on http://localhost:1234
+example project should be running on http://localhost:1234
 
+You may check running online version [here](https://gmoskal.github.io/react-formless))
 More documentation comming soon
 
 ### Custom validators
