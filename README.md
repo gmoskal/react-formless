@@ -1,4 +1,4 @@
-# Formless: WIP
+# Formless: WIP (name and lib API may change)
 
 ![tests status](https://github.com/gmoskal/react-formless/workflows/CI/badge.svg)
 
@@ -8,6 +8,13 @@ The way you deal with forms depends on the way you think about the data.
 This library employs advanced `typescript` types to automatically generate forms even
 from quite complex data structures (defined by `type` and `schema`).
 You can now focus on data structures only.
+
+
+## Install
+
+```sh
+npm i --save-dev @react-formless/core
+```
 
 ## Example
 
@@ -59,7 +66,7 @@ export const CustomLoginForm: React.FC<Props> = p => {
 }
 ```
 
-## Examples
+## More examples
 
 To compile and run project with examples type:
 
