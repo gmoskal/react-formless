@@ -4,26 +4,37 @@
 	"license": "MIT",
 	"private": true,
 	"version": "1.0.0",
-	"workspaces": [ "packages/*" ],
+	"workspaces": [
+		"packages/*"
+	],
 	"scripts": {
 		"build": "tsc -b packages/utils packages/core packages/antd packages/examples",
 		"build:all": "lerna exec yarn build",
 		"clean": "./cleanup.sh",
 		"bootstrap": "lerna bootstrap",
 		"test": "lerna exec yarn test",
-		"info": "yarn workspaces info"
+		"info": "yarn workspaces info",
+		"lint": "eslint 'packages/**/*.{js,ts,tsx}'"
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged",
+			"pre-push": "yarn run lint && yarn test"
+		}
+	},
+	"lint-staged": {
+		"*.{js,ts,tsx}": [
+			"eslint 'packages/**/*.{js,ts,tsx}' --fix"
+		]
 	},
 	"devDependencies": {
-		"ts-jest": "25.1.0",
-		"@types/react": "16.9.19",
-		"lerna": "3.20.2",
-		"typescript": "3.7.5",
 		"@testing-library/react-hooks": "3.2.1",
 		"@types/enzyme": "3.10.4",
-		"enzyme-adapter-react-16": "1.15.2",
 		"@types/enzyme-adapter-react-16": "1.0.5",
 		"@types/jest": "25.1.1",
+		"@types/react": "16.9.19",
 		"enzyme": "3.11.0",
+		"enzyme-adapter-react-16": "1.15.2",
 		"eslint": "6.8.0",
 		"eslint-config-prettier": "6.10.0",
 		"eslint-plugin-import": "2.20.1",
@@ -33,7 +44,11 @@
 		"eslint-plugin-react-hooks": "2.3.0",
 		"husky": "4.2.1",
 		"jest": "25.1.0",
-		"prettier": "1.19.1"
+		"lerna": "3.20.2",
+		"lint-staged": "^10.0.7",
+		"prettier": "1.19.1",
+		"ts-jest": "25.1.0",
+		"typescript": "3.7.5"
 	},
 	"dependencies": {
 		"react": "16.12.0"

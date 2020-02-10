@@ -158,18 +158,6 @@ describe("Map utils", () => {
                 )
             ).toEqual({ foo: "foo", bar: "bar" }))
 
-        it("skips null keys if options is present", () =>
-            expect(
-                toMap(
-                    [{ a: "foo" }, { a: "bar" }],
-                    k => (k.a === "foo" ? null : k.a),
-                    v => v.a,
-                    { skipNullKeys: true }
-                )
-            ).toEqual({
-                bar: "bar"
-            }))
-
         it("skips null values if options is present", () =>
             expect(
                 toMap(

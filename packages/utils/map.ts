@@ -5,19 +5,21 @@ export type TMap<TKey extends string | number, TValue> = { [K in TKey]: TValue }
 export type SMap<TValue> = TMap<string, TValue>
 export type KMap<T> = TMap<string | number, T>
 
+export const usleep = (ms = 1000) => new Promise(resolve => setTimeout(() => resolve(), ms))
+
 export const setPromiseTimeout = <T>(cb: F0<T>, ms: number): Promise<T> =>
     new Promise(async (res: F1<T>) => setTimeout(() => res(cb()), ms))
 
-export const asyncForEach = async <T, S>(vs: T[], cb: (val: T, i: number) => Promise<S>, delay: number = 0) => {
+export const asyncForEach = async <T, S>(vs: T[], cb: (val: T, i: number) => Promise<S>, delay = 0) => {
     for (let i = 0; i < vs.length; i++) {
         await usleep(delay)
         await cb(vs[i], i)
     }
 }
+export const keys = <T>(t: T): Array<keyof T> => (t && typeof t === "object" ? (Object.keys(t) as any) : [])
 
 export const isKeyOf = <T, TK extends keyof T>(key: TK | string, v: T): key is TK => keys(v).includes(key as any)
 
-export const keys = <T>(t: T): Array<keyof T> => (t && typeof t === "object" ? (Object.keys(t) as any) : [])
 export const values = <T>(t: T) => keys(t || (({} as any) as T)).map(k => t[k])
 
 export const iterateMap = <T>(map: SMap<T>, cb: (key: keyof SMap<T>, v: T, index: number) => void) =>
@@ -42,9 +44,8 @@ export const mapObject = <T, TV2 extends Casted<T, any>>(
     keys(o).forEach(k => (res[k] = toValue(k, o[k])))
     return res
 }
-export const usleep = (ms = 1000) => new Promise(resolve => setTimeout(() => resolve(), ms))
 
-export const asyncMap = async <T, S>(vs: T[], cb: (val: T, i: number) => Promise<S>, delay: number = 0) => {
+export const asyncMap = async <T, S>(vs: T[], cb: (val: T, i: number) => Promise<S>, delay = 0) => {
     for (let i = 0; i < vs.length; i++) {
         await usleep(delay)
         await cb(vs[i], i)
@@ -83,7 +84,7 @@ export const groupBy = <T, T2 = T>(ts: T[], toKey: F2<T, number, string>, toValu
     })
     return res
 }
-type MapOptions = { skipNullKeys?: boolean; skipNullValues?: boolean }
+type MapOptions = { skipNullValues?: boolean }
 export const toMap = <T, T2 = T>(
     ts: T[],
     toKey: F2<T, number, string | null>,
@@ -94,9 +95,9 @@ export const toMap = <T, T2 = T>(
     ;(ts || []).forEach((t, index) => {
         const k = toKey(t, index)
         const v = toValue(t)
-        if (options.skipNullKeys && k === null) return
+        if (k === null) return
         if (options.skipNullValues && v === null) return
-        res[k!] = v
+        res[k] = v
     })
     return res
 }
@@ -146,7 +147,6 @@ export const joinArrays = <T>(arr1: T[], arr2: T[], compare: (a: T, b: T) => boo
     })
     return res
 }
-
 const isArray = <T>(v: any | T[]): v is T[] => Array.isArray(v)
 export const flatten = <T>(vs: Array<T | T[]>, depth = 2, filter: (v: T | T[]) => boolean = _ => true): T[] =>
     vs.reduce(

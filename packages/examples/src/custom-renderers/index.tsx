@@ -1,14 +1,6 @@
 import * as React from "react"
 
-import {
-    useFormHook,
-    toResult,
-    FormView,
-    FormSchema,
-    RenderOptions,
-    FormViewProps,
-    ArrayItem
-} from "@react-formless/core"
+import { useFormHook, toResult, FormView, FormSchema, RenderOptions, FormViewProps } from "@react-formless/core"
 import { antDesignRenderMap } from "@react-formless/antd"
 
 import { labelize } from "@react-formless/utils/misc"

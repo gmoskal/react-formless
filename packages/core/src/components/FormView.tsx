@@ -29,7 +29,7 @@ type InputViewProps = InputPropsBase<InputSchema<any>, FormLeafState<any>, F1<In
 export const FormItemView: React.FC<InputViewProps> = p => {
     const customRenderMap = { ...plainHtmlRenderMap, ...getRenderMap(p.renderOptions) }
     const { ItemWrapper, DefaultFormItem } = getElementsRenderMap(p.renderOptions)
-    const FormItem = customRenderMap![p.schema.type] || DefaultFormItem || DefaultRenderFn
+    const FormItem = customRenderMap[p.schema.type] || DefaultFormItem || DefaultRenderFn
 
     return (
         <ItemWrapper>

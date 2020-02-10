@@ -20,6 +20,7 @@ export type Type<T> = T extends State<infer T2> ? T2 : never
 export type Constructor<T> = (payload: Value<T>) => T
 
 export const isString = (v: any): v is string => typeof v === "string"
+// eslint-disable-next-line @typescript-eslint/ban-types
 export const isObject = (v: any): v is Object => typeof v === "object"
 export const isFunction = (f: any): f is Function => "function" === typeof f
 export const isArray = <T>(ts: T[] | any): ts is T[] => ts && typeof ts === "object" && ts.constructor.name === "Array"

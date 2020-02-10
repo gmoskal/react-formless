@@ -109,12 +109,7 @@ export const toFormState = <T>(schema: FormSchema<T>, value: T): FormState<T> =>
         toInputState(s as any, s.fromValue ? s.fromValue(value[k] as any) : value[k])
     ) as any
 
-export const mkInputState = <T>(
-    defValue: T,
-    value: T,
-    active: boolean = false,
-    visited: boolean = false
-): InputState<T> => ({
+export const mkInputState = <T>(defValue: T, value: T, active = false, visited = false): InputState<T> => ({
     value: isEmpty(value) ? defValue : value,
     active,
     visited

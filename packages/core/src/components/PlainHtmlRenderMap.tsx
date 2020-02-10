@@ -146,6 +146,7 @@ export const ListInput: InputListRenderFn = p => {
     const { mutate } = p.schema
     const r = getElementsRenderMap(p.renderOptions)
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const onAdd = () => p.setDelta([...p.state, toInputState(p.schema.field, mutate!.createValue)])
     const onRemove = (i2: number) => () => p.setDelta(p.state.filter((_, i) => i2 !== i))
     return (
