@@ -8,7 +8,7 @@
 		"packages/*"
 	],
 	"scripts": {
-		"build": "tsc -b packages/utils packages/core packages/antd packages/examples",
+		"build": "tsc -b packages/utils packages/core packages/antd packages/react95 packages/examples",
 		"build:all": "lerna exec yarn build",
 		"clean": "./cleanup.sh",
 		"bootstrap": "lerna bootstrap",

@@ -1,7 +1,6 @@
 import * as React from "react"
 import { Button, Input, TextArea, Dropdown } from "@react95/core"
 import { ElementsRenderMap, InputRenderMap, InputBoxType, InputBoxRenderFn, getInputProps } from "@react-formless/core"
-
 import { toMap, call, callback } from "@react-formless/utils"
 
 export const react95Inputs: Partial<InputRenderMap> = {

@@ -1,9 +1,17 @@
-# Smallest React/Typescript build example
+# @react-formless/examples
 
-To start and install type
+![tests status](https://github.com/gmoskal/react-formless/workflows/CI/badge.svg)
+
+> Project with examples usage of `@react-formless/core`.
+
+## Install; Compile; Run
+
+First clone main repo `https://github.com/gmoskal/react-formless`, then
 
 ```sh
-npm i; npm start
+yarn
+yarn build
+yarn workspace @react-formless/examples start
 ```
 
-then visit `http://localhost:1234`
+project should be available on [http://localhost:1234](http://localhost:1234)

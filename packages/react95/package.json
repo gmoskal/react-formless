@@ -1,7 +1,7 @@
 {
-  "name": "@react-formless/antd",
+  "name": "@react-formless/react95",
   "version": "1.1.9",
-  "description": "ant-design render map for @react-formless/core",
+  "description": "react95 render map for @react-formless/core",
   "scripts": {
     "test": "echo soon"
   },
@@ -10,9 +10,7 @@
   "dependencies": {
     "@react-formless/core": "^1.1.9",
     "@react-formless/utils": "^1.1.9",
-    "antd": "3.26.9",
-    "less": "2.7.2",
-    "less-loader": "^5.0.0"
+    "@react95/core": "2.4.5"
   },
   "author": "Grzegorz Moskal",
   "license": "MIT",
@@ -25,8 +23,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "homepage": "https://github.com/gmoskal/react-formless/tree/master/packages/antd/README.md",
-  "repository": "https://github.com/gmoskal/react-formless/tree/master/packages/antd",
+  "homepage": "https://github.com/gmoskal/react-formless/tree/master/packages/react95/README.md",
+  "repository": "https://github.com/gmoskal/react-formless/tree/master/packages/react95",
   "bugs": {
     "url": "https://github.com/gmoskal/react-formless/issues"
   },

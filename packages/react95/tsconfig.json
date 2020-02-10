@@ -2,7 +2,7 @@
 	"extends": "../tsconfig.settings.json",
 	"compilerOptions": {
 		"rootDir": "src",
-		"outDir": "dist"
+		"outDir": "lib"
 	},
 	"references": [
 		{
@@ -10,12 +10,6 @@
 		},
 		{
 			"path": "../core"
-		},
-		{
-			"path": "../antd"
-		},
-		{
-			"path": "../react95"
 		}
 	]
 }

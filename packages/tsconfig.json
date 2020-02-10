@@ -11,6 +11,9 @@
 			"path": "antd"
 		},
 		{
+			"path": "react95"
+		},
+		{
 			"path": "examples"
 		}
 	]

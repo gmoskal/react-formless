@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { toMap, replace } from "@react-formless/utils"
+import { toMap, replace, isEmpty } from "@react-formless/utils"
 import {
     FormView,
     FormItemView,
@@ -18,9 +18,22 @@ import {
     toInputState
 } from ".."
 
-const Title: React.FC<{ text?: string }> = p => (p.text ? <h3>{p.text}</h3> : null)
-const Label: React.FC<{ text?: string }> = p =>
-    p.text ? <div style={{ fontSize: "12px", color: "#777" }}>{p.text}</div> : null
+const Render: React.FC<{ condition: boolean; value: () => React.ReactElement }> = p => (p.condition ? p.value() : null)
+
+const Title: React.FC<{ text?: string }> = p => <Render condition={!isEmpty(p.text)} value={() => <h3>{p.text}</h3>} />
+
+type LabelProps = { text?: string } & Pick<React.LabelHTMLAttributes<HTMLLabelElement>, "htmlFor">
+const Label: React.FC<LabelProps> = p => (
+    <Render
+        condition={!isEmpty(p.text)}
+        value={() => (
+            // eslint-disable-next-line jsx-a11y/label-has-for
+            <label style={{ fontSize: "12px", color: "#777" }} htmlFor={p.htmlFor}>
+                {p.text}
+            </label>
+        )}
+    />
+)
 
 const Error: React.FC<InputState<any>> = ({ validationResult, visited }) => (
     <div className="ErrorLabel">
@@ -30,15 +43,13 @@ const Error: React.FC<InputState<any>> = ({ validationResult, visited }) => (
 
 const Input: InputBoxRenderFn = p => {
     const r = getElementsRenderMap(p.renderOptions)
-
+    const inputProps = getInputProps(p)
+    const type = p.schema.type === "number" ? "number" : p.schema.type === "password" ? "password" : "text"
     return (
         <>
             <r.Title text={p.schema.sectionTitle} />
-            <r.Label text={p.schema.name} />
-            <input
-                {...getInputProps(p)}
-                type={p.schema.type === "number" ? "number" : p.schema.type === "password" ? "password" : "text"}
-            />
+            <r.Label text={p.schema.name} htmlFor={inputProps.id} />
+            <input {...inputProps} type={type} />
             <r.Error {...p.state} />
         </>
     )

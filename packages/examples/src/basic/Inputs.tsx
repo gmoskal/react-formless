@@ -4,7 +4,7 @@ import { FormView, useFormHook, toResult, FormSchema } from "@react-formless/cor
 export type BasicInputs = { name: string; password: string; age: number; bio: string }
 
 const schema: FormSchema<BasicInputs> = {
-    name: { type: "text", placeholder: "Name" },
+    name: { type: "text", placeholder: "Name", name: "Your name", id: "name" },
     password: { type: "password", placeholder: "Password" },
     age: { type: "number", placeholder: "Age" },
     bio: { type: "textarea", placeholder: "Bio" }

@@ -2,11 +2,11 @@ import * as React from "react"
 
 import { useFormHook, toResult, FormView, FormSchema, RenderOptions, FormViewProps } from "@react-formless/core"
 import { antDesignRenderMap } from "@react-formless/antd"
+import { react95Inputs, react95Elements } from "@react-formless/react95"
 
 import { labelize } from "@react-formless/utils/misc"
 
 import { readOnlyRenderMap } from "./ReadonlyRenderMap"
-import { react95Inputs, react95Elements } from "./React95"
 
 export type Car = { make: string }
 
