@@ -47,6 +47,7 @@ export type KeysWithValue<TSource, TBase> = Exclude<
     keyof Pick<TSource, { [P in keyof TSource]: TSource[P] extends TBase | undefined ? P : never }[keyof TSource]>,
     undefined
 >
+export type ArrayItem<T> = T extends Array<infer E> ? E : T
 export type Intersect<T, T2> = Pick<T, Extract<keyof T, keyof T2>>
 // Makes any properties included in Default optional
 export type Defaultize<Props, Defaults> = Partial<Pick<Props, Extract<keyof Props, keyof Defaults>>> &

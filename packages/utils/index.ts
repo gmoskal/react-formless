@@ -29,7 +29,8 @@ export {
     relativeComplement,
     remap,
     replace,
-    toMap
+    toMap,
+    values
 } from "./map"
 
 export { _noop, call, callback, labelize, _anything, capitalize, isFunction } from "./misc"
@@ -49,6 +50,7 @@ export {
     SimpleValue,
     StateType,
     Option,
+    ArrayItem,
     toOption
 } from "./types"
 
@@ -71,6 +73,7 @@ export {
     validNumberDef,
     validStringDef,
     validBooleanDef,
+    validateMemberOf,
     validArrayDef,
     validArrayStringDef,
     validMapDef,
@@ -86,5 +89,11 @@ export {
     isEmpty,
     isEmail,
     isOk,
-    isErr
+    isErr,
+    errors,
+    ValidationMap,
+    ExtErrors,
+    Constructor,
+    Validator,
+    mkValidator
 } from "./validators"

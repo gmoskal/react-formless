@@ -121,7 +121,7 @@ export const runValidators = <T = any>(validators: Validators<T>, value: any, cb
     return res.value
 }
 
-export const validate = <T>(
+export const mkValidator = <T>(
     validationMap: ValidationMap<Required<T>>,
     constructor?: F1<any, T>,
     delta?: (o: T) => Partial<T>

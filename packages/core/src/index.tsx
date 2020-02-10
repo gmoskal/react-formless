@@ -1,5 +1,5 @@
 import * as React from "react"
-import { F1, F0, State, FArgs, Dict, Result, Validators } from "@react-formless/utils"
+import { F1, F0, State, FArgs, Dict, Result, Validators, ArrayItem } from "@react-formless/utils"
 
 export { validators, guards } from "@react-formless/utils"
 
@@ -8,7 +8,6 @@ export { FormView, getElementsRenderMap, FormItemView } from "./components/FormV
 export { plainHtmlRenderMap, plainHtmlElementRenderMap } from "./components/PlainHtmlRenderMap"
 
 export type Tuples<T = string> = Array<[string, T]>
-export type ArrayItem<T> = T extends Array<infer E> ? E : T
 
 export type RProps<T> = T extends React.FC<infer P> ? React.PropsWithChildren<P> : never
 export type RDiv = React.FC<React.HTMLAttributes<HTMLDivElement>>

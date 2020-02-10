@@ -8,6 +8,7 @@ import {
     mkOk,
     mkErr,
     isEmpty,
+    ArrayItem,
     runValidatorsRaw
 } from "@react-formless/utils"
 
@@ -15,7 +16,6 @@ import {
     FormSchema,
     FormState,
     InputSchema,
-    ArrayItem,
     FormResult,
     CollectionInputSchema,
     InputResult,
