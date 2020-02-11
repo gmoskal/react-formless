@@ -50,11 +50,11 @@ export {
     SimpleValue,
     StateType,
     Option,
-    ArrayItem,
+    mkFetched,
     toOption,
+    ArrayItem,
     ValueOf,
-    FMapped,
-    mkFetched
+    FMapped
 } from "./types"
 
 export {
@@ -65,6 +65,14 @@ export {
     Result,
     Ok,
     Err,
+    mkOk,
+    mkErr,
+    mkValidator,
+    errors,
+    ValidationMap,
+    ExtErrors,
+    Constructor,
+    Validator,
     validNumber,
     validString,
     validEmail,
@@ -80,8 +88,6 @@ export {
     validArrayDef,
     validArrayStringDef,
     validMapDef,
-    mkOk,
-    mkErr,
     Validators,
     isString,
     isObject,
@@ -92,11 +98,5 @@ export {
     isEmpty,
     isEmail,
     isOk,
-    isErr,
-    errors,
-    ValidationMap,
-    ExtErrors,
-    Constructor,
-    Validator,
-    mkValidator
+    isErr
 } from "./validators"
