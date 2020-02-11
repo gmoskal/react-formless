@@ -51,7 +51,10 @@ export {
     StateType,
     Option,
     ArrayItem,
-    toOption
+    toOption,
+    ValueOf,
+    FMapped,
+    mkFetched
 } from "./types"
 
 export {
