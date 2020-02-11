@@ -8,6 +8,7 @@
 		"packages/*"
 	],
 	"scripts": {
+		"prepublish": "yarn build",
 		"build": "./cleanup.sh && tsc -b packages",
 		"build:all": "lerna exec yarn build",
 		"clean": "./cleanup.sh",
