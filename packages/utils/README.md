@@ -10,10 +10,6 @@ The set of functions that I found very useful for writing an application using r
 
 ### Signature
 
-```typescript
-type extendFunction = <T>(object: T) => (delta: Partial<T>) => T
-```
-
 ### Description
 
 It takes any object and returns function that takes any part of that object and returns this object and part combained.
@@ -77,6 +73,14 @@ export const Comp2 = () => {
 ```
 
 [Check it out your self](https://stackblitz.com/edit/react-ts-n3sg2e?embed=1&file=index.tsx&hideExplorer=1)
+
+## omitObject()
+
+```typescript
+type omitObjectFunction = <T, K extends keyof T>(source: T, keysToOmit: K[]) => Omit<T, K>
+```
+
+It takes any object and any array of keys of that object and return object with all given keys omited.
 
 ## TODO
 

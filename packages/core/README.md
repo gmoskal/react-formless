@@ -2,7 +2,7 @@
 
 ![tests status](https://github.com/gmoskal/react-formless/workflows/CI/badge.svg)
 
-> react-formless core.
+> react-formless core package
 
 See main documentation of [@react-formless](https://github.com/gmoskal/react-formless).
 
