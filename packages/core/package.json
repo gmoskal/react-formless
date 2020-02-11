@@ -1,6 +1,6 @@
 {
   "name": "@react-formless/core",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Data-driven react forms library written in typescript",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -8,7 +8,7 @@
     "test": "../../node_modules/.bin/jest -c $(pwd)/jest.config.js --rootDir ."
   },
   "dependencies": {
-    "@react-formless/utils": "^1.3.2"
+    "@react-formless/utils": "^1.3.3"
   },
   "keywords": [
     "react",

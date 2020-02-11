@@ -1,6 +1,6 @@
 {
   "name": "@react-formless/examples",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "private": true,
   "scripts": {
     "start": "parcel serve *.html",
@@ -15,10 +15,10 @@
     "styled-components": "^5.0.1"
   },
   "dependencies": {
-    "@react-formless/antd": "^1.3.2",
-    "@react-formless/core": "^1.3.2",
-    "@react-formless/react95": "^1.3.2",
-    "@react-formless/utils": "^1.3.2",
+    "@react-formless/antd": "^1.3.3",
+    "@react-formless/core": "^1.3.3",
+    "@react-formless/react95": "^1.3.3",
+    "@react-formless/utils": "^1.3.3",
     "react-dom": "16.12.0",
     "react-router-dom": "5.1.2"
   },
