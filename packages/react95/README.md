@@ -2,7 +2,7 @@
 
 ![tests status](https://github.com/gmoskal/react-formless/workflows/CI/badge.svg)
 
-> Ant Design render map for `@react-formless/core`.
+> React95 render map for `@react-formless/core`.
 
 Check custom renderers in [action](https://gmoskal.github.io/react-formless/)
 
