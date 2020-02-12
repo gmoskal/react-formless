@@ -51,18 +51,13 @@ export const InputsForms: React.FC = () => {
 
 ```typescript jsx
 
-export const CustomLoginForm: React.FC<Props> = p => {
-    const { formViewProps, handleSubmit } = useFormHook({ ...p, schema })
+export const CustomInputsForms: React.FC = () => {
+    const { formViewProps } = useFormHook({ schema })
     const customRenderMap: Partial<InputRenderMap> = {
-        text: p => <h1>Readonly {p.state.value}</h1>,
-        password: p => <h2>Readonly {p.state.value}</h2>
+        text: p => <h1>Readonly text {p.state.value}</h1>,
+        password: p => <h2>Readonly password {p.state.value}</h2>
     }
-    return (
-        <form onSubmit={handleSubmit}>
-            <FormView {...formViewProps} customRenderMap={customRenderMap} />
-            <button type="submit">Login</button>
-        </form>
-    )
+    return  <FormView {...formViewProps} customRenderMap={customRenderMap} />
 }
 ```
 
