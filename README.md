@@ -52,12 +52,12 @@ export const InputsForms: React.FC = () => {
 ```typescript jsx
 
 export const CustomInputsForms: React.FC = () => {
-    const { formViewProps } = useFormHook({ schema })
+    const { formViewProps: p } = useFormHook({ schema })
     const customRenderMap: Partial<InputRenderMap> = {
-        text: p => <h1>Readonly text {p.state.value}</h1>,
-        password: p => <h2>Readonly password {p.state.value}</h2>
+        text: rp => <h1>Readonly text {rp.state.value}</h1>,
+        password: rp => <h2>Readonly password {rp.state.value}</h2>
     }
-    return  <FormView {...formViewProps} customRenderMap={customRenderMap} />
+    return  <FormView {...p} customRenderMap={customRenderMap} />
 }
 ```
 
