@@ -82,6 +82,14 @@ type omitObjectFunction = <T, K extends keyof T>(source: T, keysToOmit: K[]) => 
 
 It takes any object and any array of keys of that object and return object with all given keys omited.
 
+## keys()
+
+```typescript
+type keysFunction = <T>(source: T) => Array<keyof T>
+```
+
+typed `Object.keys`
+
 ## TODO
 
 describe everything else
