@@ -65,6 +65,8 @@ export {
     Result,
     Ok,
     Err,
+    ErrType,
+    OkType,
     mkOk,
     mkErr,
     mkValidator,

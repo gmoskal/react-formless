@@ -1,5 +1,6 @@
 import * as React from "react"
 import { F1, F0, State, FArgs, Dict, Result, Validators, ArrayItem } from "@react-formless/utils"
+import { toFormState, toResult, validateForm } from "./forms"
 
 export { validators, guards } from "@react-formless/utils"
 
@@ -127,6 +128,8 @@ export type FormViewProps<T> = RenderOptions & {
     schema: FormSchema<T>
 }
 
+export type ReadyState = "Untouched" | "Err" | "Ok"
+
 export type FormHookProps<T> = {
     initialValue?: Partial<T>
     schema: FormSchema<T>
@@ -138,15 +141,17 @@ export type FormHookResult<T> = {
     handleSubmit: React.FormEventHandler
     result: Result<T, T>
     resetState: F0
+    readyState: ReadyState
 }
 
-import { toFormState, toResult, validateForm } from "./forms"
 export const useFormHook = <T extends any>({ schema, ...p }: FormHookProps<T>): FormHookResult<T> => {
     const [state, setState] = React.useState(toFormState<T>(schema, (p.initialValue || {}) as any))
+    const [readyState, setReadyState] = React.useState<ReadyState>("Untouched")
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
 
         const res = toResult(schema, state)
+        setReadyState(res.type)
         if (res.type === "Err") setState(validateForm(schema, state))
         else if (p.onSubmit) p.onSubmit(res.value)
     }
@@ -155,6 +160,7 @@ export const useFormHook = <T extends any>({ schema, ...p }: FormHookProps<T>): 
         handleSubmit,
         result: toResult(schema, state),
         formViewProps: { state, setState, schema },
-        resetState
+        resetState,
+        readyState
     }
 }

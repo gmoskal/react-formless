@@ -20,10 +20,10 @@ describe("useFormHook()", () => {
         name: { name: "Skill Name", type: "text", validators: [] },
         level: { name: "Level", type: "number", validators: [], toValue: v => parseInt(v, 10) }
     }
+    const getMockedEvent = (): React.FormEvent => ({ preventDefault: jest.fn() } as any)
 
     it("returns correct form state when initialized", () => {
         const expected: FormState<Skill> = { name: stringInputStateFixture(), level: numberInputStateFixture() }
-
         const { result } = getFormHook<Skill>({ schema, initialValue, onSubmit: _noop })
         expect(result.current.formViewProps.state).toEqual(expected)
     })
@@ -36,7 +36,7 @@ describe("useFormHook()", () => {
     it("returns initial values on submit without changes", () => {
         const resultSpy = jest.fn()
         const { result } = getFormHook({ schema: schemaNoValidators, initialValue, onSubmit: resultSpy })
-        result.current.handleSubmit({ preventDefault: _noop } as React.FormEvent)
+        act(() => result.current.handleSubmit(getMockedEvent()))
         expect(resultSpy).toBeCalledWith(initialValue)
     })
 
@@ -81,15 +81,10 @@ describe("useFormHook()", () => {
     })
 
     it("prevents default browser behaviour upon submission", () => {
-        const ev = ({
-            preventDefault: jest.fn()
-        } as unknown) as React.FormEvent
-
+        const e = getMockedEvent()
         const { result } = getFormHook<Skill>({ schema, initialValue })
-
-        act(() => result.current.handleSubmit(ev))
-
-        expect(ev.preventDefault).toHaveBeenCalled()
+        act(() => result.current.handleSubmit(e))
+        expect(e.preventDefault).toHaveBeenCalled()
     })
 
     it("returns new props when setState prop is called", () => {
@@ -98,5 +93,23 @@ describe("useFormHook()", () => {
         const delta: FormState<Skill> = { name: stringInputStateFixture({ value }), level: numberInputStateFixture() }
         act(() => result.current.formViewProps.setState(delta))
         expect(result.current.formViewProps.state.name.value).toEqual(value)
+    })
+
+    it("returns isReady state for untouched form", () => {
+        const { result } = getFormHook<Skill>({ schema, initialValue, onSubmit: _noop })
+        expect(result.current.readyState).toEqual("Untouched")
+    })
+
+    it("returns isReady state for invalid form", () => {
+        const { result } = getFormHook<Skill>({ schema, initialValue, onSubmit: _noop })
+        act(() => result.current.handleSubmit(getMockedEvent()))
+        expect(result.current.readyState).toEqual("Err")
+    })
+
+    it("returns isReady state for valid form", () => {
+        const initialValue: Skill = { name: "test", level: 100 }
+        const { result } = getFormHook<Skill>({ schema, initialValue, onSubmit: _noop })
+        act(() => result.current.handleSubmit(getMockedEvent()))
+        expect(result.current.readyState).toEqual("Ok")
     })
 })
