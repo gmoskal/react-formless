@@ -112,4 +112,18 @@ describe("useFormHook()", () => {
         act(() => result.current.handleSubmit(getMockedEvent()))
         expect(result.current.readyState).toEqual("Ok")
     })
+
+    it("returns isReady state for valid form after submitting invalid values", () => {
+        const { result } = getFormHook<Skill>({ schema, initialValue, onSubmit: _noop })
+        act(() => result.current.handleSubmit(getMockedEvent()))
+        expect(result.current.readyState).toEqual("Err")
+
+        const delta: FormState<Skill> = {
+            name: stringInputStateFixture({ value: "foo" }),
+            level: numberInputStateFixture()
+        }
+        act(() => result.current.formViewProps.setState(delta))
+
+        expect(result.current.readyState).toEqual("Ok")
+    })
 })
