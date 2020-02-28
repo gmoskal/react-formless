@@ -95,35 +95,21 @@ describe("useFormHook()", () => {
         expect(result.current.formViewProps.state.name.value).toEqual(value)
     })
 
-    it("returns isReady state for untouched form", () => {
+    it("returns submitted state for untouched form", () => {
         const { result } = getFormHook<Skill>({ schema, initialValue, onSubmit: _noop })
-        expect(result.current.readyState).toEqual("Untouched")
+        expect(result.current.submitted).toEqual(false)
     })
 
-    it("returns isReady state for invalid form", () => {
+    it("returns submitted state for invalid form", () => {
         const { result } = getFormHook<Skill>({ schema, initialValue, onSubmit: _noop })
         act(() => result.current.handleSubmit(getMockedEvent()))
-        expect(result.current.readyState).toEqual("Err")
+        expect(result.current.submitted).toEqual(true)
     })
 
     it("returns isReady state for valid form", () => {
         const initialValue: Skill = { name: "test", level: 100 }
         const { result } = getFormHook<Skill>({ schema, initialValue, onSubmit: _noop })
         act(() => result.current.handleSubmit(getMockedEvent()))
-        expect(result.current.readyState).toEqual("Ok")
-    })
-
-    it("returns isReady state for valid form after submitting invalid values", () => {
-        const { result } = getFormHook<Skill>({ schema, initialValue, onSubmit: _noop })
-        act(() => result.current.handleSubmit(getMockedEvent()))
-        expect(result.current.readyState).toEqual("Err")
-
-        const delta: FormState<Skill> = {
-            name: stringInputStateFixture({ value: "foo" }),
-            level: numberInputStateFixture()
-        }
-        act(() => result.current.formViewProps.setState(delta))
-
-        expect(result.current.readyState).toEqual("Ok")
+        expect(result.current.submitted).toEqual(true)
     })
 })

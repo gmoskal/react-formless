@@ -128,8 +128,6 @@ export type FormViewProps<T> = RenderOptions & {
     schema: FormSchema<T>
 }
 
-export type ReadyState = "Untouched" | "Err" | "Ok"
-
 export type FormHookProps<T> = {
     initialValue?: Partial<T>
     schema: FormSchema<T>
@@ -141,29 +139,27 @@ export type FormHookResult<T> = {
     handleSubmit: React.FormEventHandler
     result: Result<T, T>
     resetState: F0
-    readyState: ReadyState
+    submitted: boolean
 }
 
 export const useFormHook = <T extends any>({ schema, ...p }: FormHookProps<T>): FormHookResult<T> => {
     const [state, setState] = React.useState(toFormState<T>(schema, (p.initialValue || {}) as any))
-    const [readyState, setReadyState] = React.useState<ReadyState>("Untouched")
-
+    const [submitted, setSubmitted] = React.useState(false)
     const result = toResult(schema, state)
-    if (readyState !== "Untouched" && readyState !== result.type) setReadyState(result.type)
-
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-
-        setReadyState(result.type)
+        setSubmitted(true)
         if (result.type === "Err") setState(validateForm(schema, state))
         else if (p.onSubmit) p.onSubmit(result.value)
     }
+
     const resetState = () => setState(toFormState(schema, p.initialValue as any))
+
     return {
         handleSubmit,
         result,
         formViewProps: { state, setState, schema },
         resetState,
-        readyState
+        submitted
     }
 }
