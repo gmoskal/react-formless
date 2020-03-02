@@ -106,10 +106,12 @@ describe("useFormHook()", () => {
         expect(result.current.submitted).toEqual(true)
     })
 
-    it("returns isReady state for valid form", () => {
+    it("set submitted to false when resetState is called", () => {
         const initialValue: Skill = { name: "test", level: 100 }
         const { result } = getFormHook<Skill>({ schema, initialValue, onSubmit: _noop })
         act(() => result.current.handleSubmit(getMockedEvent()))
         expect(result.current.submitted).toEqual(true)
+        act(() => result.current.resetState())
+        expect(result.current.submitted).toEqual(false)
     })
 })

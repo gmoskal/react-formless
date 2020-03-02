@@ -153,7 +153,10 @@ export const useFormHook = <T extends any>({ schema, ...p }: FormHookProps<T>): 
         else if (p.onSubmit) p.onSubmit(result.value)
     }
 
-    const resetState = () => setState(toFormState(schema, p.initialValue as any))
+    const resetState = () => {
+        setState(toFormState(schema, p.initialValue as any))
+        setSubmitted(false)
+    }
 
     return {
         handleSubmit,
