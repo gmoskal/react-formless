@@ -1,4 +1,4 @@
-# Formless: WIP (name and lib API may change)
+# Formless
 
 ![tests status](https://github.com/gmoskal/react-formless/workflows/CI/badge.svg)
 
@@ -13,7 +13,7 @@ You can now focus on data structures only.
 ## Install
 
 ```sh
-npm i --save-dev @react-formless/core
+npm i @react-formless/core
 ```
 
 ## Example
