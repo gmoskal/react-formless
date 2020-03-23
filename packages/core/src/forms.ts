@@ -115,6 +115,8 @@ export const mkInputState = <T>(defValue: T, value: T, active = false, visited =
     visited
 })
 
+export const mkHiddenInputState = <T>(value: T): InputState<T> => ({ value, active: false, visited: true })
+
 export function toInputState<T>(s: CollectionInputSchema<T>, value: T): Array<FormState<ArrayItem<T>>>
 export function toInputState<T>(s: ListInputSchema<T>, value: T[]): Array<InputState<T>>
 export function toInputState<T>(s: ChipsInputSchema<T>, value: T[]): InputState<T[]>
@@ -133,6 +135,8 @@ export function toInputState<T>(
         case "customOption":
         case "radio":
             return mkInputState<T>("" as any, (value as any).toString())
+        case "hidden":
+            return mkHiddenInputState(value as T)
         case "customBox":
         case "select":
         case "text":

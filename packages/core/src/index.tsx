@@ -51,9 +51,14 @@ export type InputBoxSchema<T> = InputSchemaBase<InputBoxType, T>
 export type InputOptionSchema<T> = InputSchemaBase<InputOptionType, T, { values: Tuples<T> }>
 export type SimpleInputSchema<T> = InputBoxSchema<T> | InputOptionSchema<ArrayItem<T>>
 
-export type Mutable<T> = {
-    mutate?: { createValue: ArrayItem<T>; addFirstLabel?: string; addNextLabel: string; removeLabel?: string }
+export type Mutate<T> = {
+    createValue: ArrayItem<T> | F0<ArrayItem<T>>
+    addFirstLabel?: string
+    addNextLabel: string
+    removeLabel?: string
 }
+export type Mutable<T> = { mutate?: Mutate<T> }
+
 export type CollectionInputSchema<T> = InputSchemaBase<
     "collection",
     T,
@@ -97,7 +102,7 @@ export type RenderFn<TSchema extends InputSchemaBase, TState, TDelta = F1<TState
     InputPropsBase<TSchema, TState, TDelta>
 >
 
-export type InputBoxType = "text" | "email" | "number" | "textarea" | "password" | "customBox"
+export type InputBoxType = "text" | "email" | "number" | "textarea" | "password" | "customBox" | "hidden"
 export type InputBoxRenderFn<T = any> = RenderFn<InputBoxSchema<T>, InputState<T>>
 export type InputBoxRenderMap<T = any> = Dict<InputBoxType, InputBoxRenderFn<T>>
 

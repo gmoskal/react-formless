@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { toMap, replace, isEmpty } from "@react-formless/utils"
+import { toMap, replace, isEmpty, isFunction, call } from "@react-formless/utils"
 import {
     FormView,
     FormItemView,
@@ -15,7 +15,8 @@ import {
     ElementsRenderMap,
     getInputProps,
     toFormState,
-    toInputState
+    toInputState,
+    Mutable
 } from ".."
 
 const Render: React.FC<{ condition: boolean; value: () => React.ReactElement }> = p => (p.condition ? p.value() : null)
@@ -110,10 +111,16 @@ const SelectInput: InputOptionRenderFn = p => {
 
 export const CollectionInput: InputCollectionRenderFn = p => {
     const r = getElementsRenderMap(p.renderOptions)
-    const { mutate } = p.schema
+    const mutate = p.schema.mutate
 
     const onAddClick = () =>
-        p.setDelta([...p.state, toFormState(p.schema.fields, () => (mutate ? mutate.createValue : null))])
+        p.setDelta([
+            ...p.state,
+            toFormState(
+                p.schema.fields,
+                mutate ? (isFunction(mutate.createValue) ? mutate.createValue() : mutate.createValue) : null
+            )
+        ])
 
     const onRemoveClick = (i: number) => () => p.setDelta(p.state.filter((_, i2) => i2 !== i))
 

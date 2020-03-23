@@ -3,7 +3,7 @@ import { FormView, useFormHook, toResult, FormSchema } from "@react-formless/cor
 
 type User = { name: string; skills: Skill[] }
 type Skill = { name: string; level: number; tags: Tag[] }
-type Tag = { name: string }
+type Tag = { name: string; ts: number }
 
 const skillSchema: FormSchema<Skill> = {
     name: { name: "Skill Name", type: "text" },
@@ -12,8 +12,8 @@ const skillSchema: FormSchema<Skill> = {
         name: "Tags",
         type: "collection",
         sectionTitle: "Tags",
-        mutate: { addNextLabel: "Add Tag", createValue: { name: "" } },
-        fields: { name: { name: "Tag Name", type: "text" } }
+        mutate: { addNextLabel: "Add Tag", createValue: () => ({ name: "", ts: new Date().getTime() }) },
+        fields: { name: { name: "Tag Name", type: "text" }, ts: { type: "hidden" } }
     }
 }
 
@@ -24,7 +24,7 @@ const userSchema: FormSchema<User> = {
         type: "collection",
         sectionTitle: "Skills",
 
-        mutate: { addNextLabel: "Add skill", createValue: { name: "", level: 0, tags: [] } },
+        mutate: { addNextLabel: "Add skill", createValue: () => ({ name: "", level: 0, tags: [] }) },
         fields: skillSchema
     }
 }
