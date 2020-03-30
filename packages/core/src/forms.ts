@@ -132,14 +132,14 @@ export function toInputState<T>(
             return arrify(isEmpty(value) ? [] : value).map(v => mkInputState<T>("" as any, v))
         case "chips":
             return mkInputState<string[]>([], value as any)
-        case "customOption":
         case "radio":
-            return mkInputState<T>("" as any, (value as any).toString())
+            return mkInputState<T>("" as any, `${value}` as any)
         case "hidden":
             return mkHiddenInputState(value as T)
         case "customBox":
         case "select":
         case "text":
+        case "customOption":
         case "textarea":
         case "email":
         case "password":
