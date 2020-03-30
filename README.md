@@ -1,7 +1,12 @@
 # Formless
 
-![tests status](https://github.com/gmoskal/react-formless/workflows/CI/badge.svg)
-[![npm version](https://badge.fury.io/js/%40react-formless%2Fcore.svg)](https://badge.fury.io/js/%40react-formless%2Fcore)
+<p align="center">
+    <img src="logo.svg" alt="Logo" height="300" />
+</p>
+<p align="center">
+	<img src="https://github.com/gmoskal/react-formless/workflows/CI/badge.svg" alt="tests status"/>
+	<img src="https://badge.fury.io/js/%40react-formless%2Fcore.svg" alt="npm version"/>
+</p>
 
 ## Data-driven react forms library written in typescript
 
