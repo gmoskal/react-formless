@@ -13,7 +13,8 @@ You can now focus on data structures only.
 ## Install
 
 ```sh
-npm i @react-formless/core
+npm i @react-formless/core @react-formless/utils
+
 ```
 
 ## Example
@@ -23,7 +24,7 @@ Check out simple form example below, more complex one may be found in [examples 
 ```typescript tsx
 import * as React from "react"
 import { FormView, useFormHook, FormSchema } from "@react-formless/core"
-import { validNumber } from "../../../utils"
+import { validNumber } from "@react-formless/utils"
 
 export type User = { name: string; password: string; age: number; bio: string }
 

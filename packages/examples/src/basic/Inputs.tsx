@@ -1,6 +1,6 @@
 import * as React from "react"
 import { FormView, useFormHook, FormSchema } from "@react-formless/core"
-import { validNumber } from "../../../utils"
+import { validNumber } from "@react-formless/utils"
 
 export type User = { name: string; password: string; age: number; bio: string }
 
