@@ -1,5 +1,5 @@
 import * as React from "react"
-import { FormView, useFormHook, toResult, FormSchema } from "@react-formless/core"
+import { FormView, useFormHook, FormSchema } from "@react-formless/core"
 
 export type BasicInputs = { name: string; password: string; age: number; bio: string }
 
@@ -11,11 +11,12 @@ const schema: FormSchema<BasicInputs> = {
 }
 
 export const InputsForms: React.FC = () => {
-    const { formViewProps: p } = useFormHook({ schema })
+    const { formViewProps: p, result } = useFormHook({ schema })
     return (
         <>
             <FormView {...p} />
-            <pre>{JSON.stringify(toResult(p.schema, p.state), null, 2)}</pre>
+            <h3>Result</h3>
+            <pre>{JSON.stringify(result, null, 2)}</pre>
             <h3>State</h3>
             <pre>{JSON.stringify(p.state, null, 2)}</pre>
         </>

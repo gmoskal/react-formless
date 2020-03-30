@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { useFormHook, toResult, FormView, FormSchema, RenderOptions, FormViewProps } from "@react-formless/core"
+import { useFormHook, FormView, FormSchema, RenderOptions, FormViewProps } from "@react-formless/core"
 import { antDesignRenderMap } from "@react-formless/antd"
 import { react95Inputs, react95Elements } from "@react-formless/react95"
 
@@ -30,7 +30,10 @@ const themes: Array<[string, RenderType]> = renderTypes.map(v => [labelize(v), v
 const themeSchema: FormSchema<{ renderType: RenderType }> = { renderType: { type: "select", values: themes } }
 
 export const MultiRenderFormView: React.FC<FormViewProps<any>> = p => {
-    const { formViewProps } = useFormHook({ initialValue: { renderType: "Plain" as RenderType }, schema: themeSchema })
+    const { formViewProps, result } = useFormHook({
+        initialValue: { renderType: "Plain" as RenderType },
+        schema: themeSchema
+    })
     const [renderOptions, setRenderOptions] = React.useState<RenderOptions>({})
     React.useEffect(() => {
         const selectedRender: RenderType | undefined = formViewProps.state.renderType.value
@@ -56,8 +59,8 @@ export const MultiRenderFormView: React.FC<FormViewProps<any>> = p => {
             <div style={{ border: "1px solid #eee", padding: 10, margin: "5px 0" }}>
                 <FormView {...p} {...renderOptions} />
             </div>
-            <h3>Validation result</h3>
-            <pre>{JSON.stringify(toResult(p.schema, p.state), null, 2)}</pre>
+            <h3>Result</h3>
+            <pre>{JSON.stringify(result, null, 2)}</pre>
             <h3>State</h3>
             <pre>{JSON.stringify(p.state, null, 2)}</pre>
         </>

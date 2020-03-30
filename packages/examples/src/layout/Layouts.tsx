@@ -27,6 +27,14 @@ export const styledSchema: StyledFormSchema<User> = [
 ]
 
 export const LayoutForm: React.FC = () => {
-    const { formViewProps: p } = useFormHook({ schema })
-    return <StyledFormView {...p} styledSchema={styledSchema} />
+    const { formViewProps: p, result } = useFormHook({ schema })
+    return (
+        <>
+            <StyledFormView {...p} styledSchema={styledSchema} />
+            <h3>Result</h3>
+            <pre>{JSON.stringify(result, null, 2)}</pre>
+            <h3>State</h3>
+            <pre>{JSON.stringify(p.state, null, 2)}</pre>
+        </>
+    )
 }
