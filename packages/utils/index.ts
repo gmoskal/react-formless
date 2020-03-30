@@ -33,12 +33,13 @@ export {
     values
 } from "./map"
 
-export { _noop, call, callback, labelize, _anything, capitalize, isFunction } from "./misc"
+export { _noop, call, callback, isFunction, labelize, _anything, capitalize } from "./misc"
 export {
     F0,
     F1,
     F2,
     F3,
+    FMapped,
     Async,
     State,
     ValueState,
@@ -53,8 +54,7 @@ export {
     mkFetched,
     toOption,
     ArrayItem,
-    ValueOf,
-    FMapped
+    ValueOf
 } from "./types"
 
 export {

@@ -24,8 +24,8 @@ import {
     ChipsInputSchema,
     SimpleInputProps,
     ExtInputProps,
-    InputPropsBase,
     InputOptionSchema,
+    InputPropsBase,
     InputState
 } from "."
 
