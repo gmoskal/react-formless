@@ -1,6 +1,6 @@
 {
   "name": "@react-formless/react95",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "react95 render map for @react-formless/core",
   "scripts": {
     "test": "echo soon"
@@ -8,7 +8,7 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@react-formless/core": "^1.7.0",
+    "@react-formless/core": "^1.8.0",
     "@react-formless/utils": "^1.4.0",
     "@react95/core": "2.4.5"
   },
