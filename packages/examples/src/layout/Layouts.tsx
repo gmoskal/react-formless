@@ -33,8 +33,6 @@ export const LayoutForm: React.FC = () => {
             <StyledFormView {...p} styledSchema={styledSchema} />
             <h3>Result</h3>
             <pre>{JSON.stringify(result, null, 2)}</pre>
-            <h3>State</h3>
-            <pre>{JSON.stringify(p.state, null, 2)}</pre>
         </>
     )
 }
