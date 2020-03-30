@@ -97,7 +97,7 @@ it renders to
 ## Collections support
 
 `Formless` comes with default collection support, so whenever you want to create nested collections and you still want it to be __strongly typed__ `formless` is a good match.
-Check out the complex example, where `Users` with assigned `Skills` that may have `Tags` are being collected.
+Check out the complex example where each `User` has collection of `Skills` and each skill has collection of `Tags`.
 
 ```typescript tsx
 import * as React from "react"
@@ -129,11 +129,11 @@ const userSchema: FormSchema<User> = {
 }
 
 export const InputCollectionForm: React.FC = () => {
-    const { formViewProps: p } = useFormHook({ schema: userSchema })
+    const { formViewProps: p, result } = useFormHook({ schema: userSchema })
     return (
         <>
             <FormView {...p} />
-            <pre>{JSON.stringify(toResult(p.schema, p.state), null, 2)}</pre>
+            <pre>{JSON.stringify(result, null, 2)}</pre>
         </>
     )
 }
@@ -146,6 +146,9 @@ it renders to
 
 ## Custom renderers
 
+When it comes to rendering `Formless` supports render maps. `Render map` is an object that describes how each supported input type should be rendered.
+The easiest example is like:
+
 ```typescript tsx
 
 export const CustomInputsForms: React.FC = () => {
@@ -157,6 +160,16 @@ export const CustomInputsForms: React.FC = () => {
     return  <FormView {...p} customRenderMap={customRenderMap} />
 }
 ```
+
+That will render each `text input` and `password input` as an readonly `<h1>` and `<h2>` tag.
+
+Ant-design and react-95 rendering may be installed using (both are a bit rough)
+
+```sh
+npm i @react-formless/antd @react-formless/react95
+```
+
+Checkout more complex exmaples on [https://gmoskal.github.io/react-formless](https://gmoskal.github.io/react-formless) under `custom renderes` section.
 
 ## More examples
 
