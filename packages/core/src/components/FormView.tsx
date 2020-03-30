@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { F1, pickObject } from "@react-formless/utils"
+import { F1, pickObject, keys } from "@react-formless/utils"
 
 import {
     plainHtmlRenderMap,
@@ -15,7 +15,6 @@ import {
     InputSchema,
     FormSchema
 } from ".."
-import { keys } from "@react-formless/utils/map"
 
 const getRenderMap = (p: RenderOptions) => p.inputsRenderMap || plainHtmlRenderMap
 
