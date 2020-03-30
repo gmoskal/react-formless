@@ -14,7 +14,7 @@ You can now focus on data structures only.
 
 ```sh
 npm i @react-formless/core
-``
+```
 
 ## Example
 
@@ -52,8 +52,8 @@ it renders to
 
 ## Styled renderers
 
-Whenever cusotm `shape` of the form is needed, extended version of `<FormView>` component may be used. `<StyledFormView>` allows us to control presentation layer of the form.
-Checkout the example:
+Whenever custom `shape` of the form is needed, an extended version of `<FormView>` component may be used. `<StyledFormView>` allows us to control the presentation layer of the form.
+Check out the example:
 
 ```typescript tsx
 import * as React from "react"
@@ -94,6 +94,56 @@ it renders to
 
 ![tests status](packages/examples/assets/layout.png)
 
+## Collections support
+
+`Formless` comes with default collection support, so whenever you want to create nested collections and you still want it to be __strongly typed__ `formless` is a good match.
+Check out the complex example, where `Users` with assigned `Skills` that may have `Tags` are being collected.
+
+```typescript tsx
+import * as React from "react"
+import { FormView, useFormHook, toResult, FormSchema } from "@react-formless/core"
+
+type User = { name: string; skills: Skill[] }
+type Skill = { name: string; level: number; tags: Tag[] }
+type Tag = { name: string; ts: number }
+
+const skillSchema: FormSchema<Skill> = {
+    name: { name: "Skill Name", type: "text" },
+    level: { name: "Level", type: "number" },
+    tags: {
+        name: "Tags",
+        type: "collection",
+        mutate: { addNextLabel: "Add Tag", createValue: () => ({ name: "", ts: new Date().getTime() }) },
+        fields: { name: { name: "Tag Name", type: "text" }, ts: { type: "hidden" } }
+    }
+}
+
+const userSchema: FormSchema<User> = {
+    name: { name: "User Name", type: "text" },
+    skills: {
+        name: "Skills",
+        type: "collection",
+        mutate: { addNextLabel: "Add skill", createValue: () => ({ name: "", level: 0, tags: [] }) },
+        fields: skillSchema
+    }
+}
+
+export const InputCollectionForm: React.FC = () => {
+    const { formViewProps: p } = useFormHook({ schema: userSchema })
+    return (
+        <>
+            <FormView {...p} />
+            <pre>{JSON.stringify(toResult(p.schema, p.state), null, 2)}</pre>
+        </>
+    )
+}
+
+```
+
+it renders to
+
+![tests status](packages/examples/assets/collections.png)
+
 ## Custom renderers
 
 ```typescript tsx
@@ -126,7 +176,7 @@ More documentation comming soon
 
 ### Custom validators
 
-### Collections support
+
 
 ### Typings
 

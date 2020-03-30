@@ -11,7 +11,6 @@ const skillSchema: FormSchema<Skill> = {
     tags: {
         name: "Tags",
         type: "collection",
-        sectionTitle: "Tags",
         mutate: { addNextLabel: "Add Tag", createValue: () => ({ name: "", ts: new Date().getTime() }) },
         fields: { name: { name: "Tag Name", type: "text" }, ts: { type: "hidden" } }
     }
@@ -22,8 +21,6 @@ const userSchema: FormSchema<User> = {
     skills: {
         name: "Skills",
         type: "collection",
-        sectionTitle: "Skills",
-
         mutate: { addNextLabel: "Add skill", createValue: () => ({ name: "", level: 0, tags: [] }) },
         fields: skillSchema
     }
@@ -35,8 +32,6 @@ export const InputCollectionForm: React.FC = () => {
         <>
             <FormView {...p} />
             <pre>{JSON.stringify(toResult(p.schema, p.state), null, 2)}</pre>
-            <h3>State</h3>
-            <pre>{JSON.stringify(p.state, null, 2)}</pre>
         </>
     )
 }
