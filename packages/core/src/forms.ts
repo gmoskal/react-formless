@@ -182,10 +182,10 @@ export const getDropdownInputProps = <T>({
     setDelta
 }: InputPropsBase<InputOptionSchema<T>, InputState<T>>) => {
     const currentValue = schema.values.find(v => v[1] === state.value)
-    const validate = (v: T) => (schema.validators ? runValidatorsRaw<T, string>(schema.validators, v) : mkOk(v))
+    const runValidation = (v: T) => (schema.validators ? runValidatorsRaw<T, string>(schema.validators, v) : mkOk(v))
     const options = schema.values.map(v => toOption(v[0], v[1]))
     const onSelect = (o: Option<T>) =>
-        setDelta({ ...state, validationResult: validate(o.value), value: o.value, visited: true })
+        setDelta({ ...state, validationResult: runValidation(o.value), value: o.value, visited: true })
     return {
         selected: currentValue ? [toOption(currentValue[0], currentValue[1])] : [],
         options,

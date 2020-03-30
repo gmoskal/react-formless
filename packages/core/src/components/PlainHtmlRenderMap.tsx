@@ -1,6 +1,7 @@
 import * as React from "react"
 
-import { toMap, replace, isEmpty, isFunction, call } from "@react-formless/utils"
+import { replace, isEmpty, isFunction } from "@react-formless/utils"
+import { css, default as styled } from "styled-components"
 import {
     FormView,
     FormItemView,
@@ -11,36 +12,66 @@ import {
     InputCollectionRenderFn,
     InputListRenderFn,
     InputRenderMap,
-    InputBoxType,
     ElementsRenderMap,
     getInputProps,
     toFormState,
     toInputState,
-    Mutable
+    StyledInputsRenderMap
 } from ".."
 
 const Render: React.FC<{ condition: boolean; value: () => React.ReactElement }> = p => (p.condition ? p.value() : null)
 
-const Title: React.FC<{ text?: string }> = p => <Render condition={!isEmpty(p.text)} value={() => <h3>{p.text}</h3>} />
+const StyledTitle = styled.h3`
+    color: #666;
+    padding: 0;
+    margin: 6px 0;
+`
+const Title: React.FC<{ text?: string }> = p => (
+    <Render condition={!isEmpty(p.text)} value={() => <StyledTitle>{p.text}</StyledTitle>} />
+)
 
 type LabelProps = { text?: string } & Pick<React.LabelHTMLAttributes<HTMLLabelElement>, "htmlFor">
+
+const StyledLabel = styled.label`
+    font-size: 0.8rem;
+    color: #666;
+`
 const Label: React.FC<LabelProps> = p => (
     <Render
         condition={!isEmpty(p.text)}
-        value={() => (
-            // eslint-disable-next-line jsx-a11y/label-has-for
-            <label style={{ fontSize: "12px", color: "#777" }} htmlFor={p.htmlFor}>
-                {p.text}
-            </label>
-        )}
+        // eslint-disable-next-line jsx-a11y/label-has-for
+        value={() => <StyledLabel htmlFor={p.htmlFor}>{p.text}</StyledLabel>}
     />
 )
 
+const StyledError = styled.div`
+    color: #f88;
+`
 const Error: React.FC<InputState<any>> = ({ validationResult, visited }) => (
-    <div className="ErrorLabel">
+    <StyledError>
         {validationResult && visited && validationResult.type === "Err" ? validationResult.value : ""}
-    </div>
+    </StyledError>
 )
+
+const sharedStyle = css`
+    width: 100%;
+    color: rgba(0, 0, 0, 0.87);
+    overflow-wrap: break-word;
+    outline: none;
+    display: flex;
+    line-height: 34px;
+    font-size: 16px;
+    border: 1px solid rgb(223, 225, 229);
+    padding: 0px 6px;
+    margin: 0px 0px 4px;
+    box-sizing: border-box;
+    &::placeholder {
+        color: #ccc;
+    }
+`
+const StyledInput = styled.input`
+    ${sharedStyle}
+`
 
 const Input: InputBoxRenderFn = p => {
     const r = getElementsRenderMap(p.renderOptions)
@@ -50,12 +81,15 @@ const Input: InputBoxRenderFn = p => {
         <>
             <r.Title text={p.schema.sectionTitle} />
             <r.Label text={p.schema.name} htmlFor={inputProps.id} />
-            <input {...inputProps} type={type} />
+            <StyledInput {...inputProps} type={type} />
             <r.Error {...p.state} />
         </>
     )
 }
 
+export const StyledTextArea = styled.textarea`
+    ${sharedStyle}
+`
 const TextAreaInput: InputBoxRenderFn<any> = p => {
     const r = getElementsRenderMap(p.renderOptions)
 
@@ -63,7 +97,7 @@ const TextAreaInput: InputBoxRenderFn<any> = p => {
         <>
             <r.Title text={p.schema.sectionTitle} />
             <r.Label text={p.schema.name} />
-            <textarea {...getInputProps<HTMLTextAreaElement>(p)} />
+            <StyledTextArea {...getInputProps<HTMLTextAreaElement>(p)} />
             <r.Error {...p.state} />
         </>
     )
@@ -189,25 +223,66 @@ export const ListInput: InputListRenderFn = p => {
         </>
     )
 }
-export const plainHtmlRenderMap: Partial<InputRenderMap> = {
-    ...toMap<InputBoxType, InputBoxRenderFn>(
-        ["text", "email", "password", "number", "customBox"],
-        k => k,
-        () => Input
-    ),
+export const plainHtmlRenderMap: InputRenderMap = {
+    text: Input,
+    password: Input,
+    number: Input,
+    customBox: Input,
+    email: Input,
     textarea: TextAreaInput,
+    hidden: () => null,
     radio: RadioInput,
     select: SelectInput,
+    customOption: SelectInput,
+    chips: SelectInput,
     collection: CollectionInput,
     list: ListInput
 }
-
+const Button = styled.button`
+    background-image: -webkit-linear-gradient(top, rgb(245, 245, 245), rgb(241, 241, 241));
+    background-color: rgb(242, 242, 242);
+    border: 1px solid rgb(242, 242, 242);
+    border-radius: 4px;
+    color: rgb(95, 99, 104);
+    font-size: 14px;
+    margin: 4px;
+    padding: 0px 14px;
+    line-height: 27px;
+    height: 36px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    outline: none;
+    box-sizing: border-box;
+    min-width: 90px;
+`
+const ItemWrapper = styled.div`
+    margin: 2px;
+`
 export const plainHtmlElementRenderMap: ElementsRenderMap = {
-    ItemWrapper: p => <div {...p} />,
-    Button: p => <button {...p} />,
+    ItemWrapper,
+    Button,
     ItemChildrenWrapper: p => <div {...p} />,
     DefaultFormItem: () => <h1>Not supported</h1>,
     Title,
     Label,
     Error
 }
+
+export const Row = styled.div`
+    display: flex;
+    box-sizing: border-box;
+
+    flex-direction: row;
+    & > div {
+        flex: 1;
+        & > input {
+            width: calc(100% - 12px);
+        }
+    }
+    & > div:last-child > input {
+        width: 100%;
+    }
+`
+
+export const styledInputsRenderMap: StyledInputsRenderMap = { Title: StyledTitle, Row }

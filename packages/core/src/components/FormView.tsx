@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { F1, pickObject, mapOn2 } from "@react-formless/utils"
+import { F1, pickObject } from "@react-formless/utils"
 
 import {
     plainHtmlRenderMap,
@@ -15,6 +15,7 @@ import {
     InputSchema,
     FormSchema
 } from ".."
+import { keys } from "@react-formless/utils/map"
 
 const getRenderMap = (p: RenderOptions) => p.inputsRenderMap || plainHtmlRenderMap
 
@@ -25,7 +26,7 @@ export const getElementsRenderMap = (p: RenderOptions): ElementsRenderMap => ({
 
 const DefaultRenderFn: RenderFn<any, any> = p => <h3>Not supported {JSON.stringify(p.schema)}</h3>
 
-type InputViewProps = InputPropsBase<InputSchema<any>, FormLeafState<any>, F1<InputState<any>>>
+export type InputViewProps = InputPropsBase<InputSchema<any>, FormLeafState<any>, F1<InputState<any>>>
 export const FormItemView: React.FC<InputViewProps> = p => {
     const customRenderMap = { ...plainHtmlRenderMap, ...getRenderMap(p.renderOptions) }
     const { ItemWrapper, DefaultFormItem } = getElementsRenderMap(p.renderOptions)
@@ -51,9 +52,9 @@ export const FormView = <T extends any>(p: FormViewProps<T>): React.ReactElement
 
     return (
         <>
-            {mapOn2(p.schema, getProps, (key, p) => (
-                <React.Fragment key={key}>
-                    <FormItemView {...p} />
+            {keys(p.schema).map((key, i) => (
+                <React.Fragment key={`${key}-${i}`}>
+                    <FormItemView {...getProps(key, p.schema[key])} />
                 </React.Fragment>
             ))}
         </>

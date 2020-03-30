@@ -22,8 +22,23 @@
       "experimentalObjectRestSpread": true
     }
   },
-  "plugins": ["prettier", "react", "react-hooks", "jsx-a11y", "@typescript-eslint"],
+  "plugins": [
+    "prettier",
+    "react",
+    "react-hooks",
+    "jsx-a11y",
+    "@typescript-eslint"
+  ],
   "rules": {
+    "no-shadow": [
+      "error",
+      {
+        "builtinGlobals": false,
+        "hoist": "functions",
+        "allow": []
+      }
+    ],
+    "no-alert": "error",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "@typescript-eslint/interface-name-prefix": "off",
@@ -33,30 +48,45 @@
     "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/no-unused-vars": ["warn", {"vars": "all", "varsIgnorePattern": "^_", "argsIgnorePattern": "^_"}],
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "varsIgnorePattern": "^_",
+        "argsIgnorePattern": "^_"
+      }
+    ],
     "@typescript-eslint/no-use-before-define": "off",
     "react/display-name": "off",
-    "no-console": 1,
+    "no-console": 2,
     "react/prop-types": 0,
     "jsx-a11y/label-has-for": [
       2,
       {
         "required": {
-          "some": ["nesting", "id"]
+          "some": [
+            "nesting",
+            "id"
+          ]
         }
       }
     ],
     "jsx-a11y/label-has-associated-control": [
       2,
       {
-        "labelAttributes": ["label"],
+        "labelAttributes": [
+          "label"
+        ],
         "depth": 2
       }
     ],
     "react/jsx-filename-extension": [
       1,
       {
-        "extensions": [".js", ".tsx"]
+        "extensions": [
+          ".js",
+          ".tsx"
+        ]
       }
     ],
     "prettier/prettier": [
@@ -87,7 +117,9 @@
   },
   "overrides": [
     {
-      "files": ["src/**/*.ts"],
+      "files": [
+        "src/**/*.ts"
+      ],
       "parserOptions": {
         "ecmaFeatures": {
           "jsx": false
@@ -98,8 +130,15 @@
   "settings": {
     "import/resolver": {
       "node": {
-        "extensions": [".ts", ".tsx"]
+        "extensions": [
+          ".ts",
+          ".tsx"
+        ]
       }
+    },
+    "react": {
+      "pragma": "React", // Pragma to use, default to "React"
+      "version": "detect"
     }
   }
 }

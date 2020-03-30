@@ -22,15 +22,15 @@ export const antDesignElementRenderMap: Partial<ElementsRenderMap> = {
     ItemWrapper,
     Button: Button as any,
     ItemChildrenWrapper: React.Fragment,
-    DefaultFormItem: () => <h1>Not supported</h1>
+    DefaultFormItem: () => <h1>Not supported ...</h1>
 }
 
 export const RadioInput: InputOptionRenderFn = p => {
     const { value, onChange } = getInputProps<HTMLSelectElement>(p)
     return (
         <Radio.Group value={value} onChange={onChange as any}>
-            {p.schema.values.map(([name, value]) => (
-                <Radio key={value} value={value}>
+            {p.schema.values.map(([name, v]) => (
+                <Radio key={v} value={v}>
                     {name}
                 </Radio>
             ))}
@@ -56,8 +56,8 @@ const AntSelect: InputOptionRenderFn = p => {
     }
     return (
         <Select value={value} onChange={handleChange} style={{ width: 120 }}>
-            {p.schema.values.map(([name, value]) => (
-                <Select.Option key={value} value={value}>
+            {p.schema.values.map(([name, v]) => (
+                <Select.Option key={v} value={v}>
                     {name}
                 </Select.Option>
             ))}

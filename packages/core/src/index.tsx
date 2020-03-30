@@ -1,10 +1,11 @@
 import * as React from "react"
-import { F1, F0, State, FArgs, Dict, Result, Validators, ArrayItem } from "@react-formless/utils"
+import { F1, F0, State, FArgs, Dict, Result, Validators, ArrayItem, StateType, TMap } from "@react-formless/utils"
 import { toFormState, toResult, validateForm } from "./forms"
 
 export { validators, guards } from "@react-formless/utils"
 
 export { toFormState, toInputState, getInputProps, toResult } from "./forms"
+export { StyledFormView } from "./components/StyledFormView"
 export { FormView, getElementsRenderMap, FormItemView } from "./components/FormView"
 export { plainHtmlRenderMap, plainHtmlElementRenderMap } from "./components/PlainHtmlRenderMap"
 
@@ -31,7 +32,7 @@ export type RenderOptions = {
 
 export type StandardInputProps<T> = Pick<
     React.InputHTMLAttributes<T>,
-    "name" | "placeholder" | "id" | "onChange" | "value" | "disabled"
+    "name" | "placeholder" | "id" | "onChange" | "value" | "disabled" | "readOnly"
 >
 
 export type ExtInputProps<T> = StandardInputProps<T> & { onFocus: F0; onBlur: F0 }
@@ -70,6 +71,13 @@ export type ChipsInputSchema<T = string> = InputSchemaBase<"chips", T, { field: 
 export type InputSchema<T> = SimpleInputSchema<T> | CollectionInputSchema<T> | ListInputSchema<T> | ChipsInputSchema<T>
 
 export type FormSchema<T> = { [P in keyof T]: InputSchema<T[P]> }
+
+export type StyledTitle = State<"Title"> & { text: string }
+export type StyledColumn<T> = State<"Row"> & { fields: Array<keyof T> }
+export type StyledInputSchema<T> = StyledTitle | StyledColumn<T>
+export type StyledFormSchema<T> = Array<StyledInputSchema<T> | keyof FormSchema<T>>
+
+export type StyledInputsRenderMap = TMap<StateType<StyledInputSchema<any>>, React.FC>
 
 export type InputState<T> = {
     active: boolean

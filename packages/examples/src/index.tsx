@@ -11,6 +11,7 @@ import { InputCollectionForm } from "./collection/InputCollection"
 import { InputsForms } from "./basic/Inputs"
 import { CustomRenderersForm } from "./custom-renderers"
 import { Validation } from "./validation/Validation"
+import { LayoutForm } from "./layout/Layouts"
 
 const paths = {
     "/basic-inputs": InputsForms,
@@ -18,6 +19,7 @@ const paths = {
     "/list": InputListForm,
     "/radio": InputRadioForm,
     "/collection": InputCollectionForm,
+    "/layout": LayoutForm,
     "/custom-renderers": CustomRenderersForm,
     "/validation": Validation
 }

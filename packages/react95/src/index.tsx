@@ -15,8 +15,8 @@ export const react95Inputs: Partial<InputRenderMap> = {
         const selected = p.schema.values.find(v => v[1] === props.value)
         const value = selected ? selected[0] : ""
         const onChange: React.ChangeEventHandler<any> = e => {
-            const v = p.schema.values.find(v => v[0] === (e as any).target.value)
-            if (v) call(props.onChange, { target: { value: v[1] } } as any)
+            const res = p.schema.values.find(v => v[0] === (e as any).target.value)
+            if (res) call(props.onChange, { target: { value: res[1] } } as any)
         }
         return <Dropdown {...props} options={options} onChange={onChange} value={value} />
     },

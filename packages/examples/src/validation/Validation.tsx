@@ -27,6 +27,7 @@ const schema: FormSchema<Credentials> = {
 
 export const Validation: React.FC = () => {
     const onSubmit = React.useCallback((result: Credentials) => {
+        // eslint-disable-next-line no-alert
         alert(JSON.stringify(result, null, 2))
     }, [])
 
