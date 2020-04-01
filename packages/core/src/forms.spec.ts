@@ -1,4 +1,4 @@
-import { toFormState, toResult, validateForm, mkInputState } from "./forms"
+import { toFormState, toResult, validateForm, mkInputState, validate } from "./forms"
 import { mkOk } from "@react-formless/utils/validators"
 import { FormSchema, FormState, Tuples } from "../src"
 
@@ -375,6 +375,46 @@ describe("inputstate", () => {
                 ]
             }
             expect(validateForm(userSchema, state)).toEqual(expectedState)
+        })
+    })
+
+    describe("getFormProps", () => {
+        describe("validate", () => {
+            const value = { val: 1 }
+            const input = {
+                state: { stateValue: "val", anotherStateValue: "val2" },
+                schema: {
+                    toValue: undefined,
+                    type: "",
+                    validators: undefined
+                },
+                setDelta: jest.fn()
+            }
+            beforeEach(() => {
+                input.setDelta.mockReset()
+            })
+            it("sets state, value and validation result with setDelta", () => {
+                validate(input, value)
+                expect(input.setDelta).toBeCalledWith({ ...input.state, validationResult: mkOk(value), value })
+            })
+            it("returns validation result", () => {
+                expect(validate(input, value)).toEqual(mkOk(value))
+            })
+            describe("when toValue is set", () => {
+                const toValueReturn = { transformed: "1" }
+                const inputWithToValue = {
+                    ...input,
+                    schema: {
+                        ...input.schema,
+                        toValue: jest.fn().mockReturnValue(toValueReturn)
+                    }
+                }
+                it("should should transforn valu with given function", () => {
+                    validate(inputWithToValue, value)
+                    expect(inputWithToValue.schema.toValue).toBeCalledWith(value)
+                    expect(inputWithToValue.setDelta.mock.calls[0][0].value).toEqual(toValueReturn)
+                })
+            })
         })
     })
     // tslint:disable-next-line:max-file-line-count
