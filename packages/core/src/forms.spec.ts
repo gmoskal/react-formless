@@ -409,7 +409,7 @@ describe("inputstate", () => {
                         toValue: jest.fn().mockReturnValue(toValueReturn)
                     }
                 }
-                it("should should transforn valu with given function", () => {
+                it("should should transform value with given function", () => {
                     validate(inputWithToValue, value)
                     expect(inputWithToValue.schema.toValue).toBeCalledWith(value)
                     expect(inputWithToValue.setDelta.mock.calls[0][0].value).toEqual(toValueReturn)
