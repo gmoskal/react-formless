@@ -156,8 +156,8 @@ const getNumberValue = (v: any): any => {
     return isNaN(numberValue) ? v : numberValue
 }
 
-const validate = <T>({ state, schema: { toValue, type, validators }, setDelta }: SimpleInputProps, v: any) => {
-    const value = toValue ? toValue(`${v}`) : type === "number" ? getNumberValue(v) : v
+export const validate = <T>({ state, schema: { toValue, type, validators }, setDelta }: SimpleInputProps, v: any) => {
+    const value = toValue ? toValue(v) : type === "number" ? getNumberValue(v) : v
     const validationResult = validators ? runValidatorsRaw<T, string>(validators, value) : mkOk(value)
     setDelta({ ...state, validationResult, value })
     return validationResult

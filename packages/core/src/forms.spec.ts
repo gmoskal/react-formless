@@ -1,6 +1,6 @@
-import { toFormState, toResult, validateForm, mkInputState } from "./forms"
+import { toFormState, toResult, validateForm, mkInputState, validate } from "./forms"
 import { mkOk } from "@react-formless/utils/validators"
-import { FormSchema, FormState, Tuples } from "../src"
+import { FormSchema, FormState, Tuples, SimpleInputProps } from "../src"
 
 type Tag2 = { name: string }
 type Skill = { name: string; level: number }
@@ -375,6 +375,35 @@ describe("inputstate", () => {
                 ]
             }
             expect(validateForm(userSchema, state)).toEqual(expectedState)
+        })
+    })
+
+    describe("validate()", () => {
+        type N = { foo: number }
+        const state: N = { foo: 1 }
+        const input: SimpleInputProps = { state, schema: { type: "number" }, setDelta: jest.fn() }
+        const value = { foo: 2 }
+
+        beforeEach(() => input.setDelta.mockReset())
+
+        it("sets state, value and validation result with setDelta", () => {
+            validate<N>(input, value)
+            const expected = { ...input.state, value, validationResult: mkOk(value) }
+            expect(input.setDelta).toBeCalledWith(expected)
+        })
+
+        it("returns validation result", () => {
+            const current = validate<N>(input, value)
+            expect(current).toEqual(mkOk(value))
+        })
+
+        it("should should transform value with given function", () => {
+            const result = { foo: "1" }
+            const toValue = jest.fn().mockReturnValue(result)
+            validate<N>({ ...input, schema: { ...input.schema, toValue } }, value)
+
+            expect(toValue).toBeCalledWith(value)
+            expect(input.setDelta.mock.calls[0][0].value).toEqual(result)
         })
     })
     // tslint:disable-next-line:max-file-line-count
