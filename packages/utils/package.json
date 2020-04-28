@@ -1,6 +1,6 @@
 {
   "name": "@react-formless/utils",
-  "version": "1.8.2",
+  "version": "1.8.4",
   "description": "set of very useful ts utils (including Elm style validators)",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
