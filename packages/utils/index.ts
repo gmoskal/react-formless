@@ -30,7 +30,8 @@ export {
     remap,
     replace,
     toMap,
-    values
+    values,
+    toArray
 } from "./map"
 
 export { _noop, call, callback, isFunction, labelize, _anything, capitalize } from "./misc"
@@ -54,7 +55,14 @@ export {
     mkFetched,
     toOption,
     ArrayItem,
-    ValueOf
+    AsyncFetched,
+    Maybe,
+    Nothing,
+    mkJust,
+    mkNothing,
+    mkNotFetched,
+    ValueOf,
+    KeysWithValue
 } from "./types"
 
 export {
@@ -91,6 +99,8 @@ export {
     validArrayStringDef,
     validMapDef,
     Validators,
+    validateEmail,
+    validateArray,
     isString,
     isObject,
     isArray,
@@ -100,5 +110,10 @@ export {
     isEmpty,
     isEmail,
     isOk,
-    isErr
+    isErr,
+    validateCollection,
+    ValidatedCollection,
+    validateMinLength,
+    validateString,
+    validateMap
 } from "./validators"
