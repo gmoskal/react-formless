@@ -15,14 +15,26 @@ const schema: FormSchema<User> = {
     bio: { name: "Bio", type: "textarea", placeholder: "Bio" }
 }
 
-export const styledSchema: StyledFormSchema<User> = [
-    { type: "Title", text: "Basic info" },
-    { type: "Row", fields: ["login", "email", "password"] },
+type CustomFields = { type: "star" } | { type: "emoji"; text: string; repeat?: number }
 
-    { type: "Title", text: "Address" },
-    { type: "Row", fields: ["name", "street", "postal", "city"] },
-
-    { type: "Title", text: "Additional" },
+export const styledSchema: StyledFormSchema<User, CustomFields> = [
+    { type: "Title", value: "Basic info" },
+    {
+        type: "Row",
+        value: ["login", "email", { type: "Custom", value: { type: "emoji", text: "🦾" } }, "password"]
+    },
+    {
+        type: "Row",
+        value: [
+            { type: "Title", value: "Emoji row" },
+            { type: "Custom", value: { type: "emoji", text: "🦄", repeat: 2 } },
+            { type: "Custom", value: { type: "emoji", text: "😀", repeat: 3 } },
+            { type: "Custom", value: { type: "emoji", text: "🤖", repeat: 4 } }
+        ]
+    },
+    { type: "Title", value: "Address" },
+    { type: "Row", value: ["name", "street", "postal", "city"] },
+    { type: "Title", value: "Additional" },
     "bio"
 ]
 
@@ -30,7 +42,13 @@ export const LayoutForm: React.FC = () => {
     const { formViewProps: p, result } = useFormHook({ schema })
     return (
         <>
-            <StyledFormView {...p} styledSchema={styledSchema} />
+            <StyledFormView
+                {...p}
+                styledSchema={styledSchema}
+                styledInputsRenderMap={{
+                    Custom: p2 => <p>{p2.value.type === "star" ? "⭐" : p2.value.text.repeat(p2.value.repeat || 1)}</p>
+                }}
+            />
             <h3>Result</h3>
             <pre>{JSON.stringify(result, null, 2)}</pre>
         </>

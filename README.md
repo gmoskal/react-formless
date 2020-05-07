@@ -81,14 +81,16 @@ const schema: FormSchema<User> = {
     bio: { name: "Bio", type: "textarea", placeholder: "Bio" }
 }
 
+
 export const styledSchema: StyledFormSchema<User> = [
-    { type: "Title", text: "Basic info" },
-    { type: "Row", fields: ["login", "email", "password"] },
-
-    { type: "Title", text: "Address" },
-    { type: "Row", fields: ["name", "street", "postal", "city"] },
-
-    { type: "Title", text: "Additional" },
+    { type: "Title", value: "Basic info" },
+    {
+        type: "Row",
+        value: ["login", "email", "password"]
+    },
+    { type: "Title", value: "Address" },
+    { type: "Row", value: ["name", "street", "postal", "city"] },
+    { type: "Title", value: "Additional" },
     "bio"
 ]
 
@@ -100,7 +102,47 @@ export const LayoutForm: React.FC = () => {
 
 it renders to
 
-![tests status](packages/examples/assets/layout.png)
+![styled schema](packages/examples/assets/layout.png)
+
+Moreover whenever custom element is needed, we may use define `CustomFields` and pass `Custom` to `styledInputsRenderMap`
+
+```typescript tsx
+
+type User = { login: string; email: string; password: string }
+
+const schema: FormSchema<User> = {
+    login: { name: "Login", type: "text", id: "name" },
+    email: { name: "Email", type: "text", readOnly: true },
+    password: { name: "Password", type: "password" }
+}
+
+type CustomFields = { type: "emoji"; text: string; repeat?: number }
+
+export const styledSchema: StyledFormSchema<User, CustomFields> = [
+    { type: "Title", value: "Credentials" },
+    {
+        type: "Row",
+        value: [{ type: "Custom", value: { type: "emoji", text: "🦧" } }, "login", "email"]
+    },
+    {
+        type: "Row",
+        value: [{ type: "Custom", value: { type: "emoji", text: "🔑", repeat: 3 } }, "password"]
+    }
+]
+
+const Custom: React.FC<{ value: CustomFields }> = p => (
+    <span style={{ fontSize: "60px", marginRight: "10px" }}>{p.value.text.repeat(p.value.repeat || 1)}</span>
+)
+
+export const LayoutForm: React.FC = () => {
+    const { formViewProps } = useFormHook({ schema })
+    return <StyledFormView {...formViewProps} styledSchema={styledSchema} styledInputsRenderMap={{ Custom }} />
+}
+```
+
+it renders to
+
+![styled schema with CustomElement](packages/examples/assets/layout-CustomElement.png)
 
 ## Collections support
 

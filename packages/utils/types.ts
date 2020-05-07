@@ -20,6 +20,7 @@ export type Casted<T, S> = Dict<keyof T, S>
 export type Subtype<T> = Dict<keyof T, T[keyof T]>
 export type SCasted<T, S> = SDict<keyof T, S>
 export type StateType<T> = T extends State<infer E> ? E : T
+export type StateValue<T> = T extends ValueState<any, infer E> ? E : T
 export type State<T extends string, T2 = {}> = { type: T } & T2
 export type ValueState<T extends string, T2> = State<T, { value: T2 }>
 export type ErrorState<T extends string, T2 = string> = State<T, { error: T2 }>

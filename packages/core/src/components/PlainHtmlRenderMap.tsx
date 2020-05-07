@@ -285,4 +285,8 @@ export const Row = styled.div`
     }
 `
 
-export const styledInputsRenderMap: StyledInputsRenderMap = { Title: StyledTitle, Row }
+export const styledInputsRenderMap: StyledInputsRenderMap = {
+    Title: p => <StyledTitle>{p.value}</StyledTitle>,
+    Row: p => <Row>{p.value}</Row>,
+    Custom: () => <pre>Implement me</pre>
+}

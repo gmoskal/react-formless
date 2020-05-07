@@ -1,6 +1,19 @@
 import * as React from "react"
-import { F1, F0, State, FArgs, Dict, Result, Validators, ArrayItem, StateType, TMap } from "@react-formless/utils"
+import {
+    F1,
+    F0,
+    State,
+    FArgs,
+    Dict,
+    Result,
+    Validators,
+    ArrayItem,
+    StateType,
+    TMap,
+    ValueState
+} from "@react-formless/utils"
 import { toFormState, toResult, validateForm } from "./forms"
+import { StateValue } from "../../utils/types"
 
 export { validators, guards } from "@react-formless/utils"
 
@@ -72,12 +85,24 @@ export type InputSchema<T> = SimpleInputSchema<T> | CollectionInputSchema<T> | L
 
 export type FormSchema<T> = { [P in keyof T]: InputSchema<T[P]> }
 
-export type StyledTitle = State<"Title"> & { text: string }
-export type StyledColumn<T> = State<"Row"> & { fields: Array<keyof T> }
-export type StyledInputSchema<T> = StyledTitle | StyledColumn<T>
-export type StyledFormSchema<T> = Array<StyledInputSchema<T> | keyof FormSchema<T>>
+export type StyledTitle = ValueState<"Title", string>
+export type StyledCustom<T2> = ValueState<"Custom", T2>
+export type StyledCell<T, T2> = keyof T | StyledTitle | StyledCustom<T2>
 
-export type StyledInputsRenderMap = TMap<StateType<StyledInputSchema<any>>, React.FC>
+export type StyledRow<T, T2> = ValueState<"Row", Array<StyledCell<T, T2>>>
+export type StyledInputSchema<T, T2> = StyledTitle | StyledRow<T, T2> | StyledCustom<T2>
+export type StyledFormSchema<T, T2 = any> = Array<StyledInputSchema<T, T2> | keyof FormSchema<T>>
+
+export type StyledInputsRenderMap<T2 = any> = TMap<
+    Exclude<StateType<StyledInputSchema<any, T2>>, "Custom">,
+    React.FC<{ value: StateValue<StyledInputSchema<any, T2>> }>
+> & {
+    Custom: React.FC<{ value: StateValue<StyledCustom<T2>> }>
+}
+export type StyledInputsRenderMap3<T2 = any> = TMap<
+    StateType<StyledInputSchema<any, T2>>,
+    React.FC<{ value: StateValue<StyledInputSchema<any, T2>> }>
+>
 
 export type InputState<T> = {
     active: boolean

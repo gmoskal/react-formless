@@ -1,12 +1,26 @@
 import * as React from "react"
-import { FormViewProps, StyledFormSchema, RenderOptions, FormSchema, StyledInputSchema, FormItemView } from ".."
+import {
+    FormViewProps,
+    StyledFormSchema,
+    RenderOptions,
+    FormSchema,
+    StyledInputSchema,
+    FormItemView,
+    StyledInputsRenderMap
+} from ".."
 import { pickObject } from "../../../utils"
 import { InputViewProps } from "./FormView"
 import { styledInputsRenderMap } from "./PlainHtmlRenderMap"
 
-export const StyledFormView = <T extends any>(
-    p: FormViewProps<T> & { styledSchema: StyledFormSchema<T> }
-): React.ReactElement => {
+const isKeyOf = <T extends any>(v: any, keys: string[] = []): v is keyof T =>
+    typeof v === "string" && (keys.includes(v) || keys.length === 0)
+
+export const StyledCellView = <T, T2 = any>(
+    p: StyledFormViewProps<T, T2> & {
+        cell: StyledInputSchema<T, T2> | keyof T
+        styledInputsRenderMap: StyledInputsRenderMap<T2>
+    }
+) => {
     const setDelta = (key: keyof T) => (value: any) => p.setState({ ...p.state, [key]: value })
     const renderOptions: RenderOptions = pickObject(p, ["elementsRenderMap", "inputsRenderMap"])
 
@@ -17,33 +31,35 @@ export const StyledFormView = <T extends any>(
         renderOptions
     })
 
-    const render = (e: StyledInputSchema<T>) => {
-        const StyledFormItem = styledInputsRenderMap[e.type]
-
-        if (e.type === "Row")
-            return (
-                <StyledFormItem>
-                    {e.fields.map((f, i) => (
-                        <React.Fragment key={`${f}-${i}`}>
-                            <FormItemView {...getProps(f, p.schema[f])} />
-                        </React.Fragment>
-                    ))}
-                </StyledFormItem>
-            )
-        if (e.type === "Title") return <StyledFormItem>{e.text}</StyledFormItem>
+    if (isKeyOf<T>(p.cell)) {
+        const f: keyof T = p.cell
+        return <FormItemView {...getProps(f, p.schema[f])} />
     }
+    const StyledFormItem = p.styledInputsRenderMap[p.cell.type]
 
-    return (
-        <>
-            {p.styledSchema.map((e, index) => (
-                <React.Fragment key={index}>
-                    {typeof e === "string" ? (
-                        <FormItemView {...getProps(e, p.schema[e])} />
-                    ) : (
-                        render(e as StyledInputSchema<T>)
-                    )}
-                </React.Fragment>
-            ))}
-        </>
-    )
+    if (p.cell.type === "Row") {
+        return (
+            <StyledFormItem
+                value={p.cell.value.map((f, i) => <StyledCellView {...p} key={`${i}`} cell={f} />) as any}
+            />
+        )
+    }
+    return <StyledFormItem value={p.cell.value as T2} />
 }
+
+type StyledFormViewProps<T, T2> = FormViewProps<T> & {
+    styledSchema: StyledFormSchema<T, T2>
+    styledInputsRenderMap?: Partial<StyledInputsRenderMap<T2>>
+}
+export const StyledFormView = <T extends any, T2 extends any>(p: StyledFormViewProps<T, T2>): React.ReactElement => (
+    <>
+        {p.styledSchema.map((e, index) => (
+            <StyledCellView
+                key={index}
+                {...p}
+                cell={e}
+                styledInputsRenderMap={{ ...styledInputsRenderMap, ...(p.styledInputsRenderMap || {}) }}
+            />
+        ))}
+    </>
+)
