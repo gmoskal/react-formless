@@ -62,7 +62,8 @@ export {
     mkNothing,
     mkNotFetched,
     ValueOf,
-    KeysWithValue
+    KeysWithValue,
+    StateValue
 } from "./types"
 
 export {

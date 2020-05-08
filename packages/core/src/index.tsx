@@ -10,10 +10,10 @@ import {
     ArrayItem,
     StateType,
     TMap,
-    ValueState
+    ValueState,
+    StateValue
 } from "@react-formless/utils"
 import { toFormState, toResult, validateForm } from "./forms"
-import { StateValue } from "../../utils/types"
 
 export { validators, guards } from "@react-formless/utils"
 
