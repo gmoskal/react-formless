@@ -35,16 +35,20 @@ export const StyledCellView = <T, T2 = any>(
         const f: keyof T = p.cell
         return <FormItemView {...getProps(f, p.schema[f])} />
     }
-    const StyledFormItem = p.styledInputsRenderMap[p.cell.type]
 
-    if (p.cell.type === "Row") {
-        return (
-            <StyledFormItem
-                value={p.cell.value.map((f, i) => <StyledCellView {...p} key={`${i}`} cell={f} />) as any}
-            />
-        )
+    switch (p.cell.type) {
+        case "Row":
+            return (
+                <p.styledInputsRenderMap.Row
+                    value={p.cell.value.map((f, i) => <StyledCellView {...p} key={`${i}`} cell={f} />) as any}
+                />
+            )
+        case "Title":
+            return <p.styledInputsRenderMap.Title value={p.cell.value} />
+        case "Custom":
+            return <p.styledInputsRenderMap.Custom value={p.cell.value} />
     }
-    return <StyledFormItem value={p.cell.value as T2} />
+    return null
 }
 
 type StyledFormViewProps<T, T2> = FormViewProps<T> & {

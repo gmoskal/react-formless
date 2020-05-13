@@ -8,8 +8,6 @@ import {
     Result,
     Validators,
     ArrayItem,
-    StateType,
-    TMap,
     ValueState,
     StateValue
 } from "@react-formless/utils"
@@ -93,16 +91,11 @@ export type StyledRow<T, T2> = ValueState<"Row", Array<StyledCell<T, T2>>>
 export type StyledInputSchema<T, T2> = StyledTitle | StyledRow<T, T2> | StyledCustom<T2>
 export type StyledFormSchema<T, T2 = any> = Array<StyledInputSchema<T, T2> | keyof FormSchema<T>>
 
-export type StyledInputsRenderMap<T2 = any> = TMap<
-    Exclude<StateType<StyledInputSchema<any, T2>>, "Custom">,
-    React.FC<{ value: StateValue<StyledInputSchema<any, T2>> }>
-> & {
+export type StyledInputsRenderMap<T2 = any> = {
+    Title: React.FC<{ value: StateValue<StyledTitle> }>
     Custom: React.FC<{ value: StateValue<StyledCustom<T2>> }>
+    Row: React.FC<{ value: React.ReactElement[] }>
 }
-export type StyledInputsRenderMap3<T2 = any> = TMap<
-    StateType<StyledInputSchema<any, T2>>,
-    React.FC<{ value: StateValue<StyledInputSchema<any, T2>> }>
->
 
 export type InputState<T> = {
     active: boolean
@@ -174,7 +167,7 @@ export type FormHookProps<T> = {
 
 export type FormHookResult<T> = {
     formViewProps: FormViewProps<T>
-    handleSubmit: React.FormEventHandler
+    handleSubmit: (event?: React.FormEvent) => void
     result: Result<T, T>
     resetState: F0
     submitted: boolean
@@ -184,8 +177,8 @@ export const useFormHook = <T extends any>({ schema, ...p }: FormHookProps<T>): 
     const [state, setState] = React.useState(toFormState<T>(schema, (p.initialValue || {}) as any))
     const [submitted, setSubmitted] = React.useState(false)
     const result = toResult(schema, state)
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
+    const handleSubmit = (e?: React.FormEvent) => {
+        e?.preventDefault()
         setSubmitted(true)
         if (result.type === "Err") setState(validateForm(schema, state))
         else if (p.onSubmit) p.onSubmit(result.value)
