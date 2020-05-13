@@ -1,46 +1,64 @@
 import { toFormState, toResult, validateForm, mkInputState, validate } from "./forms"
-import { mkOk } from "@react-formless/utils/validators"
+import { mkOk, mkErr } from "@react-formless/utils/validators"
 import { FormSchema, FormState, Tuples, SimpleInputProps } from "../src"
 
-type Tag2 = { name: string }
+type Tag = { name: string }
 type Skill = { name: string; level: number }
-type Skill2 = Skill & { tags: Tag2[] }
-type User2 = { name: string; skills: Skill2[] }
+type NestedSkill = Skill & { tags: Tag[] }
+type NestedUser = { name: string; skills: NestedSkill[] }
 type User = { name: string; skills: Skill[] }
 type Bag = { items: string[] }
 
-const tag2Schema: FormSchema<Tag2> = {
-    name: { name: "Tag Name", type: "text", validators: [] }
-}
+const genericErrorText = "generic_error"
+const alwaysValid = <T>(v: T) => mkOk(v)
+const alwaysInvalid = <T>(v: T) => mkErr(genericErrorText, v)
+const getValidator = (valid: boolean) => [valid ? alwaysValid : alwaysInvalid]
 
-const skillSchema2: FormSchema<Skill2> = {
-    name: { name: "Skill Name", type: "text", validators: [] },
-    level: { name: "Level", type: "number", validators: [] },
-    tags: { name: "Tags", type: "collection", fields: tag2Schema, validators: [] }
-}
+const tagSchema = (valid = true): FormSchema<Tag> => ({
+    name: { name: "Tag Name", type: "text", validators: getValidator(valid) }
+})
 
-const userSchema2: FormSchema<User2> = {
-    name: { name: "Skill Name", type: "text", validators: [] },
-    skills: { name: "Skills", type: "collection", validators: [], fields: skillSchema2 }
-}
+const nestedSkillSchema = (valid = true): FormSchema<NestedSkill> => ({
+    name: { name: "Skill Name", type: "text", validators: getValidator(valid) },
+    level: { name: "Level", type: "number", validators: getValidator(valid) },
+    tags: { name: "Tags", type: "collection", fields: tagSchema(valid) }
+})
 
-const skillSchema: FormSchema<Skill> = {
-    name: { name: "Skill Name", type: "text", validators: [] },
-    level: { name: "Level", type: "number", validators: [] }
-}
+const nestedUserSchema = (valid = true): FormSchema<NestedUser> => ({
+    name: { name: "Skill Name", type: "text", validators: getValidator(valid) },
+    skills: { name: "Skills", type: "collection", fields: nestedSkillSchema(valid) }
+})
 
-const userSchema: FormSchema<User> = {
-    name: { name: "Skill Name", type: "text", validators: [] },
-    skills: { name: "Skills", type: "collection", validators: [], fields: skillSchema }
-}
+const skillSchemaValidated = (valid = true): FormSchema<Skill> => ({
+    name: { name: "Skill Name", type: "text", validators: getValidator(valid) },
+    level: { name: "Level", type: "number", validators: getValidator(valid) }
+})
 
-const bagChipsSchema: FormSchema<Bag> = {
-    items: { name: "Items", type: "chips", field: { name: "Item", type: "text", validators: [] } }
-}
+const userSchemaValidated = (valid = true): FormSchema<User> => ({
+    name: { name: "Skill Name", type: "text", validators: getValidator(valid) },
+    skills: {
+        name: "Skills",
+        type: "collection",
+        fields: skillSchemaValidated(valid)
+    }
+})
 
-const bagListSchema: FormSchema<Bag> = {
-    items: { name: "Items", type: "list", field: { name: "Item", type: "text", validators: [] } }
-}
+const bagChipsSchemaValidated = (valid = true): FormSchema<Bag> => ({
+    items: {
+        name: "Items",
+        type: "chips",
+        validators: getValidator(valid),
+        field: { name: "Item", type: "text" }
+    }
+})
+
+const bagListSchemaValidated = (valid = true): FormSchema<Bag> => ({
+    items: {
+        name: "Items",
+        type: "list",
+        field: { name: "Item", type: "text", validators: getValidator(valid) }
+    }
+})
 
 describe("inputstate", () => {
     describe("InputState()", () => {
@@ -111,7 +129,7 @@ describe("inputstate", () => {
                 ]
             }
 
-            expect(toFormState(userSchema, user)).toEqual(expected)
+            expect(toFormState(userSchemaValidated(true), user)).toEqual(expected)
         })
 
         it("gets state with chips array", () => {
@@ -121,7 +139,7 @@ describe("inputstate", () => {
                 items: { visited: false, active: false, value: ["item", "item2"] }
             }
 
-            expect(toFormState(bagChipsSchema, bag)).toEqual(expected)
+            expect(toFormState(bagChipsSchemaValidated(), bag)).toEqual(expected)
         })
 
         it("gets state with list array", () => {
@@ -134,7 +152,7 @@ describe("inputstate", () => {
                 ]
             }
 
-            expect(toFormState(bagListSchema, bag)).toEqual(expected)
+            expect(toFormState(bagListSchemaValidated(), bag)).toEqual(expected)
         })
 
         it("gets state with one string object and array with two items", () => {
@@ -160,11 +178,11 @@ describe("inputstate", () => {
                 ]
             }
 
-            expect(toFormState(userSchema, user)).toEqual(expected)
+            expect(toFormState(userSchemaValidated(true), user)).toEqual(expected)
         })
 
         it("gets state with nested arrays", () => {
-            const user: User2 = {
+            const user: NestedUser = {
                 name: "User",
                 skills: [
                     { name: "datomic", level: 1, tags: [{ name: "db" }] },
@@ -172,7 +190,7 @@ describe("inputstate", () => {
                 ]
             }
 
-            const expected: FormState<User2> = {
+            const expected: FormState<NestedUser> = {
                 name: { visited: false, active: false, value: "User" },
                 skills: [
                     {
@@ -191,7 +209,7 @@ describe("inputstate", () => {
                 ]
             }
 
-            expect(toFormState(userSchema2, user)).toEqual(expected)
+            expect(toFormState(nestedUserSchema(), user)).toEqual(expected)
         })
     })
 
@@ -204,32 +222,16 @@ describe("inputstate", () => {
             expect(current).toEqual({ name: "foo" })
         })
 
-        it("restores state with collection", () => {
-            const expected: User = {
-                name: "User",
-                skills: [
-                    { name: "datomic", level: 1 },
-                    { name: "react", level: 10 }
-                ]
+        it("creates errors map from flat form state", () => {
+            type T = { name: string }
+            const schema: FormSchema<T> = {
+                name: { name: "Skill Name", type: "text", validators: [alwaysInvalid] }
             }
-
-            const state: FormState<User> = {
-                name: { visited: false, active: false, value: "User" },
-                skills: [
-                    {
-                        name: { visited: false, active: false, value: "datomic" },
-                        level: { visited: false, active: false, value: 1 }
-                    },
-                    {
-                        name: { visited: false, active: false, value: "react" },
-                        level: { visited: false, active: false, value: 10 }
-                    }
-                ]
+            const state: FormState<T> = {
+                name: { visited: false, active: false, value: "" }
             }
-
-            const current = (toResult(userSchema, state) as any).value
-            expect(current.name).toEqual(expected.name)
-            expect(current.skills).toEqual(expected.skills)
+            const current = toResult(schema, state)
+            expect(current).toEqual(mkErr({ name: genericErrorText }, { name: "" }))
         })
 
         it("restores state with chips", () => {
@@ -240,8 +242,23 @@ describe("inputstate", () => {
             const state: FormState<Bag> = {
                 items: { visited: false, active: false, value: ["item", "item2"] }
             }
-            const current = (toResult(bagChipsSchema, state) as any).value
+            const current = (toResult(bagChipsSchemaValidated(), state) as any).value
             expect(current).toEqual(expected)
+        })
+
+        it("creates errors map for chips state", () => {
+            const state: FormState<Bag> = {
+                items: { visited: false, active: false, value: ["item", "item2"] }
+            }
+            const current = toResult(bagChipsSchemaValidated(false), state)
+            expect(current).toEqual(
+                mkErr(
+                    { items: genericErrorText },
+                    {
+                        items: ["item", "item2"]
+                    }
+                )
+            )
         })
 
         it("restores state with list", () => {
@@ -256,12 +273,92 @@ describe("inputstate", () => {
                 ]
             }
 
-            const current = (toResult(bagListSchema, state) as any).value
+            const current = (toResult(bagListSchemaValidated(), state) as any).value
             expect(current).toEqual(expected)
         })
 
+        it("creates errors map for list state", () => {
+            const state: FormState<Bag> = {
+                items: [
+                    { visited: false, active: false, value: "item" },
+                    { visited: false, active: false, value: "item2" }
+                ]
+            }
+            const current = toResult(bagListSchemaValidated(false), state)
+            expect(current).toEqual(
+                mkErr(
+                    { items: genericErrorText },
+                    {
+                        items: ["item", "item2"]
+                    }
+                )
+            )
+        })
+
+        const userState: FormState<User> = {
+            name: { visited: false, active: false, value: "User" },
+            skills: [
+                {
+                    name: { visited: false, active: false, value: "datomic" },
+                    level: { visited: false, active: false, value: 1 }
+                },
+                {
+                    name: { visited: false, active: false, value: "react" },
+                    level: { visited: false, active: false, value: 10 }
+                }
+            ]
+        }
+        it("restores state with collection", () => {
+            const expected: User = {
+                name: "User",
+                skills: [
+                    { name: "datomic", level: 1 },
+                    { name: "react", level: 10 }
+                ]
+            }
+
+            const current = (toResult(userSchemaValidated(true), userState) as any).value
+            expect(current.name).toEqual(expected.name)
+            expect(current.skills).toEqual(expected.skills)
+        })
+
+        it("creates errors map from collection form state", () => {
+            const current = toResult(userSchemaValidated(false), userState)
+            expect(current).toEqual(
+                mkErr(
+                    { name: genericErrorText, skills: genericErrorText },
+                    {
+                        name: "User",
+                        skills: [
+                            { name: "datomic", level: 1 },
+                            { name: "react", level: 10 }
+                        ]
+                    }
+                )
+            )
+        })
+
+        const nestedUserState: FormState<NestedUser> = {
+            name: { visited: false, active: false, value: "User" },
+            skills: [
+                {
+                    name: { visited: false, active: false, value: "datomic" },
+                    level: { visited: false, active: false, value: 1 },
+                    tags: [{ name: { visited: false, active: false, value: "db" } }]
+                },
+                {
+                    name: { visited: false, active: false, value: "react" },
+                    level: { visited: false, active: false, value: 10 },
+                    tags: [
+                        { name: { visited: false, active: false, value: "tech" } },
+                        { name: { visited: false, active: false, value: "FE" } }
+                    ]
+                }
+            ]
+        }
+
         it("restores state with nested collection", () => {
-            const expected: User2 = {
+            const expected: NestedUser = {
                 name: "User",
                 skills: [
                     { name: "datomic", level: 1, tags: [{ name: "db" }] },
@@ -269,29 +366,26 @@ describe("inputstate", () => {
                 ]
             }
 
-            const state: FormState<User2> = {
-                name: { visited: false, active: false, value: "User" },
-                skills: [
-                    {
-                        name: { visited: false, active: false, value: "datomic" },
-                        level: { visited: false, active: false, value: 1 },
-                        tags: [{ name: { visited: false, active: false, value: "db" } }]
-                    },
-                    {
-                        name: { visited: false, active: false, value: "react" },
-                        level: { visited: false, active: false, value: 10 },
-                        tags: [
-                            { name: { visited: false, active: false, value: "tech" } },
-                            { name: { visited: false, active: false, value: "FE" } }
-                        ]
-                    }
-                ]
-            }
-
-            const current: User2 = (toResult(userSchema2, state) as any).value
+            const current: NestedUser = (toResult(nestedUserSchema(), nestedUserState) as any).value
 
             expect(current.name).toEqual(expected.name)
             expect(current.skills).toEqual(expected.skills)
+        })
+
+        it("creates error map for nested collection state", () => {
+            const current = toResult(nestedUserSchema(false), nestedUserState)
+            expect(current).toEqual(
+                mkErr(
+                    { name: genericErrorText, skills: genericErrorText },
+                    {
+                        name: "User",
+                        skills: [
+                            { name: "datomic", level: 1, tags: [{ name: "db" }] },
+                            { name: "react", level: 10, tags: [{ name: "tech" }, { name: "FE" }] }
+                        ]
+                    }
+                )
+            )
         })
     })
     describe("validateForm()", () => {
@@ -317,7 +411,7 @@ describe("inputstate", () => {
                     validationResult: mkOk(["item", "item2"])
                 }
             }
-            expect(validateForm(bagChipsSchema, state)).toEqual(expectedState)
+            expect(validateForm(bagChipsSchemaValidated(), state)).toEqual(expectedState)
         })
 
         it("touches all on list form", () => {
@@ -343,7 +437,7 @@ describe("inputstate", () => {
                     }
                 ]
             }
-            expect(validateForm(bagListSchema, state)).toEqual(expectedState)
+            expect(validateForm(bagListSchemaValidated(), state)).toEqual(expectedState)
         })
 
         it("touches all on nasted form", () => {
@@ -374,7 +468,7 @@ describe("inputstate", () => {
                     }
                 ]
             }
-            expect(validateForm(userSchema, state)).toEqual(expectedState)
+            expect(validateForm(userSchemaValidated(true), state)).toEqual(expectedState)
         })
     })
 

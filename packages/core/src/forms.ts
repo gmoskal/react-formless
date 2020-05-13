@@ -9,7 +9,10 @@ import {
     mkErr,
     isEmpty,
     ArrayItem,
-    runValidatorsRaw
+    runValidatorsRaw,
+    toMap,
+    Err,
+    ValueOf
 } from "@react-formless/utils"
 
 import {
@@ -36,10 +39,9 @@ function validateInput<T>(
     schema: InputSchema<T>,
     state: InputState<T> | Array<FormState<ArrayItem<T>>>
 ): InputState<T> | Array<InputState<T>> | Array<FormState<ArrayItem<T>>> {
-    if (Array.isArray(state) && schema.type === "collection")
-        return (state as any[]).map(v => validateForm(schema.fields, v) as FormState<ArrayItem<T>>)
-    if (Array.isArray(state) && schema.type === "list")
-        return (state as any[]).map(v => validateInput(schema.field, v) as InputState<T>)
+    if (schema.type === "collection")
+        return arrify(state as any[]).map(v => validateForm(schema.fields, v) as FormState<ArrayItem<T>>)
+    if (schema.type === "list") return arrify(state as any[]).map(v => validateInput(schema.field, v) as InputState<T>)
 
     const s = state as InputState<T>
     return {
@@ -58,10 +60,9 @@ function inputStateToInputResult<T>(
     schema: InputSchema<T>,
     state: InputState<T> | Array<FormState<ArrayItem<T>>>
 ): Result<T, string> | Array<{ [K in keyof T]: Result<T, string> }> {
-    if (Array.isArray(state) && schema.type === "collection")
-        return (state as any[]).map(v => formStateToFormResult(schema.fields, v) as any)
-    if (Array.isArray(state) && schema.type === "list")
-        return (state as any[]).map(v => inputStateToInputResult(schema.field, v) as any)
+    if (schema.type === "collection")
+        return arrify(state as any[]).map(v => formStateToFormResult(schema.fields, v) as any)
+    if (schema.type === "list") return arrify(state as any[]).map(v => inputStateToInputResult(schema.field, v) as any)
     const s: InputState<T> = state as any
     if ((s.visited || s.active) && s.validationResult) return s.validationResult
     const value = schema.toValue ? schema.toValue((state as any).value) : (state as any).value
@@ -74,9 +75,14 @@ export const toResult = <T>(schema: FormSchema<T>, state: FormState<T>): Result<
 }
 
 export const formResultToResult = <T>(schema: FormSchema<T>, res: FormResult<T>): Result<T, T> => {
-    const errors: any = []
+    const errors: (Err<ValueOf<T>> & { key: string })[] = []
     const maybeT = formResultToResultRaw(schema, res, e => errors.push(e))
-    return errors.length ? mkErr(errors, maybeT) : mkOk((maybeT as any) as T)
+    const errorsMap = toMap(
+        errors,
+        v => v.key,
+        v => v.value
+    ) as any
+    return errors.length ? mkErr(errorsMap, maybeT) : mkOk((maybeT as any) as T)
 }
 
 const formResultToResultRaw = <T>(schema: FormSchema<T>, res: FormResult<T>, attachError: F1<any>): T =>
@@ -99,7 +105,7 @@ function inputStateToResult<T>(
     const res: Result<T> = vs as any
     if (res.type === "Err") {
         attachError(res)
-        return null as any
+        return res.obj
     }
     return res.value
 }
