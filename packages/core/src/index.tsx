@@ -71,13 +71,16 @@ export type Mutate<T> = {
 }
 export type Mutable<T> = { mutate?: Mutate<T> }
 
-export type CollectionInputSchema<T> = InputSchemaBase<
-    "collection",
-    T,
-    { fields: FormSchema<ArrayItem<T>> } & Mutable<T>
+export type CollectionInputSchema<T> = Omit<
+    InputSchemaBase<"collection", T, { fields: FormSchema<ArrayItem<T>> } & Mutable<T>>,
+    "validators"
 >
 export type ListInputSchema<T> = InputSchemaBase<"list", T, { field: SimpleInputSchema<T> } & Mutable<T>>
-export type ChipsInputSchema<T = string> = InputSchemaBase<"chips", T, { field: SimpleInputSchema<T[]> } & Mutable<T>>
+export type ChipsInputSchema<T = string> = InputSchemaBase<
+    "chips",
+    T,
+    { field: Omit<SimpleInputSchema<T[]>, "validators"> } & Mutable<T>
+>
 
 export type InputSchema<T> = SimpleInputSchema<T> | CollectionInputSchema<T> | ListInputSchema<T> | ChipsInputSchema<T>
 
