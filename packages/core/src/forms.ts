@@ -12,7 +12,8 @@ import {
     runValidatorsRaw,
     toMap,
     Err,
-    ValueOf
+    ValueOf,
+    keys
 } from "@react-formless/utils"
 
 import {
@@ -29,7 +30,8 @@ import {
     ExtInputProps,
     InputOptionSchema,
     InputPropsBase,
-    InputState
+    InputState,
+    FormLeafState
 } from "."
 
 export const validateForm = <T>(schema: FormSchema<T>, state: FormState<T>): FormState<T> =>
@@ -198,3 +200,13 @@ export const getDropdownInputProps = <T>({
         onSelect
     }
 }
+
+const isInputFocused = <T>(schema: InputSchema<T>, state: FormLeafState<T>): boolean => {
+    if (schema.type === "collection")
+        return (state as Array<FormState<any>>).some(st => isFormFocused(schema.fields, st))
+    if (schema.type === "list") return (state as Array<InputState<T>>).some(st => isInputFocused(schema, st))
+    else return (state as InputState<T>).active
+}
+
+export const isFormFocused = <T>(schema: FormSchema<T>, state: FormState<T>): boolean =>
+    keys(schema).some(key => isInputFocused(schema[key], state[key]))
