@@ -12,7 +12,8 @@ import {
     runValidatorsRaw,
     toMap,
     Err,
-    ValueOf
+    ValueOf,
+    keys
 } from "@react-formless/utils"
 
 import {
@@ -29,7 +30,8 @@ import {
     ExtInputProps,
     InputOptionSchema,
     InputPropsBase,
-    InputState
+    InputState,
+    FormLeafState
 } from "."
 
 export const validateForm = <T>(schema: FormSchema<T>, state: FormState<T>): FormState<T> =>
@@ -198,3 +200,14 @@ export const getDropdownInputProps = <T>({
         onSelect
     }
 }
+
+const isInputActive = <T>(schema: InputSchema<T>, state: FormLeafState<T>): boolean => {
+    if (schema.type === "collection")
+        return (state as Array<FormState<any>>).some(st => isFormActive(schema.fields, st))
+    if (schema.type === "list") return (state as Array<any>).some(st => isInputActive(schema.field, st))
+
+    return (state as InputState<T>).active
+}
+
+export const isFormActive = <T>(schema: FormSchema<T>, state: FormState<T>): boolean =>
+    keys(schema).some(key => isInputActive(schema[key], state[key]))
