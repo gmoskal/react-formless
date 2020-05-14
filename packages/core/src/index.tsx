@@ -11,7 +11,7 @@ import {
     ValueState,
     StateValue
 } from "@react-formless/utils"
-import { toFormState, toResult, validateForm, isFormFocused } from "./forms"
+import { toFormState, toResult, validateForm, isFormActive } from "./forms"
 
 export { validators, guards } from "@react-formless/utils"
 
@@ -107,7 +107,11 @@ export type InputState<T> = {
     value?: T
 }
 
-export type FormLeafState<T> = Array<FormState<ArrayItem<T>>> | Array<InputState<ArrayItem<T>>> | InputState<T>
+// export type FormLeafState<T> = Array<FormState<ArrayItem<T>>> | Array<InputState<ArrayItem<T>>> | InputState<T>
+
+export type FormLeafState<T> = T extends Array<infer E>
+    ? Array<FormState<E>> | InputState<Array<E>> | Array<InputState<E>>
+    : InputState<T>
 
 export type FormState<T> = { [P in keyof T]: FormLeafState<T[P]> }
 
@@ -171,7 +175,7 @@ export type FormHookResult<T> = {
     handleSubmit: (event?: React.FormEvent) => void
     result: Result<T, T>
     resetState: F0
-    focused: boolean
+    active: boolean
     submitted: boolean
 }
 
@@ -197,6 +201,6 @@ export const useFormHook = <T extends any>({ schema, ...p }: FormHookProps<T>): 
         formViewProps: { state, setState, schema },
         resetState,
         submitted,
-        focused: isFormFocused(schema, state)
+        active: isFormActive(schema, state)
     }
 }

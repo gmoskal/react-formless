@@ -201,12 +201,13 @@ export const getDropdownInputProps = <T>({
     }
 }
 
-const isInputFocused = <T>(schema: InputSchema<T>, state: FormLeafState<T>): boolean => {
+const isInputActive = <T>(schema: InputSchema<T>, state: FormLeafState<T>): boolean => {
     if (schema.type === "collection")
-        return (state as Array<FormState<any>>).some(st => isFormFocused(schema.fields, st))
-    if (schema.type === "list") return (state as Array<InputState<T>>).some(st => isInputFocused(schema, st))
-    else return (state as InputState<T>).active
+        return (state as Array<FormState<any>>).some(st => isFormActive(schema.fields, st))
+    if (schema.type === "list") return (state as Array<any>).some(st => isInputActive(schema.field, st))
+
+    return (state as InputState<T>).active
 }
 
-export const isFormFocused = <T>(schema: FormSchema<T>, state: FormState<T>): boolean =>
-    keys(schema).some(key => isInputFocused(schema[key], state[key]))
+export const isFormActive = <T>(schema: FormSchema<T>, state: FormState<T>): boolean =>
+    keys(schema).some(key => isInputActive(schema[key], state[key]))
