@@ -1,4 +1,16 @@
-import { mkJust, mkNothing, equal, mkFetched, isFetched, mkNotFetched, mkFetching, mkFetchError } from "./types"
+import {
+    mkJust,
+    mkNothing,
+    equal,
+    mkFetched,
+    isFetched,
+    mkNotFetched,
+    mkFetching,
+    mkFetchError,
+    isFetching,
+    isNotFetched,
+    isFetchError
+} from "./types"
 
 describe("Common types", () => {
     describe("Maybe<T>", () => {
@@ -19,7 +31,26 @@ describe("Common types", () => {
     describe("isFetched()", () => {
         it("returns false for NotFetched", () => expect(isFetched(mkNotFetched())).toBe(false))
         it("returns false for Fetching", () => expect(isFetched(mkFetching())).toBe(false))
-        it("returns false for FetchError", () => expect(isFetched(mkFetchError("error"))).toBe(true))
+        it("returns false for FetchError", () => expect(isFetched(mkFetchError("error"))).toBe(false))
         it("returns true for Fetched", () => expect(isFetched(mkFetched(null))).toBe(true))
+    })
+    describe("isFetching()", () => {
+        it("returns false for NotFetched", () => expect(isFetching(mkNotFetched())).toBe(false))
+        it("returns true for Fetching", () => expect(isFetching(mkFetching())).toBe(true))
+        it("returns false for FetchError", () => expect(isFetching(mkFetchError("error"))).toBe(false))
+        it("returns false for Fetched", () => expect(isFetching(mkFetched(null))).toBe(false))
+    })
+    describe("isNotFetched()", () => {
+        it("returns true for undefined", () => expect(isNotFetched(undefined)).toBe(true))
+        it("returns true for NotFetched", () => expect(isNotFetched(mkNotFetched())).toBe(true))
+        it("returns false for Fetching", () => expect(isNotFetched(mkFetching())).toBe(false))
+        it("returns false for FetchError", () => expect(isNotFetched(mkFetchError("error"))).toBe(false))
+        it("returns false for Fetched", () => expect(isNotFetched(mkFetched(null))).toBe(false))
+    })
+    describe("isFetchError()", () => {
+        it("returns false for NotFetched", () => expect(isFetchError(mkNotFetched())).toBe(false))
+        it("returns false for Fetching", () => expect(isFetchError(mkFetching())).toBe(false))
+        it("returns true for FetchError", () => expect(isFetchError(mkFetchError("error"))).toBe(true))
+        it("returns false for Fetched", () => expect(isFetchError(mkFetched(null))).toBe(false))
     })
 })
