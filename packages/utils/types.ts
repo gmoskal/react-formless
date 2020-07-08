@@ -76,9 +76,6 @@ export const isNothing = (v: any): v is Nothing => v && v.type === "Nothing"
 
 export const mkMaybe = <T>(v?: T): Maybe<T> => (v !== undefined && v !== null ? mkJust(v) : mkNothing())
 
-export const isFetchedSuccessfully = <T>(v: Async<T> | undefined): v is AsyncFetched<T> =>
-    Boolean(v && v.type === "Fetched")
-
 export const toOption = <T, _>(label: string, value: T): Option<T> => ({ label, value })
 
 export const toROption = (label: string, value?: string): ROption => ({
