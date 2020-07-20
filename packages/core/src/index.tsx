@@ -12,6 +12,8 @@ import {
     StateValue
 } from "@react-formless/utils"
 import { toFormState, toResult, validateForm, isFormActive } from "./forms"
+import { StyledFormViewProps } from "./components/StyledFormView"
+import { InputViewProps } from "./components/FormView"
 
 export { validators, guards } from "@react-formless/utils"
 
@@ -94,9 +96,17 @@ export type StyledRow<T, T2> = ValueState<"Row", Array<StyledCell<T, T2>>>
 export type StyledInputSchema<T, T2> = StyledTitle | StyledRow<T, T2> | StyledCustom<T2>
 export type StyledFormSchema<T, T2 = any> = Array<StyledInputSchema<T, T2> | keyof FormSchema<T>>
 
+export type GetPropsFn<T = any, TKey extends keyof FormSchema<T> = any> = (
+    key: TKey,
+    schema: FormSchema<T>[TKey]
+) => InputViewProps
 export type StyledInputsRenderMap<T2 = any> = {
     Title: React.FC<{ value: StateValue<StyledTitle> }>
-    Custom: React.FC<{ value: StateValue<StyledCustom<T2>> }>
+    Custom: React.FC<
+        { value: StateValue<StyledCustom<T2>> } & StyledFormViewProps<any, T2> & {
+                getProps: GetPropsFn
+            }
+    >
     Row: React.FC<{ value: React.ReactElement[] }>
 }
 
@@ -177,30 +187,42 @@ export type FormHookResult<T> = {
     resetState: F0
     active: boolean
     submitted: boolean
+    touched: boolean
 }
 
 export const useFormHook = <T extends any>({ schema, ...p }: FormHookProps<T>): FormHookResult<T> => {
     const [state, setState] = React.useState(toFormState<T>(schema, (p.initialValue || {}) as any))
+    const [touched, setTouched] = React.useState(false)
     const [submitted, setSubmitted] = React.useState(false)
     const result = toResult(schema, state)
     const handleSubmit = (e?: React.FormEvent) => {
         e?.preventDefault()
         setSubmitted(true)
+        if (!touched) setTouched(true)
         if (result.type === "Err") setState(validateForm(schema, state))
         else if (p.onSubmit) p.onSubmit(result.value)
     }
 
     const resetState = () => {
         setState(toFormState(schema, p.initialValue as any))
+        setTouched(false)
         setSubmitted(false)
     }
 
     return {
         handleSubmit,
         result,
-        formViewProps: { state, setState, schema },
+        formViewProps: {
+            state,
+            setState: s => {
+                if (!touched) setTouched(true)
+                setState(s)
+            },
+            schema
+        },
         resetState,
         submitted,
+        touched,
         active: isFormActive(schema, state)
     }
 }

@@ -11,7 +11,7 @@ export type Err<E, O = any> = ValueState<ErrType, E> & { obj: O }
 export type ResultType = OkType | ErrType
 export type Result<T, E = ExtErrors<T>> = Ok<T> | Err<E>
 export type Validator<T, E = ExtErrors<T>> = (o: any, msg?: string) => Result<T, E>
-export type Validators<T = any, T2 = ExtErrors<T>> = Array<Validator<any, T2>> | null
+export type Validators<T = any, T2 = ExtErrors<T>> = Array<Validator<T, T2>> | null
 export type ValidationMap<T> = { [key in keyof T]: Validators<T[key]> }
 export type ValidatedCollection<T, E = ExtErrors<T>> = { valid: SMap<T>; invalid: SMap<Err<E>> }
 export type IsType = (v: any, msg?: string) => null | string

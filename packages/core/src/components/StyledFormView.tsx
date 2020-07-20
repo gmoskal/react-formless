@@ -11,6 +11,7 @@ import {
 import { pickObject } from "../../../utils"
 import { InputViewProps } from "./FormView"
 import { styledInputsRenderMap } from "./PlainHtmlRenderMap"
+import { omitObject } from "@react-formless/utils/map"
 
 const isKeyOf = <T extends any>(v: any, keys: string[] = []): v is keyof T =>
     typeof v === "string" && (keys.includes(v) || keys.length === 0)
@@ -46,12 +47,18 @@ export const StyledCellView = <T, T2 = any>(
         case "Title":
             return <p.styledInputsRenderMap.Title value={p.cell.value} />
         case "Custom":
-            return <p.styledInputsRenderMap.Custom value={p.cell.value} />
+            return (
+                <p.styledInputsRenderMap.Custom
+                    {...omitObject(p, ["cell", "styledInputsRenderMap"])}
+                    getProps={getProps}
+                    value={p.cell.value}
+                />
+            )
     }
     return null
 }
 
-type StyledFormViewProps<T, T2> = FormViewProps<T> & {
+export type StyledFormViewProps<T, T2> = FormViewProps<T> & {
     styledSchema: StyledFormSchema<T, T2>
     styledInputsRenderMap?: Partial<StyledInputsRenderMap<T2>>
 }
