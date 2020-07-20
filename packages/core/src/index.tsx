@@ -100,10 +100,10 @@ export type GetPropsFn<T = any, TKey extends keyof FormSchema<T> = any> = (
     key: TKey,
     schema: FormSchema<T>[TKey]
 ) => InputViewProps
-export type StyledInputsRenderMap<T2 = any> = {
+export type StyledInputsRenderMap<T = any, T2 = any> = {
     Title: React.FC<{ value: StateValue<StyledTitle> }>
     Custom: React.FC<
-        { value: StateValue<StyledCustom<T2>> } & StyledFormViewProps<any, T2> & {
+        { value: StateValue<StyledCustom<T2>> } & StyledFormViewProps<T, T2> & {
                 getProps: GetPropsFn
             }
     >
