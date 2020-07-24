@@ -49,7 +49,7 @@ function validateInput<T>(
     return {
         ...s,
         visited: true,
-        validationResult: schema.validators ? runValidatorsRaw(schema.validators, s.value) : mkOk(s.value)
+        validationResult: schema.validators ? runValidatorsRaw(schema.validators as any, s.value) : mkOk(s.value)
     } as any
 }
 
@@ -68,7 +68,7 @@ function inputStateToInputResult<T>(
     const s: InputState<T> = state as any
     if ((s.visited || s.active) && s.validationResult) return s.validationResult
     const value = schema.toValue ? schema.toValue((state as any).value) : (state as any).value
-    return schema.validators ? runValidatorsRaw(schema.validators, value) : mkOk(value)
+    return schema.validators ? runValidatorsRaw(schema.validators as any, value) : mkOk(value)
 }
 
 export const toResult = <T>(schema: FormSchema<T>, state: FormState<T>): Result<T, T> => {
