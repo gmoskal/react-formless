@@ -114,4 +114,35 @@ describe("useFormHook()", () => {
         act(() => result.current.resetState())
         expect(result.current.submitted).toEqual(false)
     })
+
+    describe("touched", () => {
+        it("returns touched: false for untouched form", () => {
+            const { result } = getFormHook<Skill>({ schema, initialValue, onSubmit: _noop })
+            expect(result.current.touched).toEqual(false)
+        })
+
+        it("set touched when field setState is called", () => {
+            const { result } = getFormHook<Skill>({ schema, initialValue, onSubmit: _noop })
+            const delta: FormState<Skill> = {
+                name: stringInputStateFixture({ value: "foo" }),
+                level: numberInputStateFixture()
+            }
+            act(() => result.current.formViewProps.setState(delta))
+            expect(result.current.touched).toEqual(true)
+        })
+
+        it("set touched when submit is called even without changes", () => {
+            const { result } = getFormHook<Skill>({ schema, initialValue, onSubmit: _noop })
+            act(() => result.current.handleSubmit(getMockedEvent()))
+            expect(result.current.touched).toEqual(true)
+        })
+
+        it("set touched to false after calling resetState", () => {
+            const { result } = getFormHook<Skill>({ schema, initialValue, onSubmit: _noop })
+            act(() => result.current.handleSubmit(getMockedEvent()))
+            expect(result.current.touched).toEqual(true)
+            act(() => result.current.resetState())
+            expect(result.current.touched).toEqual(false)
+        })
+    })
 })

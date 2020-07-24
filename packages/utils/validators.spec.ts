@@ -8,7 +8,6 @@ import {
     validStringDef,
     validString,
     validateString,
-    validateNumber,
     isEmail,
     validateMinLength,
     validateAZ,
@@ -100,7 +99,7 @@ describe("Validators", () => {
         })
 
         it("calls error callback when invalid value after second validator", () => {
-            const validators = [validateString, validateNumber]
+            const validators = [validateString, validateUppercasePresent]
             const spy = jest.fn()
             const actual = runValidators(validators, "string", spy)
             expect(actual).toEqual("string")
