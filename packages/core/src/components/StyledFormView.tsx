@@ -8,10 +8,9 @@ import {
     FormItemView,
     StyledInputsRenderMap
 } from ".."
-import { pickObject } from "../../../utils"
+import { pickObject, omitObject } from "../../../utils"
 import { InputViewProps } from "./FormView"
 import { styledInputsRenderMap } from "./PlainHtmlRenderMap"
-import { omitObject } from "@react-formless/utils/map"
 
 const isKeyOf = <T extends any>(v: any, keys: string[] = []): v is keyof T =>
     typeof v === "string" && (keys.includes(v) || keys.length === 0)
