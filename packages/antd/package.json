@@ -1,6 +1,6 @@
 {
   "name": "@react-formless/antd",
-  "version": "1.10.1",
+  "version": "1.10.2",
   "description": "ant-design render map for @react-formless/core",
   "scripts": {
     "test": "echo soon"
@@ -8,8 +8,8 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@react-formless/core": "^1.10.1",
-    "@react-formless/utils": "^1.10.1",
+    "@react-formless/core": "^1.10.2",
+    "@react-formless/utils": "^1.10.2",
     "antd": "3.26.9",
     "less": "2.7.2",
     "less-loader": "^5.0.0"
