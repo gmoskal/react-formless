@@ -62,13 +62,17 @@ export const equal = <T>(l: Maybe<T>, r: Maybe<T>) =>
 export const mkFetched = <T>(value: T): AsyncFetched<T> => ({ type: "Fetched", value })
 export const isFetched = <T>(v: Async<T> | undefined): v is AsyncFetched<T> => Boolean(v && v.type === "Fetched")
 
-export const mkNotFetched = (): AsyncNotFetched => ({ type: "NotFetched" })
+type Default<T, TRet> = T extends null ? TRet : Async<T>
+export const mkNotFetched = <T = null>(): Default<T, AsyncNotFetched> => ({ type: "NotFetched" } as any)
+
 export const isNotFetched = (v: any): v is AsyncNotFetched => !v || v.type === "NotFetched"
 
-export const mkFetching = (): AsyncFetching => ({ type: "Fetching" })
+export const mkFetching = <T = null>(): Default<T, AsyncFetching> => ({ type: "Fetching" } as any)
 export const isFetching = (v: any): v is AsyncFetching => Boolean(v && v.type === "Fetching")
 
-export const mkFetchError = (value: string): AsyncFetchError => ({ type: "FetchError", value })
+export const mkFetchError = <T = null>(value: string): Default<T, AsyncFetchError> =>
+    ({ type: "FetchError", value } as any)
+
 export const isFetchError = (v: any): v is AsyncFetchError => Boolean(v && v.type === "FetchError")
 
 export const isJust = <T>(v: any): v is Just<T> => v && v.type === "Just"
