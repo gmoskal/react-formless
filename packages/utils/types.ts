@@ -64,14 +64,14 @@ export const equal = <T>(l: Maybe<T>, r: Maybe<T>) =>
 export const mkFetched = <T>(value: T): AsyncFetched<T> => ({ type: "Fetched", value })
 export const isFetched = <T>(v: Async<T> | undefined): v is AsyncFetched<T> => Boolean(v && v.type === "Fetched")
 
-export const mkNotFetched = (): AsyncNotFetched => ({ type: "NotFetched" } as any)
+export const mkNotFetched = (): AsyncNotFetched => ({ type: "NotFetched" })
 
 export const isNotFetched = (v: any): v is AsyncNotFetched => !v || v.type === "NotFetched"
 
-export const mkFetching = (): AsyncFetching => ({ type: "Fetching" } as any)
+export const mkFetching = (): AsyncFetching => ({ type: "Fetching" })
 export const isFetching = (v: any): v is AsyncFetching => Boolean(v && v.type === "Fetching")
 
-export const mkFetchError = (value: string): AsyncFetchError => ({ type: "FetchError", value } as any)
+export const mkFetchError = (value: string): AsyncFetchError => ({ type: "FetchError", value })
 
 export const isFetchError = (v: any): v is AsyncFetchError => Boolean(v && v.type === "FetchError")
 

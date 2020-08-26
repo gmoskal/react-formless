@@ -34,7 +34,7 @@ export {
     toArray
 } from "./map"
 
-export { _noop, call, callback, isFunction, labelize, _anything, capitalize } from "./misc"
+export { _noop, call, callback, labelize, _anything, capitalize } from "./misc"
 export {
     F0,
     F1,
@@ -108,6 +108,7 @@ export {
     validateArray,
     isString,
     isObject,
+    isFunction,
     isArray,
     isValid,
     isNumber,
