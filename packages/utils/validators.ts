@@ -22,6 +22,7 @@ export type Constructor<T> = (payload: Value<T>) => T
 export const isString = (v: any): v is string => typeof v === "string"
 // eslint-disable-next-line @typescript-eslint/ban-types
 export const isObject = (v: any): v is Object => typeof v === "object"
+// eslint-disable-next-line @typescript-eslint/ban-types
 export const isFunction = (f: any): f is Function => "function" === typeof f
 export const isArray = <T>(ts: T[] | any): ts is T[] => ts && typeof ts === "object" && ts.constructor.name === "Array"
 export const isValid = (pred: boolean | (() => boolean)) => (isFunction(pred) ? pred() : pred)
@@ -136,7 +137,7 @@ export const mkValidator = <T>(
     return Object.keys(errorsMap).length ? mkErr(errorsMap, o) : mkOk((constructor || defaultConstractor)(maybe))
 }
 
-export const validateMap = <T>(validators: Validators<T>) => (v: any, msg?: string): Result<T, string> => {
+export const validateMap = <T>(validators: Validators<T>) => (v: any, msg?: string): Result<SMap<T>, string> => {
     if (!isObject(v) || !v) return mkErr(msg || errors.notObjectType, v)
     let err: Err<string> | null = null
     iterateMap(v, (k, kv) => runValidators(validators, kv, () => (err = mkErr(`invalid value ${kv}`, k))))

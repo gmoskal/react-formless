@@ -1,7 +1,7 @@
 import { F0, F1, Casted, F3, F2, Intersect } from "./types"
 
-export type OMap<TKey extends string, TValue> = { [K in TKey]?: TValue }
-export type TMap<TKey extends string | number, TValue> = { [K in TKey]: TValue }
+export type OMap<TKey extends string | number | symbol, TValue> = { [K in TKey]?: TValue }
+export type TMap<TKey extends string | number | symbol, TValue> = { [K in TKey]: TValue }
 export type SMap<TValue> = TMap<string, TValue>
 export type KMap<T> = TMap<string | number, T>
 
@@ -36,11 +36,11 @@ export const mapOn2 = <T, T2, TV2 extends Casted<T, any>>(
     toValue2: <TKey extends keyof T>(key: string, value: T2) => TV2[TKey]
 ) => keys(o).map(k => toValue2(k + "", toValue(k, o[k])))
 
-export const mapObject = <T, TV2 extends Casted<T, any>>(
+export const mapObject = <T, T2>(
     o: T,
-    toValue: <TKey extends keyof T>(key: TKey, value: T[TKey]) => TV2[TKey]
-): TV2 => {
-    const res: TV2 = {} as any
+    toValue: <TKey extends keyof T>(key: TKey, value: T[TKey]) => T2
+): Casted<T, T2> => {
+    const res: Casted<T, T2> = {} as any
     keys(o).forEach(k => (res[k] = toValue(k, o[k])))
     return res
 }
@@ -51,11 +51,11 @@ export const asyncMap = async <T, S>(vs: T[], cb: (val: T, i: number) => Promise
         await cb(vs[i], i)
     }
 }
-export const asyncMapObject = async <T, TV2 extends Casted<T, any>>(
+export const asyncMapObject = async <T, T2>(
     o: T,
-    toValue: <TKey extends keyof T>(key: TKey, value: T[TKey]) => Promise<TV2[TKey]>
-): Promise<TV2> => {
-    const res: TV2 = {} as any
+    toValue: <TKey extends keyof T>(key: TKey, value: T[TKey]) => Promise<T2>
+): Promise<Casted<T, T2>> => {
+    const res: Casted<T, T2> = {} as any
     await asyncForEach(keys(o), async k => (res[k] = await toValue(k, o[k])))
     return res
 }

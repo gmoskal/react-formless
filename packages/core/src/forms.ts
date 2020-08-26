@@ -113,9 +113,10 @@ function inputStateToResult<T>(
 }
 
 export const toFormState = <T>(schema: FormSchema<T>, value: T): FormState<T> =>
-    mapObject(schema, (k, s: InputSchema<any>) =>
-        toInputState(s as any, s.fromValue ? s.fromValue(value[k] as any) : value[k])
-    ) as any
+    mapObject(
+        schema,
+        (k, s: InputSchema<any>) => toInputState(s as any, s.fromValue ? s.fromValue(value[k] as any) : value[k]) as any
+    )
 
 export const mkInputState = <T>(defValue: T, value: T, active = false, visited = false): InputState<T> => ({
     value: isEmpty(value) ? defValue : value,
