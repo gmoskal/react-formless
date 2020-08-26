@@ -4,7 +4,7 @@ import {
     F0,
     State,
     FArgs,
-    Dict,
+    TMap,
     Result,
     Validators,
     ArrayItem,
@@ -50,6 +50,7 @@ export type StandardInputProps<T> = Pick<
 
 export type ExtInputProps<T> = StandardInputProps<T> & { onFocus: F0; onBlur: F0 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export type InputSchemaBase<TName extends InputType = InputType, T = any, TExtra = {}> = State<
     TName,
     {
@@ -145,11 +146,11 @@ export type RenderFn<TSchema extends InputSchemaBase, TState, TDelta = F1<TState
 
 export type InputBoxType = "text" | "email" | "number" | "textarea" | "password" | "customBox" | "hidden"
 export type InputBoxRenderFn<T = any> = RenderFn<InputBoxSchema<T>, InputState<T>>
-export type InputBoxRenderMap<T = any> = Dict<InputBoxType, InputBoxRenderFn<T>>
+export type InputBoxRenderMap<T = any> = TMap<InputBoxType, InputBoxRenderFn<T>>
 
 export type InputOptionType = "radio" | "select" | "customOption"
 export type InputOptionRenderFn<T = any> = RenderFn<InputOptionSchema<T>, InputState<T>>
-export type InputOptionRenderMap<T = any> = Dict<InputOptionType, InputOptionRenderFn<T>>
+export type InputOptionRenderMap<T = any> = TMap<InputOptionType, InputOptionRenderFn<T>>
 
 export type InputChipstRenderFn<T = any> = RenderFn<InputOptionSchema<T>, InputState<T[]>, F1<InputState<T[]>>>
 export type InputListRenderFn<T = any> = RenderFn<ListInputSchema<T>, Array<InputState<T>>>

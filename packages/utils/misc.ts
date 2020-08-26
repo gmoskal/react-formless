@@ -1,9 +1,9 @@
+import { isFunction } from "./validators"
+
 export const _noop = (): any => undefined
 export const _anything: any = {}
 export const capitalize = (s: string) => s.charAt(0).toLocaleUpperCase() + s.slice(1)
 export const labelize = (s: string) => capitalize(`${s}`.toLocaleLowerCase())
-
-export const isFunction = (f: any): f is Function => "function" === typeof f
 
 export function call<T>(f?: () => T): T | undefined
 export function call<T, T2>(f?: (arg: T) => T2, arg?: T): T2 | undefined
