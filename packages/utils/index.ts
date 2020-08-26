@@ -7,6 +7,7 @@ export {
     asyncForEach,
     asyncMap,
     asyncMapObject,
+    asyncReduce,
     copyDefinedFields,
     extMap,
     extend,

@@ -60,6 +60,9 @@ export const asyncMapObject = async <T, T2>(
     return res
 }
 
+export const asyncReduce = <T, T2>(vs: T[], cb: (acc: T2, v: T) => Promise<T2>, initalValue: T2) =>
+    vs.reduce((_acc, v) => _acc.then(acc => cb(acc, v)), Promise.resolve(initalValue))
+
 export const remap = <T, S = any>(
     vs: SMap<T>,
     getKey: F3<string, T, number, string>,
