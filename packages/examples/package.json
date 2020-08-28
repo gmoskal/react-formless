@@ -1,6 +1,6 @@
 {
   "name": "@react-formless/examples",
-  "version": "1.12.1",
+  "version": "1.12.2",
   "private": true,
   "scripts": {
     "start": "parcel serve *.html",
@@ -14,10 +14,10 @@
     "parcel-bundler": "1.12.4"
   },
   "dependencies": {
-    "@react-formless/antd": "^1.12.1",
-    "@react-formless/core": "^1.12.1",
-    "@react-formless/react95": "^1.12.1",
-    "@react-formless/utils": "^1.12.1",
+    "@react-formless/antd": "^1.12.2",
+    "@react-formless/core": "^1.12.2",
+    "@react-formless/react95": "^1.12.2",
+    "@react-formless/utils": "^1.12.2",
     "react-dom": "16.13.1",
     "react-router-dom": "5.2.0",
     "styled-components": "latest"
