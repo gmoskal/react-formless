@@ -10,11 +10,11 @@
   "devDependencies": {
     "@types/react-dom": "16.9.5",
     "@types/react-router-dom": "5.1.3",
-    "@types/styled-components": "5.1.2",
-    "parcel-bundler": "1.12.4",
-    "styled-components": "^5.0.1"
+    "@types/styled-components": "latest",
+    "parcel-bundler": "1.12.4"
   },
   "dependencies": {
+    "styled-components": "latest",
     "@react-formless/antd": "latest",
     "@react-formless/core": "latest",
     "@react-formless/react95": "latest",
