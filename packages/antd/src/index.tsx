@@ -65,9 +65,9 @@ const AntSelect: InputOptionRenderFn = p => {
     )
 }
 export const antDesignRenderMap: Partial<InputRenderMap> = {
-    text: p => <Input {...getInputProps(p)} />,
-    password: p => <Input.Password {...getInputProps(p)} />,
-    textarea: p => <Input.TextArea {...getInputProps(p)} />,
+    text: (p: any) => <Input {...getInputProps(p)} />,
+    password: (p: any) => <Input.Password {...getInputProps(p)} />,
+    textarea: (p: any) => <Input.TextArea {...getInputProps(p)} />,
     number: AntInputNumber,
     radio: RadioInput,
     select: AntSelect

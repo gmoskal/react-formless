@@ -1,10 +1,8 @@
 import * as React from "react"
 import { FormView, useFormHook, FormSchema } from "@react-formless/core"
-
 type User = { name: string; skills: Skill[] }
 type Skill = { name: string; level: number; tags: Tag[] }
 type Tag = { name: string; ts: number }
-
 const skillSchema: FormSchema<Skill> = {
     name: { name: "Skill Name", type: "text" },
     level: { name: "Level", type: "number" },
