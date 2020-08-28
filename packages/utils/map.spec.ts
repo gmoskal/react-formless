@@ -275,6 +275,12 @@ describe("Map utils", () => {
                 [] as number[]
             )
             expect(sum).toEqual([2, 3])
+            const sum2 = await asyncReduce(
+                [2, 3],
+                (acc, v) => new Promise(res => setTimeout(() => res(acc + v + 1), 0)),
+                1
+            )
+            expect(sum2).toEqual(8)
         })
     })
 })
