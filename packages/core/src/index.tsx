@@ -1,16 +1,6 @@
 import * as React from "react"
-import {
-    F1,
-    F0,
-    State,
-    FArgs,
-    TMap,
-    Result,
-    Validators,
-    ArrayItem,
-    ValueState,
-    StateValue
-} from "@react-formless/utils"
+import { F1, F0, State, FArgs, TMap, Result, Validators, ArrayItem } from "@react-formless/utils"
+import { ValueState, StateValue } from "@react-formless/utils"
 import { toFormState, toResult, validateForm, isFormActive } from "./forms"
 import { StyledFormViewProps } from "./components/StyledFormView"
 import { InputViewProps } from "./components/FormView"
