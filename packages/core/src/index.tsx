@@ -76,13 +76,10 @@ export type ChipsInputSchema<T = string> = InputSchemaBase<
 >
 
 export type InputSchema<T> = SimpleInputSchema<T> | CollectionInputSchema<T> | ListInputSchema<T> | ChipsInputSchema<T>
-
 export type FormSchema<T> = { [P in keyof T]: InputSchema<T[P]> }
-
 export type StyledTitle = ValueState<"Title", string>
 export type StyledCustom<T2> = ValueState<"Custom", T2>
 export type StyledCell<T, T2> = keyof T | StyledTitle | StyledCustom<T2>
-
 export type StyledRow<T, T2> = ValueState<"Row", Array<StyledCell<T, T2>>>
 export type StyledInputSchema<T, T2> = StyledTitle | StyledRow<T, T2> | StyledCustom<T2>
 export type StyledFormSchema<T, T2 = any> = Array<StyledInputSchema<T, T2> | keyof FormSchema<T>>
@@ -93,11 +90,7 @@ export type GetPropsFn<T = any, TKey extends keyof FormSchema<T> = any> = (
 ) => InputViewProps
 export type StyledInputsRenderMap<T = any, T2 = any> = {
     Title: React.FC<{ value: StateValue<StyledTitle> }>
-    Custom: React.FC<
-        { value: StateValue<StyledCustom<T2>> } & StyledFormViewProps<T, T2> & {
-                getProps: GetPropsFn
-            }
-    >
+    Custom: React.FC<{ value: StateValue<StyledCustom<T2>> } & StyledFormViewProps<T, T2> & { getProps: GetPropsFn }>
     Row: React.FC<{ value: React.ReactElement[] }>
 }
 
@@ -107,8 +100,6 @@ export type InputState<T> = {
     validationResult?: Result<T, string>
     value?: T
 }
-
-// export type FormLeafState<T> = Array<FormState<ArrayItem<T>>> | Array<InputState<ArrayItem<T>>> | InputState<T>
 
 export type FormLeafState<T> = T extends Array<infer E>
     ? Array<FormState<E>> | InputState<Array<E>> | Array<InputState<E>>
