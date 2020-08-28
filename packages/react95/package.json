@@ -1,6 +1,6 @@
 {
   "name": "@react-formless/react95",
-  "version": "1.11.0",
+  "version": "1.11.1",
   "description": "react95 render map for @react-formless/core",
   "scripts": {
     "test": "echo soon"

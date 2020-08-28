@@ -1,6 +1,6 @@
 {
   "name": "@react-formless/antd",
-  "version": "1.11.0",
+  "version": "1.11.1",
   "description": "ant-design render map for @react-formless/core",
   "scripts": {
     "test": "echo soon"
