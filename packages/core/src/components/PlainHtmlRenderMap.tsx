@@ -234,7 +234,7 @@ export const plainHtmlRenderMap: InputRenderMap = {
     radio: RadioInput,
     select: SelectInput,
     customOption: SelectInput,
-    multiselect: SelectInput,
+    multiselect: () => null,
     collection: CollectionInput,
     list: ListInput
 }

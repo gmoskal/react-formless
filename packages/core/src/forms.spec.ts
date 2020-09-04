@@ -113,7 +113,7 @@ describe("collection type", () => {
                 name: { visited: false, active: false, value: "bar" },
                 values: [
                     { name: { visited: false, active: false, value: "qux" } },
-                    { name: { visited: false, active: false, value: "qux" } }
+                    { name: { visited: false, active: false, value: "quz" } }
                 ]
             }
         ]
@@ -258,6 +258,65 @@ describe("list type", () => {
         }
         expect(isFormActive(getListSchema(), activeState)).toEqual(true)
         expect(isFormActive(getListSchema(), inactiveState)).toEqual(false)
+    })
+})
+
+describe("multiselect type", () => {
+    type Multiselect = { values: string[] }
+
+    const getMultiselectSchema = (valid: Validity = "valid"): FormSchema<Multiselect> => ({
+        values: {
+            name: "Values",
+            type: "multiselect",
+            values: [
+                ["label1", "foo"],
+                ["label2", "bar"]
+            ],
+            validators: getValidator(valid)
+        }
+    })
+
+    const multiselect: Multiselect = { values: ["foo", "bar"] }
+
+    const multiselectState: FormState<Multiselect> = {
+        values: { visited: false, active: false, value: ["foo", "bar"] }
+    }
+
+    test("toFormState()", () => {
+        expect(toFormState(getMultiselectSchema(), multiselect)).toEqual(multiselectState)
+    })
+
+    test("toResult() => ok", () => {
+        const current = (toResult(getMultiselectSchema(), multiselectState) as any).value
+        expect(current).toEqual(multiselect)
+    })
+
+    test("toResult() => err", () => {
+        const current = toResult(getMultiselectSchema("invalid"), multiselectState)
+        expect(current).toEqual(mkErr({ values: genericErrorText }, multiselect))
+    })
+
+    it("validateForm", () => {
+        const validatedState: FormState<Multiselect> = {
+            values: {
+                visited: true,
+                active: false,
+                value: ["foo", "bar"],
+                validationResult: mkOk(["foo", "bar"])
+            }
+        }
+        expect(validateForm(getMultiselectSchema(), multiselectState)).toEqual(validatedState)
+    })
+
+    test("isFormActive()", () => {
+        const activeState: FormState<Multiselect> = {
+            values: { visited: false, active: true, value: ["foo", "bar"] }
+        }
+        const inactiveState: FormState<Multiselect> = {
+            values: { visited: false, active: false, value: ["foo", "bar"] }
+        }
+        expect(isFormActive(getMultiselectSchema(), activeState)).toEqual(true)
+        expect(isFormActive(getMultiselectSchema(), inactiveState)).toEqual(false)
     })
 })
 

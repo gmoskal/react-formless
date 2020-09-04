@@ -79,7 +79,11 @@ export type CollectionInputSchema<T> = Omit<
     "validators"
 >
 export type ListInputSchema<T> = InputSchemaBase<"list", T, { field: SimpleInputSchema<T> } & Mutable<T>>
-export type MultiselectInputSchema<T> = InputSchemaBase<"multiselect", T[], { values: Tuples<T> } & Mutable<T>>
+export type MultiselectInputSchema<T> = InputSchemaBase<
+    "multiselect",
+    T,
+    { values: Tuples<ArrayItem<T>> } & Mutable<ArrayItem<T>>
+>
 
 export type InputSchema<T> =
     | SimpleInputSchema<T>
