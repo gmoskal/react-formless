@@ -234,7 +234,7 @@ export const plainHtmlRenderMap: InputRenderMap = {
     radio: RadioInput,
     select: SelectInput,
     customOption: SelectInput,
-    chips: SelectInput,
+    multiselect: SelectInput,
     collection: CollectionInput,
     list: ListInput
 }
