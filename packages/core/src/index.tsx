@@ -1,16 +1,6 @@
 import * as React from "react"
-import {
-    F1,
-    F0,
-    State,
-    FArgs,
-    TMap,
-    Result,
-    Validators,
-    ArrayItem,
-    ValueState,
-    StateValue
-} from "@react-formless/utils"
+import { F1, F0, State, FArgs, TMap, Result, Validators, ArrayItem } from "@react-formless/utils"
+import { ValueState, StateValue } from "@react-formless/utils"
 import { toFormState, toResult, validateForm, isFormActive } from "./forms"
 import { StyledFormViewProps } from "./components/StyledFormView"
 import { InputViewProps } from "./components/FormView"
@@ -92,11 +82,9 @@ export type InputSchema<T> =
     | MultiselectInputSchema<T>
 
 export type FormSchema<T> = { [P in keyof T]: InputSchema<T[P]> }
-
 export type StyledTitle = ValueState<"Title", string>
 export type StyledCustom<T2> = ValueState<"Custom", T2>
 export type StyledCell<T, T2> = keyof T | StyledTitle | StyledCustom<T2>
-
 export type StyledRow<T, T2> = ValueState<"Row", Array<StyledCell<T, T2>>>
 export type StyledInputSchema<T, T2> = StyledTitle | StyledRow<T, T2> | StyledCustom<T2>
 export type StyledFormSchema<T, T2 = any> = Array<StyledInputSchema<T, T2> | keyof FormSchema<T>>
@@ -107,11 +95,7 @@ export type GetPropsFn<T = any, TKey extends keyof FormSchema<T> = any> = (
 ) => InputViewProps
 export type StyledInputsRenderMap<T = any, T2 = any> = {
     Title: React.FC<{ value: StateValue<StyledTitle> }>
-    Custom: React.FC<
-        { value: StateValue<StyledCustom<T2>> } & StyledFormViewProps<T, T2> & {
-                getProps: GetPropsFn
-            }
-    >
+    Custom: React.FC<{ value: StateValue<StyledCustom<T2>> } & StyledFormViewProps<T, T2> & { getProps: GetPropsFn }>
     Row: React.FC<{ value: React.ReactElement[] }>
 }
 

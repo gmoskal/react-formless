@@ -16,7 +16,8 @@ import {
     matchOnValue,
     pickObject,
     omitObject,
-    relativeComplement
+    relativeComplement,
+    asyncReduce
 } from "./map"
 
 describe("Map utils", () => {
@@ -264,5 +265,22 @@ describe("Map utils", () => {
         it("returns empty list if A=B", () => expect(relativeComplement([1, 2, 3], [1, 2, 3])).toEqual([]))
         it("returns empty list if B includes A", () => expect(relativeComplement([1, 2, 3], [1, 2, 3, 4])).toEqual([]))
         it("returns only elements missing from A", () => expect(relativeComplement([1, 2, 3], [1, 2])).toEqual([3]))
+    })
+
+    describe("asyncReduce()", () => {
+        it("works for async cbs", async () => {
+            const sum = await asyncReduce(
+                [1, 2],
+                (acc, v) => new Promise(res => setTimeout(() => res([...acc, v + 1]), 0)),
+                [] as number[]
+            )
+            expect(sum).toEqual([2, 3])
+            const sum2 = await asyncReduce(
+                [2, 3],
+                (acc, v) => new Promise(res => setTimeout(() => res(acc + v + 1), 0)),
+                1
+            )
+            expect(sum2).toEqual(8)
+        })
     })
 })

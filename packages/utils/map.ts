@@ -93,7 +93,7 @@ export const toMap = <T, T2 = T>(
     toKey: F2<T, number, string | null>,
     toValue: F1<T, T2>,
     options: MapOptions = {}
-): SMap<T2> => {
+) => {
     const res: SMap<T2> = {}
     ;(ts || []).forEach((t, index) => {
         const k = toKey(t, index)
@@ -105,13 +105,13 @@ export const toMap = <T, T2 = T>(
     return res
 }
 
-export const filterObject = <T>(o: SMap<T>, condition: (key: keyof typeof o, value: T) => boolean): SMap<T> => {
-    const result: SMap<T> = {}
+export const filterObject = <T>(o: SMap<T>, condition: (key: keyof typeof o, value: T) => boolean) => {
+    const res: SMap<T> = {}
     const f = (field: string) => {
-        if (condition(field, o[field])) result[field] = o[field]
+        if (condition(field, o[field])) res[field] = o[field]
     }
     Object.keys(o || {}).forEach(f)
-    return result
+    return res
 }
 
 export const copyDefinedFields = <T, V extends T>(keysSrc: Casted<T, any>, src: V, delta: Partial<T> = {}): T => {
@@ -188,5 +188,4 @@ export const omitObject = <T, K extends keyof T>(source: T, keysToOmit: K[]): Om
 
 export const pickIntersect = <T2>() => <T, K extends keyof Intersect<T, T2>>(source: T, keysToPick: K[]) =>
     pickObject(source, keysToPick)
-
 export const relativeComplement = <T>(a1: T[], a2: T[]) => a1.filter(id => !a2.includes(id))
