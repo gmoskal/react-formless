@@ -50,11 +50,6 @@ function validateInput<T>(
             return arrify(state as any[]).map(v => validateForm(schema.fields, v) as FormState<ArrayItem<T>>)
         case "list":
             return arrify(state as any[]).map(v => validateInput(schema.field, v) as InputState<T>)
-        // case "multiselect": {
-        //     const s = state as InputState<T>
-        //     const validationResult = runValidatorsOnInputValue(s.value, schema.validators)
-        //     return { ...s, visited: true, validationResult }
-        // }
         default:
             const s = state as InputState<T>
             const validationResult = runValidatorsOnInputValue(s.value, schema.validators)
