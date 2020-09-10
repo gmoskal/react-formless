@@ -13,7 +13,9 @@ import {
     toMap,
     Err,
     ValueOf,
-    keys
+    keys,
+    Validators,
+    pickObject
 } from "@react-formless/utils"
 
 import {
@@ -25,50 +27,64 @@ import {
     InputResult,
     SimpleInputSchema,
     ListInputSchema,
-    ChipsInputSchema,
     SimpleInputProps,
     ExtInputProps,
     InputOptionSchema,
     InputPropsBase,
     InputState,
-    FormLeafState
+    FormLeafState,
+    MultiselectInputSchema,
+    RenderParams,
+    InputMultiselectRenderFn,
+    InputOptionRenderFn,
+    InputBoxRenderFn
 } from "."
 
 export const validateForm = <T>(schema: FormSchema<T>, state: FormState<T>): FormState<T> =>
     mapObject(schema, (k, s: InputSchema<any>) => validateInput(s as any, (state as any)[k]) as any)
 
+const runValidatorsOnInputValue = <T>(value: T, validators?: Validators<T, string>) =>
+    validators ? runValidatorsRaw<any, string>(validators, value) : mkOk(value)
+
 function validateInput<T>(
     schema: InputSchema<T>,
-    state: InputState<T> | Array<FormState<ArrayItem<T>>>
-): InputState<T> | Array<InputState<T>> | Array<FormState<ArrayItem<T>>> {
-    if (schema.type === "collection")
-        return arrify(state as any[]).map(v => validateForm(schema.fields, v) as FormState<ArrayItem<T>>)
-    if (schema.type === "list") return arrify(state as any[]).map(v => validateInput(schema.field, v) as InputState<T>)
-
-    const s = state as InputState<T>
-    return {
-        ...s,
-        visited: true,
-        validationResult: schema.validators ? runValidatorsRaw(schema.validators, s.value) : mkOk(s.value)
-    } as any
+    state: InputState<T> | InputState<T[]> | Array<FormState<ArrayItem<T>>>
+): InputState<T> | InputState<T[]> | Array<InputState<T>> | Array<FormState<ArrayItem<T>>> {
+    switch (schema.type) {
+        case "collection":
+            return arrify(state as any[]).map(v => validateForm(schema.fields, v) as FormState<ArrayItem<T>>)
+        case "list":
+            return arrify(state as any[]).map(v => validateInput(schema.field, v) as InputState<T>)
+        default:
+            const s = state as InputState<T>
+            const validationResult = runValidatorsOnInputValue(s.value, schema.validators)
+            return { ...s, visited: true, validationResult }
+    }
 }
 
 export const formStateToFormResult = <T>(schema: FormSchema<T>, state: FormState<T>): FormResult<T> =>
     mapObject(schema, (k, s: InputSchema<any>) => inputStateToInputResult(s as any, (state as any)[k]) as any)
 
 function inputStateToInputResult<T>(s: CollectionInputSchema<T>, state: Array<FormState<ArrayItem<T>>>): InputResult<T>
+function inputStateToInputResult<T>(s: MultiselectInputSchema<T>, state: InputState<T[]>): Result<T[], string>
 function inputStateToInputResult<T>(s: SimpleInputSchema<T>, state: InputState<T>): Result<T, string>
 function inputStateToInputResult<T>(
     schema: InputSchema<T>,
     state: InputState<T> | Array<FormState<ArrayItem<T>>>
 ): Result<T, string> | Array<{ [K in keyof T]: Result<T, string> }> {
-    if (schema.type === "collection")
-        return arrify(state as any[]).map(v => formStateToFormResult(schema.fields, v) as any)
-    if (schema.type === "list") return arrify(state as any[]).map(v => inputStateToInputResult(schema.field, v) as any)
-    const s: InputState<T> = state as any
-    if ((s.visited || s.active) && s.validationResult) return s.validationResult
-    const value = schema.toValue ? schema.toValue((state as any).value) : (state as any).value
-    return schema.validators ? runValidatorsRaw(schema.validators, value) : mkOk(value)
+    switch (schema.type) {
+        case "collection":
+            return arrify(state as any[]).map(v => formStateToFormResult(schema.fields, v) as any)
+        case "list":
+            return arrify(state as any[]).map(v => inputStateToInputResult(schema.field, v) as any)
+        default: {
+            const s = state as InputState<T>
+            if ((s.visited || s.active) && s.validationResult) return s.validationResult
+
+            const value = schema.toValue ? schema.toValue((state as any).value) : (state as any).value
+            return runValidatorsOnInputValue(value, schema.validators)
+        }
+    }
 }
 
 export const toResult = <T>(schema: FormSchema<T>, state: FormState<T>): Result<T, T> => {
@@ -128,23 +144,23 @@ export const mkHiddenInputState = <T>(value: T): InputState<T> => ({ value, acti
 
 export function toInputState<T>(s: CollectionInputSchema<T>, value: T): Array<FormState<ArrayItem<T>>>
 export function toInputState<T>(s: ListInputSchema<T>, value: T[]): Array<InputState<T>>
-export function toInputState<T>(s: ChipsInputSchema<T>, value: T[]): InputState<T[]>
+export function toInputState<T>(s: MultiselectInputSchema<T>, value: T[]): InputState<T[]>
 export function toInputState<T>(s: SimpleInputSchema<T>, value: T): InputState<T>
 export function toInputState<T>(
     schema: InputSchema<T>,
     value: T | T[]
-): InputState<T> | InputState<string[]> | Array<InputState<T>> | Array<FormState<ArrayItem<T>>> {
+): InputState<T> | InputState<T[]> | Array<InputState<T>> | Array<FormState<ArrayItem<T>>> {
     switch (schema.type) {
         case "collection":
             return (((value || []) as any) as Array<ArrayItem<T>>).map(v => toFormState<ArrayItem<T>>(schema.fields, v))
         case "list":
             return arrify(isEmpty(value) ? [] : value).map(v => mkInputState<T>("" as any, v))
-        case "chips":
-            return mkInputState<string[]>([], value as any)
         case "radio":
             return mkInputState<T>("" as any, `${value}` as any)
         case "hidden":
             return mkHiddenInputState(value as T)
+        case "multiselect":
+            return mkInputState<T[]>([], arrify(value))
         case "customBox":
         case "select":
         case "text":
@@ -185,6 +201,17 @@ export const getInputProps = <T2 = HTMLInputElement>(p: SimpleInputProps): ExtIn
     onBlur: () => p.setDelta({ ...p.state, active: false, visited: true })
 })
 
+export const getExtInputProps = <T>(
+    p: RenderParams<InputBoxRenderFn<T> | InputOptionRenderFn<T> | InputMultiselectRenderFn<T>>
+) => ({
+    ...pickObject(p.schema, ["name", "id", "placeholder"]),
+    value: p.state.value,
+    disabled: p.schema.disabled || false,
+    onChange: (v: typeof p.state.value) => validate(p, v || null),
+    onFocus: () => p.setDelta({ ...p.state, active: true } as any),
+    onBlur: () => p.setDelta({ ...p.state, active: false, visited: true } as any)
+})
+
 export const getDropdownInputProps = <T>({
     state,
     schema,
@@ -194,7 +221,12 @@ export const getDropdownInputProps = <T>({
     const runValidation = (v: T) => (schema.validators ? runValidatorsRaw<T, string>(schema.validators, v) : mkOk(v))
     const options = schema.values.map(v => toOption(v[0], v[1]))
     const onSelect = (o: Option<T>) =>
-        setDelta({ ...state, validationResult: runValidation(o.value), value: o.value, visited: true })
+        setDelta({
+            ...state,
+            validationResult: runValidation(o.value) as Result<T, string>,
+            value: o.value,
+            visited: true
+        })
     return {
         selected: currentValue ? [toOption(currentValue[0], currentValue[1])] : [],
         options,

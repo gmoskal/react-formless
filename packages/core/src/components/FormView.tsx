@@ -23,7 +23,7 @@ export const getElementsRenderMap = (p: RenderOptions): ElementsRenderMap => ({
     ...(p.elementsRenderMap || {})
 })
 
-const DefaultRenderFn: RenderFn<any, any> = p => <h3>Not supported {JSON.stringify(p.schema)}</h3>
+const DefaultRenderFn: RenderFn<any> = p => <h3>Not supported {JSON.stringify(p.schema)}</h3>
 
 export type InputViewProps = InputPropsBase<InputSchema<any>, FormLeafState<any>, F1<InputState<any>>>
 export const FormItemView: React.FC<InputViewProps> = p => {

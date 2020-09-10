@@ -7,7 +7,7 @@ import { InputViewProps } from "./components/FormView"
 
 export { validators, guards } from "@react-formless/utils"
 
-export { toFormState, toInputState, getInputProps, toResult } from "./forms"
+export { toFormState, toInputState, getInputProps, getExtInputProps, toResult } from "./forms"
 export { StyledFormView } from "./components/StyledFormView"
 export { FormView, getElementsRenderMap, FormItemView } from "./components/FormView"
 export { plainHtmlRenderMap, plainHtmlElementRenderMap } from "./components/PlainHtmlRenderMap"
@@ -22,7 +22,7 @@ export type ElementsRenderMap = {
     Button: RButton
     ItemWrapper: RDiv
     ItemChildrenWrapper: RDiv
-    DefaultFormItem: RenderFn<any, any>
+    DefaultFormItem: RenderFn<any>
     Title: React.FC<{ text?: string }>
     Label: React.FC<{ text?: string } | { htmlFor: string }>
     Error: React.FC<InputState<any>>
@@ -54,7 +54,7 @@ export type InputSchemaBase<TName extends InputType = InputType, T = any, TExtra
 
 export type InputBoxSchema<T> = InputSchemaBase<InputBoxType, T>
 export type InputOptionSchema<T> = InputSchemaBase<InputOptionType, T, { values: Tuples<T> }>
-export type SimpleInputSchema<T> = InputBoxSchema<T> | InputOptionSchema<ArrayItem<T>>
+export type SimpleInputSchema<T> = InputBoxSchema<T> | InputOptionSchema<T>
 
 export type Mutate<T> = {
     createValue: ArrayItem<T> | F0<ArrayItem<T>>
@@ -69,13 +69,18 @@ export type CollectionInputSchema<T> = Omit<
     "validators"
 >
 export type ListInputSchema<T> = InputSchemaBase<"list", T, { field: SimpleInputSchema<T> } & Mutable<T>>
-export type ChipsInputSchema<T = string> = InputSchemaBase<
-    "chips",
+export type MultiselectInputSchema<T> = InputSchemaBase<
+    "multiselect",
     T,
-    { field: Omit<SimpleInputSchema<T[]>, "validators"> } & Mutable<T>
+    { values: Tuples<ArrayItem<T>> } & Mutable<ArrayItem<T>>
 >
 
-export type InputSchema<T> = SimpleInputSchema<T> | CollectionInputSchema<T> | ListInputSchema<T> | ChipsInputSchema<T>
+export type InputSchema<T> =
+    | SimpleInputSchema<T>
+    | CollectionInputSchema<T>
+    | ListInputSchema<T>
+    | MultiselectInputSchema<T>
+
 export type FormSchema<T> = { [P in keyof T]: InputSchema<T[P]> }
 export type StyledTitle = ValueState<"Title", string>
 export type StyledCustom<T2> = ValueState<"Custom", T2>
@@ -112,40 +117,39 @@ export type InputResult<T> = T extends Array<infer E> ? Array<FormResult<E>> : R
 export type FormResult<T> = { [P in keyof T]: InputResult<T[P]> }
 
 export type RenderOptionsProps = { renderOptions: RenderOptions }
-export type InputPropsBase<TSchema extends InputSchemaBase = any, TState = any, TDelta = F1<any>> = {
+export type InputPropsBase<TSchema extends InputSchemaBase = any, TState = any, TDelta = F1<TState>> = {
     schema: TSchema
     state: TState
     setDelta: TDelta
 } & RenderOptionsProps
 
-export type SimpleInputProps = ArrayItem<FArgs<InputRenderMap[keyof Omit<InputRenderMap, "list" | "collection">]>>
+export type SimpleInputProps = ArrayItem<
+    FArgs<InputRenderMap[keyof Omit<InputRenderMap, "list" | "collection" | "multiselect">]>
+>
 export type InputProps = ArrayItem<FArgs<InputRenderMap[keyof InputRenderMap]>>
 
-export type RenderFn<TSchema extends InputSchemaBase, TState, TDelta = F1<TState>> = React.FC<
-    InputPropsBase<TSchema, TState, TDelta>
->
+export type RenderFn<T> = React.FC<T>
+export type RenderParams<T extends RenderFn<any>> = T extends RenderFn<infer E> ? E : never
 
 export type InputBoxType = "text" | "email" | "number" | "textarea" | "password" | "customBox" | "hidden"
-export type InputBoxRenderFn<T = any> = RenderFn<InputBoxSchema<T>, InputState<T>>
+export type InputBoxRenderFn<T = any> = RenderFn<InputPropsBase<InputBoxSchema<T>, InputState<T>>>
 export type InputBoxRenderMap<T = any> = TMap<InputBoxType, InputBoxRenderFn<T>>
 
 export type InputOptionType = "radio" | "select" | "customOption"
-export type InputOptionRenderFn<T = any> = RenderFn<InputOptionSchema<T>, InputState<T>>
+export type InputOptionRenderFn<T = any> = RenderFn<InputPropsBase<InputOptionSchema<T>, InputState<T>>>
 export type InputOptionRenderMap<T = any> = TMap<InputOptionType, InputOptionRenderFn<T>>
 
-export type InputChipstRenderFn<T = any> = RenderFn<InputOptionSchema<T>, InputState<T[]>, F1<InputState<T[]>>>
-export type InputListRenderFn<T = any> = RenderFn<ListInputSchema<T>, Array<InputState<T>>>
+export type InputMultiselectRenderFn<T = any> = RenderFn<InputPropsBase<MultiselectInputSchema<T>, InputState<T[]>>>
+export type InputListRenderFn<T = any> = RenderFn<InputPropsBase<ListInputSchema<T>, InputState<T>[]>>
 export type InputCollectionRenderFn<T = any> = RenderFn<
-    CollectionInputSchema<T>,
-    Array<FormState<T>>,
-    F1<Array<FormState<T>>>
+    InputPropsBase<CollectionInputSchema<T>, FormState<T>[], F1<FormState<T>[]>>
 >
 
 export type InputRenderMap<T = any> = InputBoxRenderMap<T> &
     InputOptionRenderMap<T> & {
-        chips: InputChipstRenderFn<T>
         list: InputListRenderFn<T>
         collection: InputCollectionRenderFn<T>
+        multiselect: InputMultiselectRenderFn<T>
     }
 
 export type InputType = keyof InputRenderMap
