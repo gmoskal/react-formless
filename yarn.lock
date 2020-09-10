@@ -2091,38 +2091,6 @@
     "@parcel/utils" "^1.11.0"
     physical-cpu-count "^2.0.0"
 
-"@react-formless/antd@latest":
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/@react-formless/antd/-/antd-1.11.0.tgz#11f89e9b4d82c7414b82e41b0e0a2e599ac21af4"
-  integrity sha512-YbT4cmFCLwRs2b4lSxCUy6oea6KFiOt7rDtatmmSjjJ09+udVIgwLKH+yHxxpfsxVZ6AxzsUh2zlJ1MvKCUEjg==
-  dependencies:
-    "@react-formless/core" "^1.11.0"
-    "@react-formless/utils" "^1.11.0"
-    antd "3.26.9"
-    less "2.7.2"
-    less-loader "^5.0.0"
-
-"@react-formless/core@latest":
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/@react-formless/core/-/core-1.11.0.tgz#58d82daf595b45fdc2bcb4fb415b85dbde403a47"
-  integrity sha512-C+whqcQc+E6MP2Uc2f6+RKnTgk5U9WPsoC6jgilJXWv32nslnBZtVcvNIhdOMLg+3GVgipPu7fEkDeofox51Bw==
-  dependencies:
-    "@react-formless/utils" "^1.11.0"
-
-"@react-formless/react95@latest":
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/@react-formless/react95/-/react95-1.11.0.tgz#d038d1de1691e33ed8f1034d44e2ea0f7b10b3de"
-  integrity sha512-kEorPF2buAaQRqYYUFnUU7MtCawx/+7y2O0DqMTnbuitYPu+buxpB8yPHCVD8EWaEWKxLpvEoeEmsn+tB/zydA==
-  dependencies:
-    "@react-formless/core" "^1.11.0"
-    "@react-formless/utils" "^1.11.0"
-    "@react95/core" "2.4.5"
-
-"@react-formless/utils@latest":
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/@react-formless/utils/-/utils-1.11.0.tgz#9f19715185d9fe6628673d28ca5c0be72fa0d317"
-  integrity sha512-nt7zZShz53UyXLL9hd8ycu0BFvgzMatnKHZXqAehuiTK2+F6/4PWZiClwvseHKm2aAzV/dAiqmVPU98KJ2Wc/A==
-
 "@react95/core@2.4.5":
   version "2.4.5"
   resolved "https://registry.yarnpkg.com/@react95/core/-/core-2.4.5.tgz#a4f6ecb5e663cb320b9797e58ae0fc98650cf36a"
