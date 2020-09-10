@@ -147,11 +147,9 @@ const SelectInput: InputOptionRenderFn = p => {
 
 const MultiselectInput: InputMultiselectRenderFn = p => {
     const r = getElementsRenderMap(p.renderOptions)
-    const { onChange } = getExtInputProps(p)
-    const handleCheck = <T extends any>(value: T) => (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.checked) onChange(p.state.value?.concat(value) || [value])
-        else onChange(p.state.value?.filter(v => v !== value) || [])
-    }
+    const { onChange, value } = getExtInputProps(p)
+    const handleCheck = <T extends any>(nv: T) => (e: React.ChangeEvent<HTMLInputElement>) =>
+        onChange(e.target.checked ? p.state.value?.concat(nv) || [nv] : p.state.value?.filter(v => v !== nv) || [])
 
     return (
         <>
@@ -162,7 +160,7 @@ const MultiselectInput: InputMultiselectRenderFn = p => {
                     <input
                         type="checkbox"
                         value={v[1]}
-                        checked={p.state.value?.includes(v[1]) || false}
+                        checked={value?.includes(v[1]) || false}
                         onChange={handleCheck(v[1])}
                     />{" "}
                     {v[0]}
