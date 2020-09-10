@@ -14,7 +14,8 @@ import {
     Err,
     ValueOf,
     keys,
-    Validators
+    Validators,
+    pickObject
 } from "@react-formless/utils"
 
 import {
@@ -32,7 +33,11 @@ import {
     InputPropsBase,
     InputState,
     FormLeafState,
-    MultiselectInputSchema
+    MultiselectInputSchema,
+    RenderParams,
+    InputMultiselectRenderFn,
+    InputOptionRenderFn,
+    InputBoxRenderFn
 } from "."
 
 export const validateForm = <T>(schema: FormSchema<T>, state: FormState<T>): FormState<T> =>
@@ -196,6 +201,17 @@ export const getInputProps = <T2 = HTMLInputElement>(p: SimpleInputProps): ExtIn
     onBlur: () => p.setDelta({ ...p.state, active: false, visited: true })
 })
 
+export const getExtInputProps = <T>(
+    p: RenderParams<InputBoxRenderFn<T> | InputOptionRenderFn<T> | InputMultiselectRenderFn<T>>
+) => ({
+    ...pickObject(p.schema, ["name", "id", "placeholder"]),
+    value: p.state.value,
+    disabled: p.schema.disabled || false,
+    onChange: (v: typeof p.state.value) => validate(p, v || null),
+    onFocus: () => p.setDelta({ ...p.state, active: true } as any),
+    onBlur: () => p.setDelta({ ...p.state, active: false, visited: true } as any)
+})
+
 export const getDropdownInputProps = <T>({
     state,
     schema,
@@ -205,7 +221,12 @@ export const getDropdownInputProps = <T>({
     const runValidation = (v: T) => (schema.validators ? runValidatorsRaw<T, string>(schema.validators, v) : mkOk(v))
     const options = schema.values.map(v => toOption(v[0], v[1]))
     const onSelect = (o: Option<T>) =>
-        setDelta({ ...state, validationResult: runValidation(o.value), value: o.value, visited: true })
+        setDelta({
+            ...state,
+            validationResult: runValidation(o.value) as Result<T, string>,
+            value: o.value,
+            visited: true
+        })
     return {
         selected: currentValue ? [toOption(currentValue[0], currentValue[1])] : [],
         options,

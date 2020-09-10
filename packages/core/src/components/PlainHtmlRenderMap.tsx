@@ -14,9 +14,11 @@ import {
     InputRenderMap,
     ElementsRenderMap,
     getInputProps,
+    getExtInputProps,
     toFormState,
     toInputState,
-    StyledInputsRenderMap
+    StyledInputsRenderMap,
+    InputMultiselectRenderFn
 } from ".."
 
 const Render: React.FC<{ condition: boolean; value: () => React.ReactElement }> = p => (p.condition ? p.value() : null)
@@ -143,6 +145,33 @@ const SelectInput: InputOptionRenderFn = p => {
     )
 }
 
+const MultiselectInput: InputMultiselectRenderFn = p => {
+    const r = getElementsRenderMap(p.renderOptions)
+    const { onChange } = getExtInputProps(p)
+    const handleCheck = <T extends any>(value: T) => (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.checked) onChange(p.state.value?.concat(value) || [value])
+        else onChange(p.state.value?.filter(v => v !== value) || [])
+    }
+
+    return (
+        <>
+            <r.Title text={p.schema.sectionTitle} />
+            <r.Label text={p.schema.name} />
+            {p.schema.values.map(v => (
+                <label key={v[0]}>
+                    <input
+                        type="checkbox"
+                        value={v[1]}
+                        checked={p.state.value?.includes(v[1]) || false}
+                        onChange={handleCheck(v[1])}
+                    />{" "}
+                    {v[0]}
+                </label>
+            ))}
+        </>
+    )
+}
+
 export const CollectionInput: InputCollectionRenderFn = p => {
     const r = getElementsRenderMap(p.renderOptions)
     const mutate = p.schema.mutate
@@ -234,7 +263,7 @@ export const plainHtmlRenderMap: InputRenderMap = {
     radio: RadioInput,
     select: SelectInput,
     customOption: SelectInput,
-    multiselect: () => null,
+    multiselect: MultiselectInput,
     collection: CollectionInput,
     list: ListInput
 }
