@@ -1,5 +1,5 @@
 import { iterateMap, keys, copyDefinedFields, SMap } from "./map"
-import { mkNothing, mkJust, SCasted, ValueState, State, F1, Maybe, ArrayItem } from "./types"
+import { mkNothing, mkJust, SCasted, ValueState, State, F1, Maybe } from "./types"
 
 export type Errors<T> = SCasted<T, string>
 export type ErrArray<T> = Array<Err<ExtErrors<T>>>
@@ -105,12 +105,12 @@ export const validateHexColor = (v: any, msg?: string): Result<boolean, string> 
     /^(#[0-9a-f]{3}|#[0-9a-f]{6})$/i.test(v) ? mkOk(v) : mkErr(msg || errors.notHexColor, v)
 
 export const runValidatorsRaw = <T = any, T2 = ExtErrors<T>>(
-    validators: Validators<ArrayItem<T> | T, T2>,
+    validators: Validators<T, T2>,
     value: any
-): Result<ArrayItem<T> | T, T2> =>
+): Result<T, T2> =>
     (validators || []).reduce(
         (acc, validator) => (acc.type === "Err" ? acc : validator(acc.value)),
-        mkOk(value) as Result<ArrayItem<T> | T, T2>
+        mkOk(value) as Result<T, T2>
     )
 
 export const runValidators = <T = any>(validators: Validators<T>, value: any, cb: (err: string) => void) => {
