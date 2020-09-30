@@ -140,7 +140,9 @@ export const mkValidator = <T>(
 export const validateMap = <T>(validators: Validators<T>) => (v: any, msg?: string): Result<SMap<T>, string> => {
     if (!isObject(v) || !v) return mkErr(msg || errors.notObjectType, v)
     let err: Err<string> | null = null
-    iterateMap(v, (k, kv) => runValidators(validators, kv, () => (err = mkErr(`invalid value ${kv}`, k))))
+    iterateMap(v, (k, kv) =>
+        runValidators(validators, kv, resultError => (err = mkErr(`Invalid value on key ${k}: ${resultError}`, k)))
+    )
     return err || mkOk(v)
 }
 
