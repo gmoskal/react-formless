@@ -160,7 +160,7 @@ export function toInputState<T>(
         case "hidden":
             return mkHiddenInputState(value as T)
         case "multiselect":
-            return mkInputState<T[]>([], value ? arrify(value) : [])
+            return mkInputState<T[]>([], value === undefined ? [] : arrify(value))
         case "customBox":
         case "select":
         case "text":
