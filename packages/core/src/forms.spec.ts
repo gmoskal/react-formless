@@ -276,6 +276,9 @@ describe("multiselect type", () => {
         }
     })
 
+    const emptyMultiselect: Multiselect = {} as any
+    const emptyMultiselectState: FormState<Multiselect> = { values: { visited: false, active: false, value: [] } }
+
     const multiselect: Multiselect = { values: ["foo", "bar"] }
 
     const multiselectState: FormState<Multiselect> = {
@@ -283,6 +286,7 @@ describe("multiselect type", () => {
     }
 
     test("toFormState()", () => {
+        expect(toFormState(getMultiselectSchema(), emptyMultiselect)).toEqual(emptyMultiselectState)
         expect(toFormState(getMultiselectSchema(), multiselect)).toEqual(multiselectState)
     })
 
