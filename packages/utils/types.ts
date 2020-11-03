@@ -87,3 +87,7 @@ export const toROption = (label: string, value?: string): ROption => ({
     value: value || label.toLocaleLowerCase().replace(/\W/g, "")
 })
 export const toROptions = (tags?: string[]) => (tags || []).map(t => toROption(t))
+
+export const exhaustiveStringTuple = <T extends string>() => <L extends T[]>(
+    ...x: L & ([T] extends [L[number]] ? L : [Error, "You are missing ", Exclude<T, L[number]>])
+) => x

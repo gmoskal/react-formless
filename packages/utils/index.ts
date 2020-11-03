@@ -59,6 +59,7 @@ export {
     isFetching,
     mkFetchError,
     isFetchError,
+    exhaustiveStringTuple,
     toOption,
     ArrayItem,
     AsyncFetched,
@@ -68,7 +69,10 @@ export {
     mkNothing,
     ValueOf,
     KeysWithValue,
-    StateValue
+    StateValue,
+    Optionalize,
+    Brand,
+    DeepPartial
 } from "./types"
 
 export {
