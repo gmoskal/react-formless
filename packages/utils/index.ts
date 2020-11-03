@@ -59,6 +59,7 @@ export {
     isFetching,
     mkFetchError,
     isFetchError,
+    exhaustiveStringTuple,
     toOption,
     ArrayItem,
     AsyncFetched,
