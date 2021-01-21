@@ -60,12 +60,12 @@ export type Mutate<T> = {
 }
 export type Mutable<T> = { mutate?: Mutate<T> }
 
-export type InputBoxSchema<T> = InputSchemaBase<InputBoxType, T>
-export type InputOptionSchema<T> = InputSchemaBase<InputOptionType, T, { values: Tuples<T> }>
+export type InputBoxSchema<T> = InputSchemaBase<Exclude<InputBoxType, "customBox">, T>
+export type InputOptionSchema<T> = InputSchemaBase<Exclude<InputOptionType, "customOption">, T, { values: Tuples<T> }>
 export type SimpleInputSchema<T> = InputBoxSchema<T> | InputOptionSchema<T>
 
-export type CustomInputBoxSchema<T> = InputSchemaBase<"customBox", T, { subtype: string }>
-export type CustomInputOptionSchema<T> = InputSchemaBase<"customOption", T, { values: Tuples<T>; subtype: string }>
+export type CustomInputBoxSchema<T> = InputSchemaBase<"customBox", T, { subtype?: string }>
+export type CustomInputOptionSchema<T> = InputSchemaBase<"customOption", T, { values: Tuples<T>; subtype?: string }>
 
 export type CollectionInputSchema<T> = Omit<
     InputSchemaBase<"collection", T, { fields: FormSchema<ArrayItem<T>> } & Mutable<T>>,
@@ -136,12 +136,16 @@ export type InputProps = ArrayItem<FArgs<InputRenderMap[keyof InputRenderMap]>>
 export type RenderFn<T> = React.FC<T>
 export type RenderParams<T extends RenderFn<any>> = T extends RenderFn<infer E> ? E : never
 
-export type InputBoxType = "text" | "email" | "number" | "textarea" | "password" | "hidden"
-export type InputBoxRenderFn<T = any> = RenderFn<InputPropsBase<InputBoxSchema<T>, InputState<T>>>
+export type InputBoxType = "text" | "email" | "number" | "textarea" | "password" | "hidden" | "customBox"
+export type InputBoxRenderFn<T = any> = RenderFn<
+    InputPropsBase<InputBoxSchema<T> | CustomInputBoxSchema<T>, InputState<T>>
+>
 export type InputBoxRenderMap<T = any> = TMap<InputBoxType, InputBoxRenderFn<T>>
 
-export type InputOptionType = "radio" | "select"
-export type InputOptionRenderFn<T = any> = RenderFn<InputPropsBase<InputOptionSchema<T>, InputState<T>>>
+export type InputOptionType = "radio" | "select" | "customOption"
+export type InputOptionRenderFn<T = any> = RenderFn<
+    InputPropsBase<InputOptionSchema<T> | CustomInputOptionSchema<T>, InputState<T>>
+>
 export type InputOptionRenderMap<T = any> = TMap<InputOptionType, InputOptionRenderFn<T>>
 
 export type InputMultiselectRenderFn<T = any> = RenderFn<InputPropsBase<MultiselectInputSchema<T>, InputState<T[]>>>
@@ -150,13 +154,8 @@ export type InputCollectionRenderFn<T = any> = RenderFn<
     InputPropsBase<CollectionInputSchema<T>, FormState<T>[], F1<FormState<T>[]>>
 >
 
-export type CustomBoxRenderFn<T = any> = RenderFn<InputPropsBase<CustomInputBoxSchema<T>, InputState<T>>>
-export type CustomOptionRenderFn<T = any> = RenderFn<InputPropsBase<CustomInputBoxSchema<T>, InputState<T>>>
-
 export type InputRenderMap<T = any> = InputBoxRenderMap<T> &
     InputOptionRenderMap<T> & {
-        customBox: CustomBoxRenderFn<T>
-        customOption: CustomOptionRenderFn<T>
         list: InputListRenderFn<T>
         collection: InputCollectionRenderFn<T>
         multiselect: InputMultiselectRenderFn<T>
