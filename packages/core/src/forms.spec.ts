@@ -268,7 +268,7 @@ describe("multiselect type", () => {
         values: {
             name: "Values",
             type: "multiselect",
-            subtype: "multiselect",
+            creatable: true,
             values: [
                 ["label1", "foo"],
                 ["label2", "bar"]

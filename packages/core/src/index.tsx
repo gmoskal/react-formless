@@ -75,7 +75,7 @@ export type ListInputSchema<T> = InputSchemaBase<"list", T, { field: SimpleInput
 export type MultiselectInputSchema<T> = InputSchemaBase<
     "multiselect",
     T,
-    { values: Tuples<ArrayItem<T>>; subtype: "multiselect" | "combobox" }
+    { values: Tuples<ArrayItem<T>>; creatable?: true }
 >
 
 export type InputSchema<T> =
