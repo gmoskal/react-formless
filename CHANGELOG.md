@@ -1,4 +1,4 @@
-## Version 1.1.14
+## Version 1.14.1
 
 1. `subtype` field introduced for `custom input`:
 ```ts
