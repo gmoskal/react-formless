@@ -2,7 +2,15 @@ import * as React from "react"
 import { renderHook, act } from "@testing-library/react-hooks"
 import { validateAZ, validNumber, validateNotEmpty, mkOk, _noop, factory } from "@react-formless/utils"
 
-import { useFormHook, FormHookProps, InputState, FormSchema, FormState } from "."
+import {
+    useFormHook,
+    FormHookProps,
+    InputState,
+    FormSchema,
+    FormState,
+    CustomInputBoxSchema,
+    CustomInputOptionSchema
+} from "."
 
 describe("useFormHook()", () => {
     const getFormHook = <T extends any>(p: FormHookProps<T>) => renderHook(() => useFormHook(p))
@@ -143,6 +151,44 @@ describe("useFormHook()", () => {
             expect(result.current.touched).toEqual(true)
             act(() => result.current.resetState())
             expect(result.current.touched).toEqual(false)
+        })
+    })
+
+    describe("passes subtypes in custom inputs", () => {
+        it("passes subtypes in custom box", () => {
+            type CustomItem = { date: string }
+            const customSchema: FormSchema<CustomItem> = {
+                date: { type: "customBox", subtype: "date" }
+            }
+            const { result } = getFormHook<CustomItem>({
+                schema: customSchema,
+                initialValue: { date: "" },
+                onSubmit: _noop
+            })
+            const resultingSchema = result.current.formViewProps.schema.date as CustomInputBoxSchema<string>
+            expect(resultingSchema.type).toEqual("customBox")
+            expect(resultingSchema.subtype === "date")
+        })
+        it("passes subtypes in custom box", () => {
+            type CustomItem = { cascader: string }
+            const customSchema: FormSchema<CustomItem> = {
+                cascader: {
+                    type: "customOption",
+                    subtype: "cascader",
+                    values: [
+                        ["1", "2"],
+                        ["3", "4"]
+                    ]
+                }
+            }
+            const { result } = getFormHook<CustomItem>({
+                schema: customSchema,
+                initialValue: { cascader: "" },
+                onSubmit: _noop
+            })
+            const resultingSchema = result.current.formViewProps.schema.cascader as CustomInputOptionSchema<string>
+            expect(resultingSchema.type).toEqual("customOption")
+            expect(resultingSchema.subtype === "cascader")
         })
     })
 })

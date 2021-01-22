@@ -7,6 +7,7 @@ import { mapOn } from "@react-formless/utils"
 import { InputSelectForm } from "./select/InputSelect"
 import { InputListForm } from "./list/InputList"
 import { InputRadioForm } from "./radio/InputRadio"
+import { MultiselectForm } from "./multiselect/MultiselectForm"
 import { InputCollectionForm } from "./collection/InputCollection"
 import { InputsForms } from "./basic/Inputs"
 import { CustomRenderersForm } from "./custom-renderers"
@@ -18,6 +19,7 @@ const paths = {
     "/select": InputSelectForm,
     "/list": InputListForm,
     "/radio": InputRadioForm,
+    "/multiselect": MultiselectForm,
     "/collection": InputCollectionForm,
     "/layout": LayoutForm,
     "/custom-renderers": CustomRenderersForm,
